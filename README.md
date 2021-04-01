@@ -23,7 +23,7 @@ How does it work?
 The Dragon Based mechacon store configuration flags and patches encrypted in their eeprom, the patch DES key was eventually bruteforced which allowed code execution
 on those units and for the full keystore to be dumped.
 
-Normally the configuration and patch area are write protected and cannot be written to at runtime except while using PMAP in TEST mode (this requires soldering) or when the EEPROM is empty,
+Normally the patch area is write protected and cannot be written to at runtime except while using PMAP in TEST mode (this requires soldering) furthermore the configuration area can only be written to when it is empty.
 
 This is done to prevent an attacker or anyone outside of Sony's own factory to overwrite mechacon configuration.
 
