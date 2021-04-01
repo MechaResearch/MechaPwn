@@ -4,7 +4,9 @@ Disclaimer: DO NOT USE A ON A REAL DTL/DEX; This sets the QA flag which forces t
 
 Real DEX (non QA) flags have not been added to the public version of mechapwn for your own safety.
 
+
 The authors hold no responsibility should you break/damage your Playstation 2 console using this software
+
 
 
 This tool can be used to change the region and configuration flags from Dragon based mechacon consoles
