@@ -61,7 +61,7 @@ char unlockNVM()
 	
 	const uint8_t *patch = getPatch(build_date);
 	
-	struct GSTEXTURE_holder *exploitTextures = draw_text(10, 200, 42, 0xFFFFFF, "Press O exploit.\n");
+	struct GSTEXTURE_holder *exploitTextures = draw_text(10, 200, 42, 0xFFFFFF, "Press O to install exploit.\n");
 	struct GSTEXTURE_holder *exitTextures = draw_text(10, 250, 42, 0xFFFFFF, "Press X to exit.\n");
 	
 	drawFrame();
@@ -704,19 +704,13 @@ char backupNVM()
 	getTextSize(42, "Backing up to nvm.bin...", &x, &y);
 	y += 42;
 
-	int last = 0;
+	gsKit_clear(gsGlobal, Black);
+	struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Backing up to nvm.bin...");
+	drawFrame();
+	freeGSTEXTURE_holder(textTextures);
+
 	for (int i = 0; i < 0x200; i++)
 	{
-		int new = (i * 100) / 0x200;
-		if (new != last)
-		{
-			gsKit_clear(gsGlobal, Black);
-			struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Backing up to nvm.bin... %d%%", new);
-			drawFrame();
-			freeGSTEXTURE_holder(textTextures);
-			last = new;
-		}
-	
 		uint16_t data;
 		if (!ReadNVM(i, &data))
 			break;
@@ -751,23 +745,18 @@ char restorePatches()
 	getTextSize(42, "Restoring patches...", &x, &y);
 	y += 42;
 	
-	int last = 0;
+	gsKit_clear(gsGlobal, Black);
+	struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Restoring patches...");
+	drawFrame();
+	freeGSTEXTURE_holder(textTextures);
+
 	fseek(f, 400 * 2, SEEK_SET);
 	for (int i = 0; i < 112; i++)
 	{
-		int new = (i * 100) / 112;
-		if (new != last)
-		{
-			gsKit_clear(gsGlobal, Black);
-			struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Restoring patches... %d%%", new);
-			drawFrame();
-			freeGSTEXTURE_holder(textTextures);
-			last = new;
-		}
 		
 		uint16_t data;
 		fread(&data, 1, 2, f);
-		if (!WriteNVM(400, data))
+		if (!WriteNVM(400 + i, data))
 			break;
 	}
 	
@@ -833,6 +822,25 @@ void checkUnsupportedVersion()
 	}
 }
 
+char isPatchAlreadyInstalled()
+{
+	uint8_t build_date[5];
+	getMechaBuildDate(build_date);
+	
+	uint8_t current_patch[224];
+			
+	int last = 0;
+	for (int i = 0; i < 112; i++)
+	{
+		if (!ReadNVM(400 + i, (uint16_t *) &current_patch[i * 2]))
+			break;
+	}
+	
+	const uint8_t *patch = getPatch(build_date);
+	
+	return memcmp(current_patch, patch, 224) == 0;
+}
+
 int main()
 {
 	init_ui();
@@ -875,10 +883,15 @@ int main()
 	
 	checkUnsupportedVersion();
 	
+	char rerun = 0;
 	if (!IsNVMUnlocked())
 	{
-		if (backupNVM())
-			unlockNVM();
+		rerun = 1;
+		if (!isPatchAlreadyInstalled())
+		{
+			if (backupNVM())
+				unlockNVM();
+		}
 	}
 	else
 	{
@@ -890,16 +903,28 @@ int main()
 
 	struct GSTEXTURE_holder *imageTextures = drawImage((gsGlobal->Width - 400) / 2, (gsGlobal->Height - (225 + 60)) / 2, 400, 225, getPowerTexture());
 		
-	char text[] = "Unplug the power cord.";
-
-	int x2, y2;
-	getTextSize(42, text, &x2, &y2);
-	y2 += 42;
+	const char *text = "Unplug the power cord.";
+	int x, y;
+	getTextSize(42, text, &x, &y);
+	y += 42;
+	struct GSTEXTURE_holder *unplugTextures = draw_text((gsGlobal->Width - x) / 2, ((gsGlobal->Height - (225 + 60)) / 2) + 225, 42, 0xFFFFFF, text);
 	
-	struct GSTEXTURE_holder *unplugTextures = draw_text((gsGlobal->Width - x2) / 2, ((gsGlobal->Height - (225 + 60)) / 2) + 225, 42, 0xFFFFFF, text);
+	struct GSTEXTURE_holder *rerunTextures = 0;
+	if (rerun)
+	{
+		const char *text = "Run MechaPwn again.";
+		int x, y;
+		getTextSize(42, text, &x, &y);
+		y += 42;
+		rerunTextures = draw_text((gsGlobal->Width - x) / 2, ((gsGlobal->Height - (195)) / 2) + 225, 42, 0xFFFFFF, text);
+	}
+	
 	drawFrame();
+	if (rerunTextures)
+		freeGSTEXTURE_holder(rerunTextures);
 	freeGSTEXTURE_holder(unplugTextures);
 	freeGSTEXTURE_holder(imageTextures);
+	
 	
 	// ---
 	
