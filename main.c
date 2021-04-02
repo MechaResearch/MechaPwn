@@ -51,40 +51,15 @@ char unlockNVM()
 	gsKit_clear(gsGlobal, Black);
 	
 	uint8_t version[3];
-	if (!getMechaVersion(version))
-	{
-		//scr_printf("Failed to read the version!\n");
-		//scr_printf("Do you have an SPC MechaCon?\n");
-		SleepThread();
-		return 0;
-	}
+	getMechaVersion(version);
 	
 	uint8_t build_date[5];
-	if (!getMechaBuildDate(build_date))
-	{
-		//scr_printf("Failed to read build date!\n");
-		//scr_printf("Do you have an SPC MechaCon?\n");
-		SleepThread();
-		return 0;
-	}
+	getMechaBuildDate(build_date);
 	
 	struct GSTEXTURE_holder *versionTextures = ui_printf(10, 100, 42, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
 	struct GSTEXTURE_holder *buildTextures = ui_printf(10, 150, 42, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 	
 	const uint8_t *patch = getPatch(build_date);
-	if (patch == 0)
-	{
-		struct GSTEXTURE_holder *errorTextures = draw_text(10, 200, 42, 0xFFFFFF, "This MechaCon isn't supported!\n");
-
-		drawFrame();
-		
-		freeGSTEXTURE_holder(versionTextures);
-		freeGSTEXTURE_holder(buildTextures);
-		freeGSTEXTURE_holder(errorTextures);
-		
-		SleepThread();
-		return 0;
-	}
 	
 	struct GSTEXTURE_holder *exploitTextures = draw_text(10, 200, 42, 0xFFFFFF, "Press O exploit.\n");
 	struct GSTEXTURE_holder *exitTextures = draw_text(10, 250, 42, 0xFFFFFF, "Press X to exit.\n");
@@ -822,6 +797,42 @@ uint8_t *getPowerTexture()
 	return &pwr50k;
 }
 
+void checkUnsupportedVersion()
+{
+	uint8_t version[3];
+	uint8_t build_date[5];
+	if (!getMechaVersion(version) || !getMechaBuildDate(build_date))
+	{
+		struct GSTEXTURE_holder *errorTextures = draw_text(10, 200, 42, 0xFFFFFF, "This MechaCon isn't supported!\n");
+
+		drawFrame();
+		
+		freeGSTEXTURE_holder(errorTextures);
+		
+		SleepThread();
+		return 0;
+	}
+	
+
+	struct GSTEXTURE_holder *versionTextures = ui_printf(10, 100, 42, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+	struct GSTEXTURE_holder *buildTextures = ui_printf(10, 150, 42, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
+	
+	const uint8_t *patch = getPatch(build_date);
+	if (patch == 0)
+	{
+		struct GSTEXTURE_holder *errorTextures = draw_text(10, 200, 42, 0xFFFFFF, "This MechaCon isn't supported!\n");
+
+		drawFrame();
+		
+		freeGSTEXTURE_holder(versionTextures);
+		freeGSTEXTURE_holder(buildTextures);
+		freeGSTEXTURE_holder(errorTextures);
+		
+		SleepThread();
+		return 0;
+	}
+}
+
 int main()
 {
 	init_ui();
@@ -861,6 +872,8 @@ int main()
 	// ---
 	
 	drawLogo();
+	
+	checkUnsupportedVersion();
 	
 	if (!IsNVMUnlocked())
 	{
