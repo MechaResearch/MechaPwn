@@ -90,7 +90,7 @@ Run Mechapwn again to choose which region you want
 
 Retail will just set the region flag and machine ID of your chosing (it is not advised to mix and match different machine ID types, for example setting an SCPH-75001 ID to an SCPH-50004 console.
 
-Debug will let you set a QA Flagged DEX configuration/region with a DEX machine ID of your chosing, this allows mechacon to read diss from all regions as well as masterdiscs (the retail option does not).
+Debug will let you set a QA Flagged DEX configuration/region with a DEX machine ID of your chosing, this allows mechacon to read discs from all regions as well as masterdiscs (the retail option does not).
 
 
 Run Mechapwn one last time to restore the original patch set (and uninstall the exploit patch) from your mechacon backup (you will need to reinstall the exploit patch to change your region again).
