@@ -57,9 +57,9 @@ On SCPH-500xx and SCPH-700xx:
 
 * BOOT original PS2 discs all regions as well as PS2 Masterdiscs from all region by skipping the logo check (for example by loading a disc using ulaunchelf)
 
-* BOOT PS1 disc originals and backups from the console's original region (NTSC-J and PAL consoles)
+* NTSC-J and PAL consoles: BOOT PS1 disc originals from the console's original region
 
-* BOOT PS1 disc originals and backups from all regions (NTSC-U and ASIA (non NTSC-J) units only)
+* NTSC-U and ASIA (non NTSC-J) consoles: BOOT PS1 disc originals from all regions
 
 
 
@@ -75,7 +75,7 @@ On SCPH-7500X and later models (also known as Deckard consoles)
 
 * BOOT original PS2 discs all regions as well as PS2 Masterdiscs from all region by skipping the logo check (for example by loading a disc using ulaunchelf)
 
-* BOOT PS1 disc originals and backups from all regions
+* BOOT PS1 disc originals from all regions
 
 
 FAQ: 
