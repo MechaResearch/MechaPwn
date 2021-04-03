@@ -92,10 +92,14 @@ Bypassing the logo check bypasses this protection (this can be done using ule or
 
 ### My PS2 has a modchip. Will it work for me?
 
-We don't know. This depends on what modchip you are using, it has been reported that some revisions of the modbo chip do not truly disable when "disabled" causing conflicts/compatibility issues with mechapwn region changes, whereas we have seen it work with a modbo 5.0 with disable that does work as intended (with all modchip features still working when enabled on the converted console).
+We don't know. This depends on what modchip you are using, it has been reported that some revisions of the modbo 4.0 chip do not truly disable when "disabled" causing conflicts/compatibility issues with mechapwn region changes, whereas we have seen it work with a modbo 5.0 with disable that does work as intended (with all modchip features still working when enabled on the converted console).
 
-### Why is my playstation 2 no longer booting? 
+### Why is my PS2 doesn't play DVDs anymore / FreeDVDBoot stopped working?
 
-Verify that you do not have a FMCB memory card inserted, FMCB memory cards that have NOT been installed using "multi install" may no longer boot (until FMCB is reinstalled to it) on a console that has been modified using mechapwn as the main kelf will no longer decrypt and the OSD will loop while attempting to load it.
+The DVD Player KELF inside the BootROM (BIOS) is region locked. Since you changed the region of the console it can't run that file.
+To fix that you need to install a DVD Player update to your memory card.
 
+### Why did FreeMCBoot stopped working?
 
+Version 1.8 is piggybacking a DVD Player KELF and faces the same issue as DVD Player players.
+Version 1.9 is supported, but you have to make sure you have the multi-region ("multi install") version installed.
