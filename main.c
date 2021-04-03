@@ -306,9 +306,9 @@ void selectModel(char isDex, char *isSlim, char *model)
 	menu.title = "Select model";
 	menu.x_text = "X Select";
 	menu.o_text = "O Exit";
-	menu.option_count = 5;
+	menu.option_count = 6;
 	
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < menu.option_count; i++)
 	{
 		char *option = malloc(20);
 		strcpy(option, model);
@@ -319,11 +319,12 @@ void selectModel(char isDex, char *isSlim, char *model)
 	strcat(menu.options[1], "70xxx");
 	strcat(menu.options[2], "75xxx");
 	strcat(menu.options[3], "77xxx");
-	strcat(menu.options[4], "90xxx");
+	strcat(menu.options[4], "79xxx");
+	strcat(menu.options[5], "90xxx");
 	
 	int selected = drawMenu(&menu);
 	
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < menu.option_count; i++)
 		free(menu.options[i]);
 	
 	if (selected == -1)
@@ -353,6 +354,11 @@ void selectModel(char isDex, char *isSlim, char *model)
 		*isSlim = 1;
 	}
 	else if(selected == 4)
+	{
+		strcat(model, "79");
+		*isSlim = 1;
+	}
+	else if(selected == 5)
 	{
 		strcat(model, "90");
 		*isSlim = 1;
