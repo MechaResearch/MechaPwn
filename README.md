@@ -3,7 +3,7 @@
 ## For questions @ [me on twitter.com](https://twitter.com/balika011).
 Any issue opened that not an actual issue, but a question will be closed.
 
-Disclaimer: DO NOT USE A ON A REAL DTL/DEX; This sets the QA flag which forces the use of the retail keystore, this would break memory card compatibility.
+## Disclaimer: DO NOT USE A ON A REAL DTL/DEX; This sets the QA flag which forces the use of the retail keystore, this would break memory card compatibility.
 
 Real DEX (non QA) flags have not been added to the public version of mechapwn for your own safety.
 
@@ -17,13 +17,13 @@ This means Playstation 2 consoles from the SCPH-5000X systems all the way to the
 
 Older Playstation 2 units do NOT use a Dragon based mechacon and therefore are not supported, no support is planned for those in the future.
 
-How to use?
+### How to use?
 
 1) Run Mechapwn once to install the exploit patch/payload an initial backup of your mechacon eeprom will be made to the usb mass storage device (keep it safe!),then power off the console by disconnecting it from the mains when asked (mechacon is on even when the ps2 cpu is off, so you really need to disconnect the power chord!) 
 
 2) Run Mechapwn again to choose which region you want and to restore the original patch set (and uninstall the exploit patch) from your mechacon backup (you will need to reinstall the exploit patch to change your region again).
 
-Explanations of the menu options:
+#### Explanations of the menu options:
 
 CEX (Retail) will just set the region flag and machine ID of your chosing (it is not advised to mix and match different machine ID types, for example setting an SCPH-75001 ID to an SCPH-50004 console.
 
@@ -80,17 +80,17 @@ On SCPH-7500X and later models (also known as Deckard consoles)
 
 FAQ: 
 
-Why do PAL/NTSC-J consoles do not play NTSC/PAL discs (on scph-70000 and earlier) ?
+### Why do PAL/NTSC-J consoles do not play NTSC/PAL discs (on scph-70000 and earlier) ?
 
 The IOP ROM on those consoles have enforced strict logo decryption checks both in the PS1 and PS2 BIOS which the NTSC-U (also used in ASIA consoles) BIOS does not have.
 
 
-Why do consoles not run masterdiscs directly from the OSD? 
+### Why do consoles not run masterdiscs directly from the OSD? 
 
 An additional protection exists on the DSP, which is different in retail and debug consoles, the debug one allows mechacon to store the masterdisc xor key in its registers, the retail one does not.
 Bypassing the logo check bypasses this protection (this can be done using ule or a future cdvdman patch using a ps2 homebrew)
 
-My PS2 has a modchip. Will it work for me?
+### My PS2 has a modchip. Will it work for me?
 
 We don't know. From reports we can tell that even if you "disable" the Modbo chips they aren't disabled and break everything.
 
