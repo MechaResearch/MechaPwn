@@ -90,3 +90,7 @@ Why do consoles not run masterdiscs directly from the OSD?
 An additional protection exists on the DSP, which is different in retail and debug consoles, the debug one allows mechacon to store the masterdisc xor key in its registers, the retail one does not.
 Bypassing the logo check bypasses this protection (this can be done using ule or a future cdvdman patch using a ps2 homebrew)
 
+My PS2 has a modchip. Will it work for me?
+
+We don't know. From reports we can tell that even if you "disable" the Modbo chips they aren't disabled and break everything.
+
