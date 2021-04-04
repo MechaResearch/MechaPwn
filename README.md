@@ -21,7 +21,7 @@ Older Playstation 2 units do NOT use a Dragon based mechacon and therefore are n
 
 0) Make sure if you are using FMCB **you have v1.966 "multi install" installed**.
 
-1) Run Mechapwn once to install the exploit patch/payload an initial backup of your mechacon eeprom will be made to the usb mass storage device (keep it safe!),then power off the console by disconnecting it from the mains when asked (mechacon is on even when the ps2 cpu is off, so you really need to disconnect the power chord!) 
+1) Run Mechapwn once to install the exploit patch/payload; an initial backup of your mechacon eeprom will be made to the usb mass storage device (keep it safe!), then power off the console by disconnecting it from the mains when asked (mechacon is on even when the ps2 cpu is off, so you really need to disconnect the power cord!) 
 
 2) Run Mechapwn again to choose which region you want and to restore the original patch set (and uninstall the exploit patch) from your mechacon backup (you will need to reinstall the exploit patch to change your region again).
 
