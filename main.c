@@ -695,7 +695,36 @@ void drawLogo()
 
 char backupNVM()
 {
-	FILE *f = fopen("mass:/nvm.bin", "wb");
+	FILE *f = fopen("mass:/nvm.bin", "rb");
+	if (f)
+	{
+		fclose(f);
+		gsKit_clear(gsGlobal, Black);
+		
+		struct MENU menu;
+		menu.title = "An NVM backup found";
+		menu.x_text = "X Select";
+		menu.o_text = "O Exit";
+		menu.option_count = 2;
+		
+		menu.options[0] = "Create a new backup";
+		menu.options[1] = "Keep the current backup";
+		
+		int selected = drawMenu(&menu);
+			
+		if (selected == -1)
+		{
+			ResetIOP();
+			LoadExecPS2("rom0:OSDSYS", 0, NULL);
+			SleepThread();
+		}
+		else if(selected == 1)
+		{
+			return 1;
+		}
+	}
+
+	f = fopen("mass:/nvm.bin", "wb");
 	if (!f)
 	{
 		gsKit_clear(gsGlobal, Black);
