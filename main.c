@@ -306,7 +306,7 @@ void selectModel(char isDex, char *isSlim, char *model)
 	menu.title = "Select model";
 	menu.x_text = "X Select";
 	menu.o_text = "O Exit";
-	menu.option_count = 6;
+	menu.option_count = 7;
 	
 	for (int i = 0; i < menu.option_count; i++)
 	{
@@ -316,11 +316,12 @@ void selectModel(char isDex, char *isSlim, char *model)
 	}
 	
 	strcat(menu.options[0], "50xxx");
-	strcat(menu.options[1], "70xxx");
-	strcat(menu.options[2], "75xxx");
-	strcat(menu.options[3], "77xxx");
-	strcat(menu.options[4], "79xxx");
-	strcat(menu.options[5], "90xxx");
+	strcat(menu.options[1], "55xxx");
+	strcat(menu.options[2], "70xxx");
+	strcat(menu.options[3], "75xxx");
+	strcat(menu.options[4], "77xxx");
+	strcat(menu.options[5], "79xxx");
+	strcat(menu.options[6], "90xxx");
 	
 	int selected = drawMenu(&menu);
 	
@@ -340,25 +341,30 @@ void selectModel(char isDex, char *isSlim, char *model)
 	}
 	else if(selected == 1)
 	{
-		strcat(model, "70");
-		*isSlim = 1;
+		strcat(model, "55");
+		*isSlim = 0;
 	}
 	else if(selected == 2)
 	{
-		strcat(model, "75");
+		strcat(model, "70");
 		*isSlim = 1;
 	}
 	else if(selected == 3)
 	{
-		strcat(model, "77");
+		strcat(model, "75");
 		*isSlim = 1;
 	}
 	else if(selected == 4)
 	{
-		strcat(model, "79");
+		strcat(model, "77");
 		*isSlim = 1;
 	}
 	else if(selected == 5)
+	{
+		strcat(model, "79");
+		*isSlim = 1;
+	}
+	else if(selected == 6)
 	{
 		strcat(model, "90");
 		*isSlim = 1;
