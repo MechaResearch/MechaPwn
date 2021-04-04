@@ -882,6 +882,47 @@ char isPatchAlreadyInstalled()
 	return memcmp(current_patch, patch, 224) == 0;
 }
 
+char restoreBackup()
+{
+	FILE *f = fopen("mass:/nvm.bin", "rb");
+	if (!f)
+	{
+		gsKit_clear(gsGlobal, Black);
+	
+		char text[] = "Failed to open nvm.bin!";
+			
+		int x, y;
+		getTextSize(42, text, &x, &y);
+		y += 42;
+		
+		struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, text);
+		drawFrame();
+		freeGSTEXTURE_holder(textTextures);
+		return 0;
+	}
+			
+	int x, y;
+	getTextSize(42, "Restoring backup...", &x, &y);
+	y += 42;
+
+	gsKit_clear(gsGlobal, Black);
+	struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Restoring backup...");
+	drawFrame();
+	freeGSTEXTURE_holder(textTextures);
+
+	for (int i = 0; i < 0x200; i++)
+	{
+		
+		uint16_t data;
+		fread(&data, 1, 2, f);
+		if (!WriteNVM(i, data))
+			break;
+	}
+	
+	fclose(f);
+	return 1;
+}
+
 int main()
 {
 	init_ui();
@@ -936,8 +977,34 @@ int main()
 	}
 	else
 	{
-		setRegion();
-		restorePatches();
+		gsKit_clear(gsGlobal, Black);
+		
+		struct MENU menu;
+		menu.title = "MechaPwn";
+		menu.x_text = "X Select";
+		menu.o_text = "O Exit";
+		menu.option_count = 2;
+		
+		menu.options[0] = "Change region";
+		menu.options[1] = "Restore NVM backup";
+		
+		int selected = drawMenu(&menu);
+			
+		if (selected == -1)
+		{
+			ResetIOP();
+			LoadExecPS2("rom0:OSDSYS", 0, NULL);
+			SleepThread();
+		}
+		else if(selected == 0)
+		{
+			setRegion();
+			restorePatches();
+		}
+		else if(selected == 1)
+		{
+			restoreBackup();
+		}
 	}
 
 	gsKit_clear(gsGlobal, Black);
