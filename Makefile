@@ -1,5 +1,6 @@
 EE_BIN = MechaPwn.elf
 IRX_DIR = irx/compiled
+EE_PACKED_BIN = MechaPwn_pck.elf
 
 # C File
 EE_OBJS = main.o mecha.o exploit.o pad.o ui.o mass.o
@@ -14,10 +15,13 @@ EE_CFLAGS = -std=c99
 BIN2S = $(PS2SDK)/bin/bin2s
 
 all: $(EE_BIN)
-	rm -rf *.o *.s resources/*.bin resources/*.pyc
+	ps2-packer $(EE_BIN) $(EE_PACKED_BIN)
+	rm -rf *.o *.s resources/*.bin resources/*.pyc *.pyc
 
 clean:
-	rm -f *.elf *.o *.s resources/*.bin resources/*.pyc
+	make clean -C irx/source/mechaproxy
+	make clean -C irx/source/masswatcher
+	rm -f *.elf *.o *.s resources/*.bin resources/*.pyc *.pyc
 	
 #IRX Modules
 iomanX.s:
@@ -36,10 +40,12 @@ USBD.s: $(PS2SDK)/iop/irx/usbd.irx
 	$(BIN2S) $(PS2SDK)/iop/irx/usbd.irx USBD.s USBD
 USBHDFSD.s: $(PS2SDK)/iop/irx/usbhdfsd.irx
 	$(BIN2S) $(PS2SDK)/iop/irx/usbhdfsd.irx USBHDFSD.s USBHDFSD
-MECHAPROXY_irx.s: $(IRX_DIR)/mechaproxy.irx
-	$(BIN2S) $(IRX_DIR)/mechaproxy.irx MECHAPROXY_irx.s MECHAPROXY_irx
-MASSWATCHER_irx.s: $(IRX_DIR)/masswatcher.irx
-	$(BIN2S) $(IRX_DIR)/masswatcher.irx MASSWATCHER_irx.s MASSWATCHER_irx
+MECHAPROXY_irx.s: 
+	$(MAKE) -C irx/source/mechaproxy
+	$(BIN2S) irx/source/mechaproxy/irx/mechaproxy.irx MECHAPROXY_irx.s MECHAPROXY_irx
+MASSWATCHER_irx.s:
+	$(MAKE) -C irx/source/masswatcher
+	$(BIN2S) irx/source/masswatcher/irx/masswatcher.irx MASSWATCHER_irx.s MASSWATCHER_irx
 IndieFlower.s: resources/IndieFlower-Regular.ttf
 	$(BIN2S) resources/IndieFlower-Regular.ttf IndieFlower.s IndieFlower
 resources/50k.bin: resources/50k.png
