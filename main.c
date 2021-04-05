@@ -618,18 +618,17 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 	}
 }
 
-void setRegion()
-{
-	char isDex = 0;	
-	selectCexDex(&isDex);
+void setRegion(char *isDex)
+{	
+	selectCexDex(isDex);
 	char isSlim = 0;
 	char model[18];
-	selectModel(isDex, &isSlim, model);
+	selectModel(*isDex, &isSlim, model);
 	uint8_t *region_params = 0;
 	uint8_t *region_ciphertext = 0;
-	selectRegion(isDex, isSlim, model, &region_params, &region_ciphertext);
+	selectRegion(*isDex, isSlim, model, &region_params, &region_ciphertext);
 	
-	write_region(region_params, model, region_ciphertext);
+	write_region(region_params, (uint8_t *) model, region_ciphertext);
 }
 
 uint8_t *frames[] = {
@@ -764,45 +763,98 @@ char backupNVM()
 	return 1;
 }
 
-char restorePatches()
+char applyPatches(char isDex)
 {
-	FILE *f = fopen("mass:/nvm.bin", "rb");
-	if (!f)
+	uint8_t build_date[5];
+	getMechaBuildDate(build_date);
+
+	char applyForceUnlock = 0;
+	const uint8_t *force_unlock = getForceUnlock(build_date);
+			
+	if (isDex && force_unlock)
 	{
 		gsKit_clear(gsGlobal, Black);
-	
-		char text[] = "Failed to open nvm.bin!";
-			
+		
+		struct MENU menu;
+		menu.title = "Install force unlock?";
+		menu.x_text = "X Select";
+		menu.o_text = "O Exit";
+		menu.option_count = 2;
+		
+		menu.options[0] = "No";
+		menu.options[1] = "Yes";
+		
+		int selected = drawMenu(&menu);
+		if (selected == -1)
+		{
+			ResetIOP();
+			LoadExecPS2("rom0:OSDSYS", 0, NULL);
+			SleepThread();
+		}
+		else if (selected == 1)
+		{
+			applyForceUnlock = 1;
+		}
+	}
+
+	if (applyForceUnlock)
+	{
 		int x, y;
-		getTextSize(42, text, &x, &y);
+		getTextSize(42, "Applying force unlock...", &x, &y);
 		y += 42;
 		
-		struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, text);
+		gsKit_clear(gsGlobal, Black);
+		struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Applying force unlock...");
 		drawFrame();
 		freeGSTEXTURE_holder(textTextures);
-		return 0;
-	}
-			
-	int x, y;
-	getTextSize(42, "Restoring patches...", &x, &y);
-	y += 42;
-	
-	gsKit_clear(gsGlobal, Black);
-	struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Restoring patches...");
-	drawFrame();
-	freeGSTEXTURE_holder(textTextures);
-
-	fseek(f, 400 * 2, SEEK_SET);
-	for (int i = 0; i < 112; i++)
-	{
 		
-		uint16_t data;
-		fread(&data, 1, 2, f);
-		if (!WriteNVM(400 + i, data))
-			break;
+		for (int i = 0; i < 112; i++)
+		{
+			if (!WriteNVM(400 + i, *(uint16_t*) &force_unlock[i * 2]))
+				break;
+		}
+		
 	}
-	
-	fclose(f);
+	else
+	{
+		FILE *f = fopen("mass:/nvm.bin", "rb");
+		if (!f)
+		{
+			gsKit_clear(gsGlobal, Black);
+		
+			char text[] = "Failed to open nvm.bin!";
+				
+			int x, y;
+			getTextSize(42, text, &x, &y);
+			y += 42;
+			
+			struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, text);
+			drawFrame();
+			freeGSTEXTURE_holder(textTextures);
+			return 0;
+		}
+				
+		int x, y;
+		getTextSize(42, "Restoring patches...", &x, &y);
+		y += 42;
+		
+		gsKit_clear(gsGlobal, Black);
+		struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Restoring patches...");
+		drawFrame();
+		freeGSTEXTURE_holder(textTextures);
+
+		fseek(f, 400 * 2, SEEK_SET);
+		for (int i = 0; i < 112; i++)
+		{
+			
+			uint16_t data;
+			fread(&data, 1, 2, f);
+			if (!WriteNVM(400 + i, data))
+				break;
+		}
+		
+		fclose(f);
+	}
 	return 1;
 }
 
@@ -1004,8 +1056,9 @@ int main()
 		}
 		else if(selected == 0)
 		{
-			setRegion();
-			restorePatches();
+			char isDex = 0;
+			setRegion(&isDex);
+			applyPatches(isDex);
 		}
 		else if(selected == 1)
 		{
