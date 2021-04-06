@@ -22,8 +22,10 @@ Older Playstation 2 units do NOT use a Dragon based mechacon and therefore are n
 0) Make sure if you are using FMCB **you have v1.966 "multi install" installed**.
 
 1) Run Mechapwn once to install the exploit patch/payload an initial backup of your mechacon eeprom will be made to the usb mass storage device (keep it safe!),then power off the console by disconnecting it from the mains when asked (mechacon is on even when the ps2 cpu is off, so you really need to disconnect the power chord!) 
+2) Run Mechapwn again to choose which region you want.
+3) Choose whether you want to use force unlock or restore the original patch set (and uninstall the exploit patch) from your mechacon backup.
 
-2) Run Mechapwn again to choose which region you want and to restore the original patch set (and uninstall the exploit patch) from your mechacon backup (you will need to reinstall the exploit patch to change your region again).
+*You will need to reinstall the exploit patch to change your region again*
 
 #### Explanations of the menu options:
 
@@ -106,3 +108,10 @@ To fix that you need to install a DVD Player update to your memory card.
 Version 1.8 is piggybacking a DVD Player KELF and faces the same issue as DVD Player players.
 
 Version 1.9 is supported, but you have to make sure you have the multi-region ("multi install") version installed.
+
+### What is force unlock?
+
+Force-Unlock is a very much needed feature for homebrew applications, like Neo Geo emulation, PS2 Linux for reading CD and DVD-ROM discs.
+What it's meant to do is unlock the disk drive for access.
+
+**Important note: If you enable force unlock every CD and DVD will be detected as a PS2 disc, meaning it breaks PS1 games and DVD-Video**
