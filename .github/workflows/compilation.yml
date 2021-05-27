@@ -20,8 +20,8 @@ jobs:
         pip install Pillow
 
     - uses: actions/checkout@v2
-    - run: |
-        git fetch --prune --unshallow
+      with:
+        fetch-depth: 0
 
     - name: Compile project
       run: |
