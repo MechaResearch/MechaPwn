@@ -39,8 +39,8 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.slug.outputs.REPOSITORY_NAME }}-${{ steps.slug.outputs.sha8 }}
-        path: |
-          MechaPwn_pck.elf
+        path: MechaPwn_pck.elf
+        if-no-files-found: error
 
     # 'path' will create artifact with all *.elf in working directory
     # you can change this
