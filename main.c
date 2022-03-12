@@ -119,6 +119,7 @@ struct MENU
 int drawMenu(struct MENU *menu)
 {
 	int selected_menu = 0;
+	gsKit_clear(gsGlobal, Black);
 
 	while(1)
 	{
@@ -202,7 +203,7 @@ uint8_t region_ciphertext_europe_cex[] = { 0x54, 0x88, 0x4f, 0x90, 0x76, 0x4d, 0
 
 // 5 - Korea
 uint8_t region_params_korea[] = { 0x48, 0x4b, 0x6b, 0x6f, 0x72, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00 };
-int8_t region_ciphertext_korea_cex[] = { 0x2a, 0xf0, 0x38, 0x2d, 0xef, 0xe5, 0x48, 0xa4, 0x00, 0xc0 };
+uint8_t region_ciphertext_korea_cex[] = { 0x2a, 0xf0, 0x38, 0x2d, 0xef, 0xe5, 0x48, 0xa4, 0x00, 0xc0 };
 
 // 6 - Asia
 uint8_t region_params_asia[] = { 0x48, 0x48, 0x65, 0x6e, 0x67, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -315,18 +316,18 @@ void selectModel(char isDex, char *isSlim, char *model)
 		menu.options[i] = option;
 	}
 	
-	strcat(menu.options[0], "50xxx");
-	strcat(menu.options[1], "55xxx");
-	strcat(menu.options[2], "70xxx");
-	strcat(menu.options[3], "75xxx");
-	strcat(menu.options[4], "77xxx");
-	strcat(menu.options[5], "79xxx");
-	strcat(menu.options[6], "90xxx");
+	strcat((char *) menu.options[0], "50xxx");
+	strcat((char *) menu.options[1], "55xxx");
+	strcat((char *) menu.options[2], "70xxx");
+	strcat((char *) menu.options[3], "75xxx");
+	strcat((char *) menu.options[4], "77xxx");
+	strcat((char *) menu.options[5], "79xxx");
+	strcat((char *) menu.options[6], "90xxx");
 	
 	int selected = drawMenu(&menu);
 	
 	for (int i = 0; i < menu.option_count; i++)
-		free(menu.options[i]);
+		free((char *) menu.options[i]);
 	
 	if (selected == -1)
 	{
@@ -389,18 +390,18 @@ void selectRegion(char isDex, char isSlim, char *model, uint8_t **region_params,
 		menu.options[i] = option;
 	}
 	
-	strcat(menu.options[0], "000 - Japan");
-	strcat(menu.options[1], "001 - USA");
-	strcat(menu.options[2], "002 - Oceania");
-	strcat(menu.options[3], "003 - UK");
-	strcat(menu.options[4], "004 - Europe");
-	strcat(menu.options[5], "005 - Korea");
+	strcat((char *) menu.options[0], "000 - Japan");
+	strcat((char *) menu.options[1], "001 - USA");
+	strcat((char *) menu.options[2], "002 - Oceania");
+	strcat((char *) menu.options[3], "003 - UK");
+	strcat((char *) menu.options[4], "004 - Europe");
+	strcat((char *) menu.options[5], "005 - Korea");
 	menu.options[6] = "More";
 	
 	int selected = drawMenu(&menu);
 	
 	for (int i = 0; i < 6; i++)
-		free(menu.options[i]);
+		free((char *) menu.options[i]);
 	
 	if (selected == -1)
 	{
@@ -411,7 +412,7 @@ void selectRegion(char isDex, char isSlim, char *model, uint8_t **region_params,
 	else if(selected == 0)
 	{
 		strcat(model, "000");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		if (isSlim)
 			*region_params = region_params_japan;
 		if (isDex)
@@ -422,7 +423,7 @@ void selectRegion(char isDex, char isSlim, char *model, uint8_t **region_params,
 	else if(selected == 1)
 	{
 		strcat(model, "001");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		if (isSlim)
 			*region_params = region_params_usa;
 		if (isDex)
@@ -433,7 +434,7 @@ void selectRegion(char isDex, char isSlim, char *model, uint8_t **region_params,
 	else if(selected == 2)
 	{
 		strcat(model, "002");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		if (isSlim)
 			*region_params = region_params_oceania;
 		if (isDex)
@@ -444,7 +445,7 @@ void selectRegion(char isDex, char isSlim, char *model, uint8_t **region_params,
 	else if(selected == 3)
 	{
 		strcat(model, "003");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		if (isSlim)
 			*region_params = region_params_europe;
 		if (isDex)
@@ -455,7 +456,7 @@ void selectRegion(char isDex, char isSlim, char *model, uint8_t **region_params,
 	else if(selected == 4)
 	{
 		strcat(model, "004");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		if (isSlim)
 			*region_params = region_params_europe;
 		if (isDex)
@@ -466,7 +467,7 @@ void selectRegion(char isDex, char isSlim, char *model, uint8_t **region_params,
 	else if(selected == 5)
 	{
 		strcat(model, "005");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		if (isSlim)
 			*region_params = region_params_korea;
 		if (isDex)
@@ -498,25 +499,25 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 	}
 	
 	menu.options[0] = "Back";
-	strcat(menu.options[1], "006 - Asia");
-	strcat(menu.options[2], "007 - Tawain");
-	strcat(menu.options[3], "008 - Russia");
+	strcat((char *) menu.options[1], "006 - Asia");
+	strcat((char *) menu.options[2], "007 - Tawain");
+	strcat((char *) menu.options[3], "008 - Russia");
 	if (!isSlim)
 	{
-		strcat(menu.options[4], "009 - China");
-		strcat(menu.options[5], "011 - Mexico");
+		strcat((char *) menu.options[4], "009 - China");
+		strcat((char *) menu.options[5], "011 - Mexico");
 	}
 	else
 	{
-		strcat(menu.options[4], "010 - ???");
-		strcat(menu.options[5], "011 - ???");
-		strcat(menu.options[6], "012 - ???");
+		strcat((char *) menu.options[4], "010 - ???");
+		strcat((char *) menu.options[5], "011 - ???");
+		strcat((char *) menu.options[6], "012 - ???");
 	}
 	
 	int selected = drawMenu(&menu);
 
 	for (int i = 1; i < (isSlim ? 7 : 6); i++)
-		free(menu.options[i]);
+		free((char *) menu.options[i]);
 		
 	if (selected == -1)
 	{
@@ -531,7 +532,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 	else if(selected == 1)
 	{
 		strcat(model, "006");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		if (isSlim)
 			*region_params = region_params_asia;
 		if (isDex)
@@ -542,7 +543,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 	else if(selected == 2)
 	{
 		strcat(model, "007");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		if (isSlim)
 			*region_params = region_params_tawain;
 		if (isDex)
@@ -553,7 +554,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 	else if(selected == 3)
 	{
 		strcat(model, "008");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		if (isSlim)
 			*region_params = region_params_russia;
 		if (isDex)
@@ -566,7 +567,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 		if (!isSlim)
 		{
 			strcat(model, "009");
-			sum_buffer(model, 18);
+			sum_buffer((uint8_t *) model, 18);
 			if (isDex)
 				*region_ciphertext = region_ciphertext_dex;
 			else
@@ -575,7 +576,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 		else
 		{
 			strcat(model, "010");
-			sum_buffer(model, 18);
+			sum_buffer((uint8_t *) model, 18);
 			*region_params = region_params_usa;
 			if (isDex)
 				*region_ciphertext = region_ciphertext_dex;
@@ -588,7 +589,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 		if (!isSlim)
 		{
 			strcat(model, "011");
-			sum_buffer(model, 18);
+			sum_buffer((uint8_t *) model, 18);
 			if (isDex)
 				*region_ciphertext = region_ciphertext_dex;
 			else
@@ -597,7 +598,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 		else
 			{
 			strcat(model, "011");
-			sum_buffer(model, 18);
+			sum_buffer((uint8_t *) model, 18);
 			*region_params = region_params_usa;
 			if (isDex)
 				*region_ciphertext = region_ciphertext_dex;
@@ -608,7 +609,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 	else if(selected == 6)
 	{
 		strcat(model, "012");
-		sum_buffer(model, 18);
+		sum_buffer((uint8_t *) model, 18);
 		*region_params = region_params_usa;
 		if (isDex)
 			*region_ciphertext = region_ciphertext_dex;
@@ -617,18 +618,17 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 	}
 }
 
-void setRegion()
-{
-	char isDex = 0;	
-	selectCexDex(&isDex);
+void setRegion(char *isDex)
+{	
+	selectCexDex(isDex);
 	char isSlim = 0;
 	char model[18];
-	selectModel(isDex, &isSlim, model);
+	selectModel(*isDex, &isSlim, model);
 	uint8_t *region_params = 0;
 	uint8_t *region_ciphertext = 0;
-	selectRegion(isDex, isSlim, model, &region_params, &region_ciphertext);
+	selectRegion(*isDex, isSlim, model, &region_params, &region_ciphertext);
 	
-	write_region(region_params, model, region_ciphertext);
+	write_region(region_params, (uint8_t *) model, region_ciphertext);
 }
 
 uint8_t *frames[] = {
@@ -763,45 +763,98 @@ char backupNVM()
 	return 1;
 }
 
-char restorePatches()
+char applyPatches(char isDex)
 {
-	FILE *f = fopen("mass:/nvm.bin", "rb");
-	if (!f)
+	uint8_t build_date[5];
+	getMechaBuildDate(build_date);
+
+	char applyForceUnlock = 0;
+	const uint8_t *force_unlock = getForceUnlock(build_date);
+			
+	if (isDex && force_unlock)
 	{
 		gsKit_clear(gsGlobal, Black);
-	
-		char text[] = "Failed to open nvm.bin!";
-			
+		
+		struct MENU menu;
+		menu.title = "Install force unlock?";
+		menu.x_text = "X Select";
+		menu.o_text = "O Exit";
+		menu.option_count = 2;
+		
+		menu.options[0] = "No";
+		menu.options[1] = "Yes";
+		
+		int selected = drawMenu(&menu);
+		if (selected == -1)
+		{
+			ResetIOP();
+			LoadExecPS2("rom0:OSDSYS", 0, NULL);
+			SleepThread();
+		}
+		else if (selected == 1)
+		{
+			applyForceUnlock = 1;
+		}
+	}
+
+	if (applyForceUnlock)
+	{
 		int x, y;
-		getTextSize(42, text, &x, &y);
+		getTextSize(42, "Applying force unlock...", &x, &y);
 		y += 42;
 		
-		struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, text);
+		gsKit_clear(gsGlobal, Black);
+		struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Applying force unlock...");
 		drawFrame();
 		freeGSTEXTURE_holder(textTextures);
-		return 0;
-	}
-			
-	int x, y;
-	getTextSize(42, "Restoring patches...", &x, &y);
-	y += 42;
-	
-	gsKit_clear(gsGlobal, Black);
-	struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Restoring patches...");
-	drawFrame();
-	freeGSTEXTURE_holder(textTextures);
-
-	fseek(f, 400 * 2, SEEK_SET);
-	for (int i = 0; i < 112; i++)
-	{
 		
-		uint16_t data;
-		fread(&data, 1, 2, f);
-		if (!WriteNVM(400 + i, data))
-			break;
+		for (int i = 0; i < 112; i++)
+		{
+			if (!WriteNVM(400 + i, *(uint16_t*) &force_unlock[i * 2]))
+				break;
+		}
+		
 	}
-	
-	fclose(f);
+	else
+	{
+		FILE *f = fopen("mass:/nvm.bin", "rb");
+		if (!f)
+		{
+			gsKit_clear(gsGlobal, Black);
+		
+			char text[] = "Failed to open nvm.bin!";
+				
+			int x, y;
+			getTextSize(42, text, &x, &y);
+			y += 42;
+			
+			struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, text);
+			drawFrame();
+			freeGSTEXTURE_holder(textTextures);
+			return 0;
+		}
+				
+		int x, y;
+		getTextSize(42, "Restoring patches...", &x, &y);
+		y += 42;
+		
+		gsKit_clear(gsGlobal, Black);
+		struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Restoring patches...");
+		drawFrame();
+		freeGSTEXTURE_holder(textTextures);
+
+		fseek(f, 400 * 2, SEEK_SET);
+		for (int i = 0; i < 112; i++)
+		{
+			
+			uint16_t data;
+			fread(&data, 1, 2, f);
+			if (!WriteNVM(400 + i, data))
+				break;
+		}
+		
+		fclose(f);
+	}
 	return 1;
 }
 
@@ -833,6 +886,8 @@ void checkUnsupportedVersion()
 	uint8_t build_date[5];
 	if (!getMechaVersion(version) || !getMechaBuildDate(build_date))
 	{
+		gsKit_clear(gsGlobal, Black);
+
 		struct GSTEXTURE_holder *errorTextures = draw_text(10, 200, 42, 0xFFFFFF, "This MechaCon isn't supported!\n");
 
 		drawFrame();
@@ -840,16 +895,18 @@ void checkUnsupportedVersion()
 		freeGSTEXTURE_holder(errorTextures);
 		
 		SleepThread();
-		return 0;
+		return;
 	}
 	
 
-	struct GSTEXTURE_holder *versionTextures = ui_printf(10, 100, 42, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
-	struct GSTEXTURE_holder *buildTextures = ui_printf(10, 150, 42, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
-	
 	const uint8_t *patch = getPatch(build_date);
 	if (patch == 0)
 	{
+		gsKit_clear(gsGlobal, Black);
+
+		struct GSTEXTURE_holder *versionTextures = ui_printf(10, 100, 42, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+		struct GSTEXTURE_holder *buildTextures = ui_printf(10, 150, 42, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
+	
 		struct GSTEXTURE_holder *errorTextures = draw_text(10, 200, 42, 0xFFFFFF, "This MechaCon isn't supported!\n");
 
 		drawFrame();
@@ -859,7 +916,7 @@ void checkUnsupportedVersion()
 		freeGSTEXTURE_holder(errorTextures);
 		
 		SleepThread();
-		return 0;
+		return;
 	}
 }
 
@@ -869,8 +926,7 @@ char isPatchAlreadyInstalled()
 	getMechaBuildDate(build_date);
 	
 	uint8_t current_patch[224];
-			
-	int last = 0;
+
 	for (int i = 0; i < 112; i++)
 	{
 		if (!ReadNVM(400 + i, (uint16_t *) &current_patch[i * 2]))
@@ -965,6 +1021,8 @@ int main()
 	
 	checkUnsupportedVersion();
 	
+	uint8_t *powerTexture = getPowerTexture();
+	
 	char rerun = 0;
 	if (!IsNVMUnlocked())
 	{
@@ -998,8 +1056,9 @@ int main()
 		}
 		else if(selected == 0)
 		{
-			setRegion();
-			restorePatches();
+			char isDex = 0;
+			setRegion(&isDex);
+			applyPatches(isDex);
 		}
 		else if(selected == 1)
 		{
@@ -1009,7 +1068,7 @@ int main()
 
 	gsKit_clear(gsGlobal, Black);
 
-	struct GSTEXTURE_holder *imageTextures = drawImage((gsGlobal->Width - 400) / 2, (gsGlobal->Height - (225 + 60)) / 2, 400, 225, getPowerTexture());
+	struct GSTEXTURE_holder *imageTextures = drawImage((gsGlobal->Width - 400) / 2, (gsGlobal->Height - (225 + 60)) / 2, 400, 225, powerTexture);
 		
 	const char *text = "Unplug the power cord.";
 	int x, y;
