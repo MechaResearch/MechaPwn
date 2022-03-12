@@ -30,31 +30,31 @@ static unsigned char RpcBuffer[0x1000] ALIGNED(64);
 
 int MassInit()
 {
-	SifInitRpc(0);
+    SifInitRpc(0);
 
-	nopdelay();
-	while(SifBindRpc(&SifRpcClientMass, MASSWATCHER_HEADER, 0) < 0 || SifRpcClientMass.server == NULL)
-	{
-		_printf("libsecr: bind failed\n");
-	}
+    nopdelay();
+    while (SifBindRpc(&SifRpcClientMass, MASSWATCHER_HEADER, 0) < 0 || SifRpcClientMass.server == NULL)
+    {
+        _printf("libsecr: bind failed\n");
+    }
 
-	return 1;
+    return 1;
 }
 
 void MassDeinit()
 {
-	memset(&SifRpcClientMass, 0, sizeof(SifRpcClientData_t));
+    memset(&SifRpcClientMass, 0, sizeof(SifRpcClientData_t));
 }
 
 char MassCheck()
 {
-	char *params = (char *) RpcBuffer;
+    char *params = (char *)RpcBuffer;
 
-	if(SifCallRpc(&SifRpcClientMass, 1, 0, RpcBuffer, sizeof(RpcBuffer), RpcBuffer, sizeof(RpcBuffer), NULL, NULL) < 0)
-	{
-		_printf("MassScmd: rpc error\n");
-		return 0;
-	}
+    if (SifCallRpc(&SifRpcClientMass, 1, 0, RpcBuffer, sizeof(RpcBuffer), RpcBuffer, sizeof(RpcBuffer), NULL, NULL) < 0)
+    {
+        _printf("MassScmd: rpc error\n");
+        return 0;
+    }
 
-	return *params;
+    return *params;
 }

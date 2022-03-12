@@ -22,7 +22,7 @@ clean:
 	make clean -C irx/source/mechaproxy
 	make clean -C irx/source/masswatcher
 	rm -f *.elf *.o *.s resources/*.bin resources/*.pyc *.pyc
-	
+
 #IRX Modules
 iomanX.s:
 	$(BIN2S) $(PS2SDK)/iop/irx/iomanX.irx iomanX.s iomanX
@@ -40,7 +40,7 @@ USBD.s: $(PS2SDK)/iop/irx/usbd.irx
 	$(BIN2S) $(PS2SDK)/iop/irx/usbd.irx USBD.s USBD
 USBHDFSD.s: $(PS2SDK)/iop/irx/usbhdfsd.irx
 	$(BIN2S) $(PS2SDK)/iop/irx/usbhdfsd.irx USBHDFSD.s USBHDFSD
-MECHAPROXY_irx.s: 
+MECHAPROXY_irx.s:
 	$(MAKE) -C irx/source/mechaproxy
 	$(BIN2S) irx/source/mechaproxy/irx/mechaproxy.irx MECHAPROXY_irx.s MECHAPROXY_irx
 MASSWATCHER_irx.s:

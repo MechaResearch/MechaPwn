@@ -14,4 +14,4 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define MASSWATCHER_HEADER		0x80000F01
+#define MASSWATCHER_HEADER 0x80000F01
