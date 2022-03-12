@@ -1,0 +1,7 @@
+*.o
+*.irx
+*.s
+*.pyc
+.*
+
+!.github
