@@ -9,7 +9,7 @@ EE_OBJS += MECHAPROXY_irx.o MASSWATCHER_irx.o pwr50k.o pwr70k.o pwr90k.o frame_0
 
 EE_INCS = -I$(PS2SDK)/ports/include -I$(PS2SDK)/sbv/include -I$(PS2SDK)/common/include -I./irx/source/mechaproxy/include/ -I./irx/source/masswatcher/include/ -I$(PS2SDK)/ports/include/freetype2 -I$(GSKIT)/include
 EE_LDFLAGS = -L$(PS2SDK)/sbv/lib -L$(PS2SDK)/ports/lib -L$(GSKIT)/lib
-EE_LIBS = -lpatches -lpadx -lmc -lfreetype -lpng16 -lzlib -lgskit -lgskit_toolkit -ldmakit -lfileXio
+EE_LIBS = -lpatches -lpadx -lmc -lfreetype -lpng16 -lz -lgskit -lgskit_toolkit -ldmakit -lfileXio
 EE_CFLAGS = -std=c99
 
 BIN2S = $(PS2SDK)/bin/bin2s

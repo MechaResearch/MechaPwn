@@ -37,6 +37,8 @@
 #include "ui.h"
 #include "mass.h"
 
+// TODO: store existing areas on nvram on boot
+
 static void ResetIOP()
 {
     SifInitRpc(0);
@@ -85,6 +87,7 @@ char unlockNVM()
         }
     }
 
+    // TODO: check original patch before, so it will be possible to restore it
     if (!installPatch(patch))
     {
         struct GSTEXTURE_holder *errorTextures = draw_text(10, 300, 42, 0xFFFFFF, "Failed to install the patch.\n");
@@ -180,50 +183,62 @@ int drawMenu(struct MENU *menu)
     }
 }
 
-uint8_t region_keyseed[]                = {0x4d, 0x65, 0x63, 0x68, 0x61, 0x50, 0x77, 0x6e, 0x00, 0xec};
+// TODO: generate slim region_params per user choise:
+// HKkorJAG
+// ||||||||
+// |||||||G - rom1:DVDVER last byte (only in PS3) (possible values: " UEAGDCM", space symbol for Japan)
+// ||||||A  - rom1:DVDID last byte (possible values: "JUEAORCM")
+// |||||J   - rom0:VERSTR (0x22 byte: "System ROM Version 5.0 06/23/03 J") (possible values: "JAE") ps1 games, best region - A (no restrictions)
+// |Kkor    - rom0:OSDVER (5-8th byte) ("0190Csch"), allows to change console language set, possible values: Jjpn, Aeng, Eeng, Heng, Reng, Csch, Kkor, Htch, Aspa
+// H        - rom0:ROMVER (4th byte 0220HD20060905) (possible values: "JAEHC") ps2 games, best region - A (no restrictions)
+uint8_t region_keyseed[]                = {0x4d, 0x65, 0x63, 0x68, 0x61, 0x50, 0x77, 0x6e, 0x00, 0xec}; // MechaPwn +00 EC
 uint8_t region_ciphertext_dex[]         = {0x1a, 0x74, 0xac, 0xb2, 0xb0, 0xae, 0x15, 0xdf, 0x00, 0xc1};
 
 // 0 - Japan
-uint8_t region_params_japan[]           = {0x4a, 0x4a, 0x6a, 0x70, 0x6e, 0x4a, 0x4a, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t region_params_japan[]           = {0x4a, 0x4a, 0x6a, 0x70, 0x6e, 0x4a, 0x4a, 0x00, 0x00, 0x00, 0x00, 0x00}; // JJjpnJJ
 uint8_t region_ciphertext_japan_cex[]   = {0xf1, 0xef, 0x50, 0xec, 0x1c, 0x2e, 0xc5, 0x69, 0x00, 0x6b};
 
 // 1 - USA
-uint8_t region_params_usa[]             = {0x41, 0x41, 0x65, 0x6e, 0x67, 0x41, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t region_params_usa[]             = {0x41, 0x41, 0x65, 0x6e, 0x67, 0x41, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00}; // AAengAU
 uint8_t region_ciphertext_usa_cex[]     = {0xb8, 0x42, 0xd5, 0xbc, 0x53, 0xa1, 0x96, 0xe6, 0x00, 0x04};
 
 // 2 - Oceania
-uint8_t region_params_oceania[]         = {0x45, 0x45, 0x65, 0x6e, 0x67, 0x45, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t region_params_oceania[]         = {0x45, 0x45, 0x65, 0x6e, 0x67, 0x45, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00}; // EEengEO
 uint8_t region_ciphertext_oceania_cex[] = {0x64, 0xaa, 0x23, 0x25, 0x28, 0x5c, 0x14, 0xf3, 0x00, 0x1e};
 
 // 3 - UK
 // same as europe
 
 // 4 - Europe
-uint8_t region_params_europe[]          = {0x45, 0x45, 0x65, 0x6e, 0x67, 0x45, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t region_params_europe[]          = {0x45, 0x45, 0x65, 0x6e, 0x67, 0x45, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00}; // EEengEE
 uint8_t region_ciphertext_europe_cex[]  = {0x54, 0x88, 0x4f, 0x90, 0x76, 0x4d, 0xcb, 0xeb, 0x00, 0xcb};
 
 // 5 - Korea
-uint8_t region_params_korea[]           = {0x48, 0x4b, 0x6b, 0x6f, 0x72, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t region_params_korea[]           = {0x48, 0x4b, 0x6b, 0x6f, 0x72, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00}; // HKkorJA
 uint8_t region_ciphertext_korea_cex[]   = {0x2a, 0xf0, 0x38, 0x2d, 0xef, 0xe5, 0x48, 0xa4, 0x00, 0xc0};
 
 // 6 - Asia
-uint8_t region_params_asia[]            = {0x48, 0x48, 0x65, 0x6e, 0x67, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t region_params_asia[]            = {0x48, 0x48, 0x65, 0x6e, 0x67, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00}; // HHengJA
 uint8_t region_ciphertext_asia_cex[]    = {0x2a, 0xf0, 0x38, 0x2d, 0xef, 0xe5, 0x48, 0xa4, 0x00, 0xc0};
 
-// 7 - Tawain
-uint8_t region_params_tawain[]          = {0x48, 0x48, 0x74, 0x63, 0x68, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00};
+// 7 - Taiwan
+uint8_t region_params_taiwan[]          = {0x48, 0x48, 0x74, 0x63, 0x68, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00}; // HHtchJA
 // region_ciphertext is same as asia
 
 // 8 - Russia
-uint8_t region_params_russia[]          = {0x45, 0x52, 0x65, 0x6e, 0x67, 0x45, 0x52, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t region_params_russia[]          = {0x45, 0x52, 0x65, 0x6e, 0x67, 0x45, 0x52, 0x00, 0x00, 0x00, 0x00, 0x00}; // ERengER
 uint8_t region_ciphertext_russia_cex[]  = {0x3e, 0x11, 0xc1, 0xbb, 0xfb, 0x26, 0x2b, 0x4c, 0x00, 0x9c};
 
+
 // 9 - China
+// TODO: CCschJC
 uint8_t region_ciphertext_china_cex[]   = {0x0f, 0x5d, 0xb8, 0xa2, 0x9d, 0x85, 0xcc, 0x76, 0x00, 0xd5};
 
+// TODO: 10 and 12
 // 10 - ???
 
 // 11 - Mexico / ???
+// TODO: AAspaAM
 uint8_t region_ciphertext_mexico_cex[]  = {0x35, 0x1a, 0x92, 0x9a, 0x05, 0x5b, 0xdc, 0x40, 0x00, 0x08};
 
 // 12 - ???
@@ -297,6 +312,7 @@ void selectCexDex(char *isDex)
 
 void selectModel(char isDex, char *isSlim, char *model)
 {
+    // TODO: remove model change to DTL, maybe add some letter at the end
     if (isDex)
         strcpy(model, "DTL-H");
     else
@@ -317,6 +333,8 @@ void selectModel(char isDex, char *isSlim, char *model)
         menu.options[i] = option;
     }
 
+    // TODO: as we don change model name. remove all that variety
+    // probably leave 4 families: FAT, Deckard, 70k, DESR
     strcat((char *)menu.options[0], "50xxx");
     strcat((char *)menu.options[1], "55xxx");
     strcat((char *)menu.options[2], "70xxx");
@@ -501,7 +519,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 
     menu.options[0] = "Back";
     strcat((char *)menu.options[1], "006 - Asia");
-    strcat((char *)menu.options[2], "007 - Tawain");
+    strcat((char *)menu.options[2], "007 - Taiwan");
     strcat((char *)menu.options[3], "008 - Russia");
     if (!isSlim)
     {
@@ -546,7 +564,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
         strcat(model, "007");
         sum_buffer((uint8_t *)model, 18);
         if (isSlim)
-            *region_params = region_params_tawain;
+            *region_params = region_params_taiwan;
         if (isDex)
             *region_ciphertext = region_ciphertext_dex;
         else
@@ -695,6 +713,8 @@ void drawLogo()
 
 char backupNVM()
 {
+    // TODO: maybe add serial into filename?
+    // TODO: maybe save 2 backups? one to the memory card, ont ot the flash?
     FILE *f = fopen("mass:/nvm.bin", "rb");
     if (f)
     {
@@ -758,6 +778,8 @@ char backupNVM()
         fwrite(&data, 1, 2, f);
     }
 
+    // TODO: open file again, check if its size isnt zero, or maybe even compare with nvm again
+    // TODO: add more messages to the screen about backuping
     fclose(f);
 
     return 1;
@@ -859,6 +881,8 @@ char applyPatches(char isDex)
 
 uint8_t *getPowerTexture()
 {
+    // TODO: perform any checks based on mechacon version, v6 = slim, v5 = Fat, desr
+    // Model name isnt safe check, cause it can be rewritten
     char model_number[18];
     for (int i = 0; i < 18; i += 2)
         if (!ReadNVM(216 + i / 2, (uint16_t *)&model_number[i]))
@@ -873,7 +897,7 @@ uint8_t *getPowerTexture()
         memcmp(model_number, "SCPH-7", 6) == 0 ||
         memcmp(model_number, "DTL-H7", 6) == 0)
         return &pwr70k;
-
+    // TODO: add picture for DESR
     return &pwr50k;
 }
 
@@ -881,6 +905,7 @@ void checkUnsupportedVersion()
 {
     uint8_t version[3];
     uint8_t build_date[5];
+    // TODO: print mecha version for unsupported consoles too
     if (!getMechaVersion(version) || !getMechaBuildDate(build_date))
     {
         gsKit_clear(gsGlobal, Black);
@@ -917,6 +942,7 @@ void checkUnsupportedVersion()
     }
 }
 
+// TODO: provide similar function, but for checking original patch
 char isPatchAlreadyInstalled()
 {
     uint8_t build_date[5];
@@ -937,6 +963,9 @@ char isPatchAlreadyInstalled()
 
 char restoreBackup()
 {
+    // TODO: add more checks for backup!! Quite dangerous, it is better to patch NVM and undo patches
+    // high risk that you will restore wrong backup
+    // maybe we can keep mechapwn setting in ciphertext?
     FILE *f = fopen("mass:/nvm.bin", "rb");
     if (!f)
     {
@@ -1008,6 +1037,7 @@ int main()
     MechaInit();
     MassInit();
 
+    // TODO: do we need this?
     mcInit(MC_TYPE_XMC);
 
     PadInitPads();
@@ -1067,20 +1097,20 @@ int main()
 
     struct GSTEXTURE_holder *imageTextures = drawImage((gsGlobal->Width - 400) / 2, (gsGlobal->Height - (225 + 60)) / 2, 400, 225, powerTexture);
 
-    const char *text                       = "Unplug the power cord.";
-    int x, y;
-    getTextSize(42, text, &x, &y);
-    y += 42;
-    struct GSTEXTURE_holder *unplugTextures = draw_text((gsGlobal->Width - x) / 2, ((gsGlobal->Height - (225 + 60)) / 2) + 225, 42, 0xFFFFFF, text);
+    const char *text1                      = "Unplug the power cord.";
+    int x1, y1;
+    getTextSize(42, text1, &x1, &y1);
+    y1 += 42;
+    struct GSTEXTURE_holder *unplugTextures = draw_text((gsGlobal->Width - x1) / 2, ((gsGlobal->Height - (225 + 60)) / 2) + 225, 42, 0xFFFFFF, text1);
 
     struct GSTEXTURE_holder *rerunTextures  = 0;
     if (rerun)
     {
-        const char *text = "Run MechaPwn again.";
-        int x, y;
-        getTextSize(42, text, &x, &y);
-        y += 42;
-        rerunTextures = draw_text((gsGlobal->Width - x) / 2, ((gsGlobal->Height - (195)) / 2) + 225, 42, 0xFFFFFF, text);
+        const char *text2 = "Run MechaPwn again.";
+        int x2, y2;
+        getTextSize(42, text2, &x2, &y2);
+        y2 += 42;
+        rerunTextures = draw_text((gsGlobal->Width - x2) / 2, ((gsGlobal->Height - (195)) / 2) + 225, 42, 0xFFFFFF, text2);
     }
 
     drawFrame();

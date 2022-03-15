@@ -17,7 +17,7 @@
 import sys
 import os
 from PIL import Image
-from RLE24 import encodeRLE24, decodeRLE24
+from RLE24 import encodeRLE24
 
 img = Image.open(sys.argv[1])
 
@@ -35,8 +35,8 @@ else:
     print("sorry, can't support this format")
     sys.exit()
 
-#r, g, b = background.split()
-#data = Image.merge("RGB", (r, g, b)).tobytes()
+# r, g, b = background.split()
+# data = Image.merge("RGB", (r, g, b)).tobytes()
 
 data = encodeRLE24(background)
 

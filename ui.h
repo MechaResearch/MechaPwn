@@ -37,7 +37,7 @@ struct GSTEXTURE_holder
 
 extern GSGLOBAL *gsGlobal;
 
-struct GSTEXTURE_holder *drawImage(int x, int y, int width, int height, u8 *texture);
+struct GSTEXTURE_holder *drawImage(int x, int y, int width, int height, const u8 *texture);
 
 void getTextSize(int size, const char *text, int *x, int *y);
 

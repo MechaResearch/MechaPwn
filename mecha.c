@@ -66,13 +66,13 @@ int MechaScmd(u8 cmd, void *input, u8 inputlength, void *output)
     return params->result;
 }
 
-
-
 char getMechaVersion(uint8_t *data)
 {
     u8 input[1];
     u8 output[16];
     input[0] = 0x00;
+    // TODO: DTL-H3010x MechaScmd(0x03) return error, but this is incorrect behaviour
+    // as it is unsupported maybe dont look at it
     if (MechaScmd(0x03, input, sizeof(input), output) != 1)
     {
         return 0;

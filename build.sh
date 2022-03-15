@@ -1,3 +1,4 @@
+#!/bin/sh
 cd irx/source/mechaproxy
 make
 cd -

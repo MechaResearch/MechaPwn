@@ -63,7 +63,7 @@ void draw_bitmap(int x, int y, FT_Bitmap *bitmap, GSTEXTURE *Texture, u32 color)
     gsKit_prim_sprite_texture(gsGlobal, Texture, x, y, 0.0f, 0.0f, x + Texture->Width, y + Texture->Height, Texture->Width, Texture->Height, 3, GS_SETREG_RGBAQ(0xFF, 0xFF, 0xFF, 0xFF, 0x00));
 }
 
-struct GSTEXTURE_holder *drawImage(int x, int y, int width, int height, u8 *texture)
+struct GSTEXTURE_holder *drawImage(int x, int y, int width, int height, const u8 *texture)
 {
     struct GSTEXTURE_holder *TextureHolder = malloc(sizeof(struct GSTEXTURE_holder));
     memset(TextureHolder, 0, sizeof(struct GSTEXTURE_holder));
@@ -235,6 +235,6 @@ void init_ui()
     gsKit_init_screen(gsGlobal);
 
     int error = FT_Init_FreeType(&library);
-
+    // TODO: add error haandling
     error     = FT_New_Memory_Face(library, &IndieFlower, size_IndieFlower, 0, &face);
 }
