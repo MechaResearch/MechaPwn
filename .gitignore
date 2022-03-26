@@ -3,6 +3,7 @@
 *.s
 *.pyc
 .*
+*.elf
 
 !.github
 !.editorconfig

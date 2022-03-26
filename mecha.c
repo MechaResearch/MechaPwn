@@ -194,15 +194,6 @@ char ReadNVM(uint16_t offset, uint16_t *data)
     return 1;
 }
 
-char getModelName(char *model_number[18])
-{
-    for (int i = 0; i < 18; i += 2)
-        if (!ReadNVM(216 + i / 2, (uint16_t *)&model_number[i]))
-            return 0;
-
-    return 1;
-}
-
 char WriteNVM(uint16_t offset, uint16_t data)
 {
     u8 input[4];

@@ -24,5 +24,4 @@ char WriteConfig(const uint8_t *data);
 char CloseConfig();
 char ReadNVM(uint16_t offset, uint16_t *data);
 char WriteNVM(uint16_t offset, uint16_t data);
-char getModelName(char *model_number[18])
 char IsNVMUnlocked();
