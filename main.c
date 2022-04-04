@@ -311,79 +311,79 @@ void selectCexDex(char *isDex)
 }
 
 
-void selectModel(char isDex, char *model)
-{
-    // TODO: remove model change to DTL, maybe add some letter at the end
-    // if (isDex)
-    //     strcpy(model, "DTL-H");
-    // else
-    //     strcpy(model, "SCPH-");
+// void selectModel(char isDex, char *model)
+// {
+//     // TODO: remove model change to DTL, maybe add some letter at the end
+//     // if (isDex)
+//     //     strcpy(model, "DTL-H");
+//     // else
+//     //     strcpy(model, "SCPH-");
 
-    gsKit_clear(gsGlobal, Black);
+//     gsKit_clear(gsGlobal, Black);
 
-    struct MENU menu;
-    menu.title        = "Select model";
-    menu.x_text       = "X Select";
-    menu.o_text       = "O Exit";
-    menu.option_count = 7;
+//     struct MENU menu;
+//     menu.title        = "Select model";
+//     menu.x_text       = "X Select";
+//     menu.o_text       = "O Exit";
+//     menu.option_count = 7;
 
-    for (int i = 0; i < menu.option_count; i++)
-    {
-        char *option = malloc(20);
-        strcpy(option, model);
-        menu.options[i] = option;
-    }
+//     for (int i = 0; i < menu.option_count; i++)
+//     {
+//         char *option = malloc(20);
+//         strcpy(option, model);
+//         menu.options[i] = option;
+//     }
 
-    // TODO: as we don change model name. remove all that variety
-    // probably leave 4 families: FAT, Deckard, 70k, DESR
-    strcat((char *)menu.options[0], "50xxx");
-    strcat((char *)menu.options[1], "55xxx");
-    strcat((char *)menu.options[2], "70xxx");
-    strcat((char *)menu.options[3], "75xxx");
-    strcat((char *)menu.options[4], "77xxx");
-    strcat((char *)menu.options[5], "79xxx");
-    strcat((char *)menu.options[6], "90xxx");
+//     // TODO: as we don change model name. remove all that variety
+//     // probably leave 4 families: FAT, Deckard, 70k, DESR
+//     strcat((char *)menu.options[0], "50xxx");
+//     strcat((char *)menu.options[1], "55xxx");
+//     strcat((char *)menu.options[2], "70xxx");
+//     strcat((char *)menu.options[3], "75xxx");
+//     strcat((char *)menu.options[4], "77xxx");
+//     strcat((char *)menu.options[5], "79xxx");
+//     strcat((char *)menu.options[6], "90xxx");
 
-    int selected = drawMenu(&menu);
+//     int selected = drawMenu(&menu);
 
-    for (int i = 0; i < menu.option_count; i++)
-        free((char *)menu.options[i]);
+//     for (int i = 0; i < menu.option_count; i++)
+//         free((char *)menu.options[i]);
 
-    if (selected == -1)
-    {
-        ResetIOP();
-        LoadExecPS2("rom0:OSDSYS", 0, NULL);
-        SleepThread();
-    }
-    else if (selected == 0)
-    {
-        strcat(model, "50");
-    }
-    else if (selected == 1)
-    {
-        strcat(model, "55");
-    }
-    else if (selected == 2)
-    {
-        strcat(model, "70");
-    }
-    else if (selected == 3)
-    {
-        strcat(model, "75");
-    }
-    else if (selected == 4)
-    {
-        strcat(model, "77");
-    }
-    else if (selected == 5)
-    {
-        strcat(model, "79");
-    }
-    else if (selected == 6)
-    {
-        strcat(model, "90");
-    }
-}
+//     if (selected == -1)
+//     {
+//         ResetIOP();
+//         LoadExecPS2("rom0:OSDSYS", 0, NULL);
+//         SleepThread();
+//     }
+//     else if (selected == 0)
+//     {
+//         strcat(model, "50");
+//     }
+//     else if (selected == 1)
+//     {
+//         strcat(model, "55");
+//     }
+//     else if (selected == 2)
+//     {
+//         strcat(model, "70");
+//     }
+//     else if (selected == 3)
+//     {
+//         strcat(model, "75");
+//     }
+//     else if (selected == 4)
+//     {
+//         strcat(model, "77");
+//     }
+//     else if (selected == 5)
+//     {
+//         strcat(model, "79");
+//     }
+//     else if (selected == 6)
+//     {
+//         strcat(model, "90");
+//     }
+// }
 
 void selectRegion2(char isDex, char *model, uint8_t **region_params, uint8_t **region_ciphertext);
 void selectRegion(char isDex, char *model, uint8_t **region_params, uint8_t **region_ciphertext)
@@ -891,20 +891,20 @@ uint8_t *getPowerTexture()
 {
     // TODO: perform any checks based on mechacon version, v6 = slim, v5 = Fat, desr
     // Model name isnt safe check, cause it can be rewritten
-    char model_number[18];
-    for (int i = 0; i < 18; i += 2)
-        if (!ReadNVM(216 + i / 2, (uint16_t *)&model_number[i]))
-            break;
+    // char model_number[18];
+    // for (int i = 0; i < 18; i += 2)
+    //     if (!ReadNVM(216 + i / 2, (uint16_t *)&model_number[i]))
+    //         break;
 
-    if (
-        memcmp(model_number, "SCPH-9", 6) == 0 ||
-        memcmp(model_number, "DTL-H9", 6) == 0)
-        return &pwr90k;
+    uint8_t version[3];
+    getMechaVersion(version);
 
-    if (
-        memcmp(model_number, "SCPH-7", 6) == 0 ||
-        memcmp(model_number, "DTL-H7", 6) == 0)
-        return &pwr70k;
+    if (version[1] == 6)
+        if (version[2] < 6)
+            return &pwr70k; // MV 6.0-6.5
+        else
+            return &pwr90k; // MV >=6.6
+
     // TODO: add picture for DESR
     return &pwr50k;
 }
