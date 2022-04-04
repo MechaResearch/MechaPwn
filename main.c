@@ -191,8 +191,9 @@ int drawMenu(struct MENU *menu)
 // |||||J   - rom0:VERSTR (0x22 byte: "System ROM Version 5.0 06/23/03 J") (possible values: "JAE") ps1 games, best region - A (no restrictions)
 // |Kkor    - rom0:OSDVER (5-8th byte) ("0190Csch"), allows to change console language set, possible values: Jjpn, Aeng, Eeng, Heng, Reng, Csch, Kkor, Htch, Aspa
 // H        - rom0:ROMVER (4th byte 0220HD20060905) (possible values: "JAEHC") ps2 games, best region - A (no restrictions)
-uint8_t region_keyseed[]                = {0x4d, 0x65, 0x63, 0x68, 0x61, 0x50, 0x77, 0x6e, 0x00, 0xec}; // MechaPwn +00 EC
-uint8_t region_ciphertext_dex[]         = {0x1a, 0x74, 0xac, 0xb2, 0xb0, 0xae, 0x15, 0xdf, 0x00, 0xc1};
+uint8_t region_keyseed[]                = {0x4d, 0x65, 0x63, 0x68, 0x61, 0x50, 0x77, 0x6e, 0x00, 0xec};             // MechaPwn +00 EC
+uint8_t region_ciphertext_dex[]         = {0x05, 0x0D, 0x36, 0x04, 0x6F, 0x69, 0xB6, 0x76, 0x00, 0xAF};             // Region 00130000
+uint8_t region_params_dex[]             = {0x4a, 0x4a, 0x6a, 0x70, 0x6e, 0x4a, 0x4a, 0x00, 0x00, 0x00, 0x00, 0x00}; // AAengAU
 
 // 0 - Japan
 uint8_t region_params_japan[]           = {0x4a, 0x4a, 0x6a, 0x70, 0x6e, 0x4a, 0x4a, 0x00, 0x00, 0x00, 0x00, 0x00}; // JJjpnJJ
@@ -261,12 +262,12 @@ char write_region(uint8_t *region_params, uint8_t *model_number, uint8_t *region
                 break;
     }
 
-    if (model_number)
-    {
-        for (int i = 0; i < 18; i += 2)
-            if (!WriteNVM(216 + i / 2, *(uint16_t *)&model_number[i]))
-                break;
-    }
+    // if (model_number)
+    // {
+    //     for (int i = 0; i < 18; i += 2)
+    //         if (!WriteNVM(216 + i / 2, *(uint16_t *)&model_number[i]))
+    //             break;
+    // }
 
     if (region_ciphertext)
     {
@@ -310,13 +311,13 @@ void selectCexDex(char *isDex)
 }
 
 
-void selectModel(char isDex, char *isSlim, char *model)
+void selectModel(char isDex, char *model)
 {
     // TODO: remove model change to DTL, maybe add some letter at the end
-    if (isDex)
-        strcpy(model, "DTL-H");
-    else
-        strcpy(model, "SCPH-");
+    // if (isDex)
+    //     strcpy(model, "DTL-H");
+    // else
+    //     strcpy(model, "SCPH-");
 
     gsKit_clear(gsGlobal, Black);
 
@@ -357,43 +358,44 @@ void selectModel(char isDex, char *isSlim, char *model)
     else if (selected == 0)
     {
         strcat(model, "50");
-        *isSlim = 0;
     }
     else if (selected == 1)
     {
         strcat(model, "55");
-        *isSlim = 0;
     }
     else if (selected == 2)
     {
         strcat(model, "70");
-        *isSlim = 1;
     }
     else if (selected == 3)
     {
         strcat(model, "75");
-        *isSlim = 1;
     }
     else if (selected == 4)
     {
         strcat(model, "77");
-        *isSlim = 1;
     }
     else if (selected == 5)
     {
         strcat(model, "79");
-        *isSlim = 1;
     }
     else if (selected == 6)
     {
         strcat(model, "90");
-        *isSlim = 1;
     }
 }
 
-void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params, uint8_t **region_ciphertext);
-void selectRegion(char isDex, char isSlim, char *model, uint8_t **region_params, uint8_t **region_ciphertext)
+void selectRegion2(char isDex, char *model, uint8_t **region_params, uint8_t **region_ciphertext);
+void selectRegion(char isDex, char *model, uint8_t **region_params, uint8_t **region_ciphertext)
 {
+    uint8_t version[3];
+    uint8_t isSlim = 0;
+    getMechaVersion(version);
+    if (version[1] == 5)
+        isSlim = 0;
+    else if (version[1] == 6)
+        isSlim = 1;
+
     gsKit_clear(gsGlobal, Black);
 
     struct MENU menu;
@@ -496,12 +498,20 @@ void selectRegion(char isDex, char isSlim, char *model, uint8_t **region_params,
     }
     else if (selected == 6)
     {
-        return selectRegion2(isDex, isSlim, model, region_params, region_ciphertext);
+        return selectRegion2(isDex, model, region_params, region_ciphertext);
     }
 }
 
-void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params, uint8_t **region_ciphertext)
+void selectRegion2(char isDex, char *model, uint8_t **region_params, uint8_t **region_ciphertext)
 {
+    uint8_t version[3];
+    uint8_t isSlim = 0;
+    getMechaVersion(version);
+    if (version[1] == 5)
+        isSlim = 0;
+    else if (version[1] == 6)
+        isSlim = 1;
+
     gsKit_clear(gsGlobal, Black);
 
     struct MENU menu;
@@ -510,7 +520,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
     menu.o_text       = "O Exit";
     menu.option_count = (isSlim ? 7 : 6);
 
-    for (int i = 1; i < (isSlim ? 7 : 6); i++)
+    for (int i = 1; i < menu.option_count; i++)
     {
         char *option = malloc(20);
         strcpy(option, model);
@@ -535,7 +545,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 
     int selected = drawMenu(&menu);
 
-    for (int i = 1; i < (isSlim ? 7 : 6); i++)
+    for (int i = 1; i < menu.option_count; i++)
         free((char *)menu.options[i]);
 
     if (selected == -1)
@@ -546,7 +556,7 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
     }
     else if (selected == 0)
     {
-        return selectRegion(isDex, isSlim, model, region_params, region_ciphertext);
+        return selectRegion(isDex, model, region_params, region_ciphertext);
     }
     else if (selected == 1)
     {
@@ -640,12 +650,10 @@ void selectRegion2(char isDex, char isSlim, char *model, uint8_t **region_params
 void setRegion(char *isDex)
 {
     selectCexDex(isDex);
-    char isSlim = 0;
     char model[18];
-    selectModel(*isDex, &isSlim, model);
     uint8_t *region_params     = 0;
     uint8_t *region_ciphertext = 0;
-    selectRegion(*isDex, isSlim, model, &region_params, &region_ciphertext);
+    selectRegion(*isDex, model, &region_params, &region_ciphertext);
 
     write_region(region_params, (uint8_t *)model, region_ciphertext);
 }
