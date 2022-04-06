@@ -52,13 +52,13 @@ static void ResetIOP()
 
 char unlockNVM()
 {
-    gsKit_clear(gsGlobal, Black);
-
     uint8_t version[3];
     getMechaVersion(version);
 
     uint8_t build_date[5];
     getMechaBuildDate(build_date);
+
+    gsKit_clear(gsGlobal, Black);
 
     struct GSTEXTURE_holder *versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
     struct GSTEXTURE_holder *buildTextures   = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
@@ -667,39 +667,62 @@ void checkUnsupportedVersion()
     uint8_t version[3];
     uint8_t build_date[5];
     // TODO: print mecha version for unsupported consoles too
-    if (!getMechaVersion(version) || !getMechaBuildDate(build_date))
-    {
-        if (!getMechaBuildDate(build_date))
-            gsKit_clear(gsGlobal, Black);
+    struct GSTEXTURE_holder *versionTextures;
+    struct GSTEXTURE_holder *errorTextures;
 
-        struct GSTEXTURE_holder *errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "This MechaCon isn't supported!\n");
+    gsKit_clear(gsGlobal, Black);
+    if (!getMechaBuildDate(build_date))
+    {
+        if (getMechaVersion(version))
+            versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+
+        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "This MechaCon isn't supported!\n");
 
         drawFrame();
 
+        if (getMechaVersion(version))
+            freeGSTEXTURE_holder(versionTextures);
         freeGSTEXTURE_holder(errorTextures);
 
         SleepThread();
         return;
     }
-
-    const uint8_t *patch = getPatch(build_date);
-    if (patch == 0)
+    else
     {
-        gsKit_clear(gsGlobal, Black);
+        versionTextures                        = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+        struct GSTEXTURE_holder *buildTextures = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
-        struct GSTEXTURE_holder *versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
-        struct GSTEXTURE_holder *buildTextures   = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
+        if (!getPatch(build_date))
+        {
+            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "You have unknown MechaCon, please report!\n");
 
-        struct GSTEXTURE_holder *errorTextures   = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "You have unknown MechaCon, please report!\n");
+            drawFrame();
 
-        drawFrame();
+            freeGSTEXTURE_holder(versionTextures);
+            freeGSTEXTURE_holder(buildTextures);
+            freeGSTEXTURE_holder(errorTextures);
 
-        freeGSTEXTURE_holder(versionTextures);
-        freeGSTEXTURE_holder(buildTextures);
-        freeGSTEXTURE_holder(errorTextures);
+            SleepThread();
+            return;
+        }
+        else
+        {
+            struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
 
-        SleepThread();
-        return;
+            drawFrame();
+
+            freeGSTEXTURE_holder(versionTextures);
+            freeGSTEXTURE_holder(buildTextures);
+            freeGSTEXTURE_holder(exitTextures);
+        }
+    }
+
+    while (1)
+    {
+        u32 new_pad = ReadCombinedPadStatus();
+
+        if (new_pad & PAD_CROSS)
+            break;
     }
 }
 

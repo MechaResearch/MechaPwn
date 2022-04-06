@@ -78,7 +78,7 @@ char getMechaVersion(uint8_t *data)
         return 0;
     }
 
-    memcpy(data, &output[0], 3);
+    memcpy(data, &output[0], 4);
 
     return 1;
 }
