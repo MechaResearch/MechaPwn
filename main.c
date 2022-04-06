@@ -37,6 +37,7 @@
 #include "ui.h"
 #include "mass.h"
 
+static unsigned int big_size = 46, reg_size = 32;
 // TODO: store existing areas on nvram on boot
 
 static void ResetIOP()
@@ -59,13 +60,13 @@ char unlockNVM()
     uint8_t build_date[5];
     getMechaBuildDate(build_date);
 
-    struct GSTEXTURE_holder *versionTextures = ui_printf(10, 100, 42, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
-    struct GSTEXTURE_holder *buildTextures   = ui_printf(10, 150, 42, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
+    struct GSTEXTURE_holder *versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+    struct GSTEXTURE_holder *buildTextures   = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
     const uint8_t *patch                     = getPatch(build_date);
 
-    struct GSTEXTURE_holder *exploitTextures = draw_text(10, 200, 42, 0xFFFFFF, "Press O to install exploit.\n");
-    struct GSTEXTURE_holder *exitTextures    = draw_text(10, 250, 42, 0xFFFFFF, "Press X to exit.\n");
+    struct GSTEXTURE_holder *exploitTextures = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Press O to install exploit.\n");
+    struct GSTEXTURE_holder *exitTextures    = draw_text(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to exit.\n");
 
     drawFrame();
 
@@ -90,7 +91,7 @@ char unlockNVM()
     // TODO: check original patch before, so it will be possible to restore it
     if (!installPatch(patch))
     {
-        struct GSTEXTURE_holder *errorTextures = draw_text(10, 300, 42, 0xFFFFFF, "Failed to install the patch.\n");
+        struct GSTEXTURE_holder *errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 4 * (reg_size + 4), reg_size, 0xFFFFFF, "Failed to install the patch.\n");
 
         drawFrame();
 
@@ -154,7 +155,6 @@ int drawMenu(struct MENU *menu)
         gsKit_clear(gsGlobal, Black);
 
         int title_x, title_y;
-        int big_size = 46, reg_size = 32;
         getTextSize(big_size, menu->title, &title_x, &title_y);
 
         struct GSTEXTURE_holder *TitleTexture = draw_text((gsGlobal->Width - title_x) / 2, 8, big_size, 0xFFFFFF, menu->title);
@@ -432,7 +432,6 @@ void drawLogoFrame(uint8_t frame, char *text2)
 
     char text[]                           = "MechaPwn";
     int x, y;
-    int big_size = 46;
     getTextSize(big_size, text, &x, &y);
     y += big_size;
     struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - 270) / 2 - big_size - 8, big_size, 0xFFFFFF, text);
@@ -480,8 +479,7 @@ char backupNVM()
 {
     // TODO: maybe add serial into filename?
     // TODO: maybe save 2 backups? one to the memory card, ont ot the flash?
-    int reg_size = 42;
-    FILE *f      = fopen("mass:/nvm.bin", "rb");
+    FILE *f = fopen("mass:/nvm.bin", "rb");
     if (f)
     {
         fclose(f);
@@ -589,11 +587,11 @@ char applyPatches(char isDex)
     if (applyForceUnlock)
     {
         int x, y;
-        getTextSize(42, "Applying force unlock...", &x, &y);
-        y += 42;
+        getTextSize(reg_size, "Applying force unlock...", &x, &y);
+        y += reg_size;
 
         gsKit_clear(gsGlobal, Black);
-        struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Applying force unlock...");
+        struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Applying force unlock...");
         drawFrame();
         freeGSTEXTURE_holder(textTextures);
 
@@ -613,21 +611,21 @@ char applyPatches(char isDex)
             char text[] = "Failed to open nvm.bin!";
 
             int x, y;
-            getTextSize(42, text, &x, &y);
-            y += 42;
+            getTextSize(reg_size, text, &x, &y);
+            y += reg_size;
 
-            struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, text);
+            struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, text);
             drawFrame();
             freeGSTEXTURE_holder(textTextures);
             return 0;
         }
 
         int x, y;
-        getTextSize(42, "Restoring patches...", &x, &y);
-        y += 42;
+        getTextSize(reg_size, "Restoring patches...", &x, &y);
+        y += reg_size;
 
         gsKit_clear(gsGlobal, Black);
-        struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Restoring patches...");
+        struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Restoring patches...");
         drawFrame();
         freeGSTEXTURE_holder(textTextures);
 
@@ -671,9 +669,10 @@ void checkUnsupportedVersion()
     // TODO: print mecha version for unsupported consoles too
     if (!getMechaVersion(version) || !getMechaBuildDate(build_date))
     {
-        gsKit_clear(gsGlobal, Black);
+        if (!getMechaBuildDate(build_date))
+            gsKit_clear(gsGlobal, Black);
 
-        struct GSTEXTURE_holder *errorTextures = draw_text(10, 200, 42, 0xFFFFFF, "This MechaCon isn't supported!\n");
+        struct GSTEXTURE_holder *errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "This MechaCon isn't supported!\n");
 
         drawFrame();
 
@@ -688,10 +687,10 @@ void checkUnsupportedVersion()
     {
         gsKit_clear(gsGlobal, Black);
 
-        struct GSTEXTURE_holder *versionTextures = ui_printf(10, 100, 42, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
-        struct GSTEXTURE_holder *buildTextures   = ui_printf(10, 150, 42, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
+        struct GSTEXTURE_holder *versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+        struct GSTEXTURE_holder *buildTextures   = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
-        struct GSTEXTURE_holder *errorTextures   = draw_text(10, 200, 42, 0xFFFFFF, "You have unknown MechaCon, please report!\n");
+        struct GSTEXTURE_holder *errorTextures   = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "You have unknown MechaCon, please report!\n");
 
         drawFrame();
 
@@ -736,21 +735,21 @@ char restoreBackup()
         char text[] = "Failed to open nvm.bin!";
 
         int x, y;
-        getTextSize(42, text, &x, &y);
-        y += 42;
+        getTextSize(reg_size, text, &x, &y);
+        y += reg_size;
 
-        struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, text);
+        struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, text);
         drawFrame();
         freeGSTEXTURE_holder(textTextures);
         return 0;
     }
 
     int x, y;
-    getTextSize(42, "Restoring backup...", &x, &y);
-    y += 42;
+    getTextSize(reg_size, "Restoring backup...", &x, &y);
+    y += reg_size;
 
     gsKit_clear(gsGlobal, Black);
-    struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, 42, 0xFFFFFF, "Restoring backup...");
+    struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Restoring backup...");
     drawFrame();
     freeGSTEXTURE_holder(textTextures);
 
@@ -775,7 +774,7 @@ int main()
 
     gsKit_clear(gsGlobal, Black);
 
-    struct GSTEXTURE_holder *loadingTextures = draw_text(-10, -74, 42, 0xFFFFFF, "Loading...");
+    struct GSTEXTURE_holder *loadingTextures = draw_text(-8, -reg_size - 8, reg_size, 0xFFFFFF, "Loading...");
     drawFrame();
     freeGSTEXTURE_holder(loadingTextures);
 
@@ -861,18 +860,18 @@ int main()
 
     const char *text1                      = "Unplug the power cord.";
     int x1, y1;
-    getTextSize(42, text1, &x1, &y1);
-    y1 += 42;
-    struct GSTEXTURE_holder *unplugTextures = draw_text((gsGlobal->Width - x1) / 2, ((gsGlobal->Height - (225 + 60)) / 2) + 225, 42, 0xFFFFFF, text1);
+    getTextSize(reg_size, text1, &x1, &y1);
+    y1 += reg_size;
+    struct GSTEXTURE_holder *unplugTextures = draw_text((gsGlobal->Width - x1) / 2, ((gsGlobal->Height - (225 + 60)) / 2) + 225, reg_size, 0xFFFFFF, text1);
 
     struct GSTEXTURE_holder *rerunTextures  = 0;
     if (rerun)
     {
         const char *text2 = "Run MechaPwn again.";
         int x2, y2;
-        getTextSize(42, text2, &x2, &y2);
-        y2 += 42;
-        rerunTextures = draw_text((gsGlobal->Width - x2) / 2, ((gsGlobal->Height - (195)) / 2) + 225, 42, 0xFFFFFF, text2);
+        getTextSize(reg_size, text2, &x2, &y2);
+        y2 += reg_size;
+        rerunTextures = draw_text((gsGlobal->Width - x2) / 2, ((gsGlobal->Height - (195)) / 2) + 225, reg_size, 0xFFFFFF, text2);
     }
 
     drawFrame();
