@@ -489,59 +489,38 @@ char backupNVM()
     FILE *f = fopen(nvm_path, "rb");
     if (f)
     {
+        fseek(f, 0, SEEK_END);
+        int len = ftell(f);
         fclose(f);
-        gsKit_clear(gsGlobal, Black);
-
-        struct MENU menu;
-        menu.title        = "An NVM backup found";
-        menu.x_text       = "X Select";
-        menu.o_text       = "O Exit";
-        menu.option_count = 2;
-
-        menu.options[0]   = "Create a new backup";
-        menu.options[1]   = "Keep the current backup";
-
-        int selected      = drawMenu(&menu);
-
-        if (selected == -1)
-        {
-            ResetIOP();
-            LoadExecPS2("rom0:OSDSYS", 0, NULL);
-            SleepThread();
-        }
-        else if (selected == 1)
-        {
+        if (len == 1024)
             return 1;
+        else
+        {
+            gsKit_clear(gsGlobal, Black);
+
+            char text[] = "NVRAM backup is corrupted!";
+
+            int x, y;
+            getTextSize(reg_size, text, &x, &y);
+            y += reg_size;
+
+            struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, text);
+            drawFrame();
+            freeGSTEXTURE_holder(textTextures);
+            return 0;
         }
-    }
-
-    f = fopen(nvm_path, "wb");
-
-    if (!f)
-    {
-        gsKit_clear(gsGlobal, Black);
-
-        char text[] = "Failed to open nvm.bin!";
-
-        int x, y;
-        getTextSize(reg_size, text, &x, &y);
-        y += reg_size;
-
-        struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, text);
-        drawFrame();
-        freeGSTEXTURE_holder(textTextures);
-        return 0;
     }
 
     int x, y;
-    getTextSize(reg_size, "Backing up to nvm.bin...", &x, &y);
+    getTextSize(reg_size, "Backing up NVRAM...", &x, &y);
     y += reg_size;
 
     gsKit_clear(gsGlobal, Black);
-    struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Backing up to nvm.bin...");
+    struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Backing up NVRAM...");
     drawFrame();
     freeGSTEXTURE_holder(textTextures);
 
+    f = fopen(nvm_path, "wb");
     for (int i = 0; i < 0x200; i++)
     {
         uint16_t data;
