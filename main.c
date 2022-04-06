@@ -477,9 +477,16 @@ void drawLogo()
 
 char backupNVM()
 {
-    // TODO: maybe add serial into filename?
     // TODO: maybe save 2 backups? one to the memory card, ont ot the flash?
-    FILE *f = fopen("mass:/nvm.bin", "rb");
+    uint32_t serial[1];
+    getSerial(serial);
+    uint8_t version[3];
+    getMechaVersion(version);
+
+    char nvm_path[256];
+    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07d.bin", version[1], version[2], serial[0]);
+
+    FILE *f = fopen(nvm_path, "rb");
     if (f)
     {
         fclose(f);
@@ -508,7 +515,7 @@ char backupNVM()
         }
     }
 
-    f = fopen("mass:/nvm.bin", "wb");
+    f = fopen(nvm_path, "wb");
 
     if (!f)
     {
@@ -603,12 +610,19 @@ char applyPatches(char isDex)
     }
     else
     {
-        FILE *f = fopen("mass:/nvm.bin", "rb");
+        uint32_t serial[1];
+        getSerial(serial);
+        uint8_t version[3];
+        getMechaVersion(version);
+
+        char nvm_path[256];
+        sprintf(nvm_path, "mass:/nvm_%d.%02d_%07d.bin", version[1], version[2], serial[0]);
+        FILE *f = fopen(nvm_path, "rb");
         if (!f)
         {
             gsKit_clear(gsGlobal, Black);
 
-            char text[] = "Failed to open nvm.bin!";
+            char text[] = "Failed to open nvram backup!";
 
             int x, y;
             getTextSize(reg_size, text, &x, &y);
@@ -763,7 +777,15 @@ char restoreBackup()
     // TODO: add more checks for backup!! Quite dangerous, it is better to patch NVM and undo patches
     // high risk that you will restore wrong backup
     // maybe we can keep mechapwn setting in ciphertext?
-    FILE *f = fopen("mass:/nvm.bin", "rb");
+    uint32_t serial[1];
+    getSerial(serial);
+    uint8_t version[3];
+    getMechaVersion(version);
+
+    char nvm_path[256];
+    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07d.bin", version[1], version[2], serial[0]);
+
+    FILE *f = fopen(nvm_path, "rb");
     if (!f)
     {
         gsKit_clear(gsGlobal, Black);
