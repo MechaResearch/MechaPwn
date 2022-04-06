@@ -670,13 +670,15 @@ void checkUnsupportedVersion()
     struct GSTEXTURE_holder *versionTextures;
     struct GSTEXTURE_holder *errorTextures;
 
+
     gsKit_clear(gsGlobal, Black);
+
     if (!getMechaBuildDate(build_date))
     {
         if (getMechaVersion(version))
             versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
 
-        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "This MechaCon isn't supported!\n");
+        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "This MechaCon isn't supported!\n");
 
         drawFrame();
 
@@ -689,31 +691,42 @@ void checkUnsupportedVersion()
     }
     else
     {
-        versionTextures                        = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
-        struct GSTEXTURE_holder *buildTextures = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
+        uint16_t ModelId;
+        uint32_t serial[1];
+        ReadNVM(0xF8, &ModelId);
+        getSerial(serial);
+        struct GSTEXTURE_holder *serialTextures  = ui_printf(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "S/N: %07d\n", serial[0]);
+
+        struct GSTEXTURE_holder *ModelIDTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID: 0x%X\n", ModelId);
+
+        versionTextures                          = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+        struct GSTEXTURE_holder *buildTextures   = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
         if (!getPatch(build_date))
         {
-            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "You have unknown MechaCon, please report!\n");
+            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "You have unknown MechaCon, please report!\n");
 
             drawFrame();
 
             freeGSTEXTURE_holder(versionTextures);
             freeGSTEXTURE_holder(buildTextures);
             freeGSTEXTURE_holder(errorTextures);
+            freeGSTEXTURE_holder(serialTextures);
+            freeGSTEXTURE_holder(ModelIDTextures);
 
             SleepThread();
             return;
         }
         else
         {
-            struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
+            struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
 
             drawFrame();
 
             freeGSTEXTURE_holder(versionTextures);
             freeGSTEXTURE_holder(buildTextures);
             freeGSTEXTURE_holder(exitTextures);
+            freeGSTEXTURE_holder(ModelIDTextures);
         }
     }
 
