@@ -23,7 +23,7 @@
 
 #include <tamtypes.h>
 #include <libpad.h>
-#include <libmc.h>
+// #include <libmc.h>
 #include <kernel.h>
 #include <sifrpc.h>
 #include <loadfile.h>
@@ -825,8 +825,8 @@ int main()
     SifExecModuleBuffer(&fileXio, size_fileXio, 0, NULL, NULL);
     SifExecModuleBuffer(&freesio2, size_freesio2, 0, NULL, NULL);
     SifExecModuleBuffer(&freepad, size_freepad, 0, NULL, NULL);
-    SifExecModuleBuffer(&mcman, size_mcman, 0, NULL, NULL);
-    SifExecModuleBuffer(&mcserv, size_mcserv, 0, NULL, NULL);
+    // SifExecModuleBuffer(&mcman, size_mcman, 0, NULL, NULL);
+    // SifExecModuleBuffer(&mcserv, size_mcserv, 0, NULL, NULL);
     SifExecModuleBuffer(&USBD, size_USBD, 0, NULL, NULL);
     SifExecModuleBuffer(&USBHDFSD, size_USBHDFSD, 0, NULL, NULL);
     SifExecModuleBuffer(&MECHAPROXY_irx, size_MECHAPROXY_irx, 0, NULL, NULL);
@@ -835,8 +835,7 @@ int main()
     MechaInit();
     MassInit();
 
-    // TODO: do we need this?
-    mcInit(MC_TYPE_XMC);
+    // mcInit(MC_TYPE_XMC);
 
     PadInitPads();
 
