@@ -52,7 +52,7 @@ static void ResetIOP()
 
 char unlockNVM()
 {
-    uint8_t version[3];
+    uint8_t version[4];
     getMechaVersion(version);
 
     uint8_t build_date[5];
@@ -184,7 +184,6 @@ int drawMenu(struct MENU *menu)
     }
 }
 
-// TODO: generate slim region_params per user choise:
 // HKkorJAG
 // ||||||||
 // |||||||G - rom1:DVDVER last byte (only in PS3) (possible values: " UEAGDCM", space symbol for Japan)
@@ -232,15 +231,10 @@ uint8_t region_ciphertext_russia_cex[]  = {0x3e, 0x11, 0xc1, 0xbb, 0xfb, 0x26, 0
 
 
 // 9 - China
-// TODO: CCschJC
 uint8_t region_params_china[]           = {0x43, 0x43, 0x73, 0x63, 0x68, 0x4A, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00}; // CCschJC
 uint8_t region_ciphertext_china_cex[]   = {0x0f, 0x5d, 0xb8, 0xa2, 0x9d, 0x85, 0xcc, 0x76, 0x00, 0xd5};
 
-// TODO: 10 and 12
-// 10 - ???
-
 // 11 - Mexico / ???
-// TODO: AAspaAM
 uint8_t region_params_mexico[]          = {0x41, 0x41, 0x73, 0x70, 0x61, 0x41, 0x4D, 0x00, 0x00, 0x00, 0x00, 0x00}; // AAspaAM
 uint8_t region_ciphertext_mexico_cex[]  = {0x35, 0x1a, 0x92, 0x9a, 0x05, 0x5b, 0xdc, 0x40, 0x00, 0x08};
 
@@ -257,7 +251,7 @@ void sum_buffer(uint8_t *buffer, int length)
 
 char write_region(uint8_t *region_params, uint8_t *region_ciphertext)
 {
-    uint8_t version[3];
+    uint8_t version[4];
     uint8_t isSlim = 0;
     getMechaVersion(version);
     if (version[1] == 5)
@@ -480,11 +474,11 @@ char backupNVM()
     // TODO: maybe save 2 backups? one to the memory card, ont ot the flash?
     uint32_t serial[1];
     getSerial(serial);
-    uint8_t version[3];
+    uint8_t version[4];
     getMechaVersion(version);
 
     char nvm_path[256];
-    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07d.bin", version[1], version[2], serial[0]);
+    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], version[2], serial[0]);
 
     FILE *f = fopen(nvm_path, "rb");
     if (f)
@@ -541,23 +535,27 @@ char applyPatches(char isDex)
     uint8_t build_date[5];
     getMechaBuildDate(build_date);
 
+    char applyOriginalPatch     = 0;
     char applyForceUnlock       = 0;
     const uint8_t *force_unlock = getForceUnlock(build_date);
+    const uint8_t *orig_patch   = getOrigPatch(build_date);
 
-    if (isDex && force_unlock)
+    if (force_unlock)
     {
         gsKit_clear(gsGlobal, Black);
 
         struct MENU menu;
-        menu.title        = "Install force unlock?";
+        menu.title        = "Patches menu";
         menu.x_text       = "X Select";
         menu.o_text       = "O Exit";
-        menu.option_count = 2;
+        menu.option_count = (isDex ? 3 : 2); // isDex
 
-        menu.options[0]   = "No";
-        menu.options[1]   = "Yes";
+        menu.options[0]   = "Keep current patch";
+        menu.options[1]   = "Remove force unlock and restore original patch";
+        if (isDex)
+            menu.options[2] = "Install force unlock";
 
-        int selected      = drawMenu(&menu);
+        int selected = drawMenu(&menu);
         if (selected == -1)
         {
             ResetIOP();
@@ -566,11 +564,32 @@ char applyPatches(char isDex)
         }
         else if (selected == 1)
         {
+            applyOriginalPatch = 1;
+        }
+        else if (selected == 2)
+        {
             applyForceUnlock = 1;
         }
     }
 
-    if (applyForceUnlock)
+    if (applyOriginalPatch)
+    {
+        int x, y;
+        getTextSize(reg_size, "Applying original patch...", &x, &y);
+        y += reg_size;
+
+        gsKit_clear(gsGlobal, Black);
+        struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Applying original patch...");
+        drawFrame();
+        freeGSTEXTURE_holder(textTextures);
+
+        for (int i = 0; i < 112; i++)
+        {
+            if (!WriteNVM(400 + i, *(uint16_t *)&orig_patch[i * 2]))
+                break;
+        }
+    }
+    else if (applyForceUnlock)
     {
         int x, y;
         getTextSize(reg_size, "Applying force unlock...", &x, &y);
@@ -591,11 +610,11 @@ char applyPatches(char isDex)
     {
         uint32_t serial[1];
         getSerial(serial);
-        uint8_t version[3];
+        uint8_t version[4];
         getMechaVersion(version);
 
         char nvm_path[256];
-        sprintf(nvm_path, "mass:/nvm_%d.%02d_%07d.bin", version[1], version[2], serial[0]);
+        sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], version[2], serial[0]);
         FILE *f = fopen(nvm_path, "rb");
         if (!f)
         {
@@ -639,12 +658,12 @@ char applyPatches(char isDex)
 
 uint8_t *getPowerTexture()
 {
-    uint8_t version[3];
+    uint8_t version[4];
     getMechaVersion(version);
 
     if (version[1] == 6)
     {
-        // TODO: FIXME: 79k and 90k has the same mecha but different power cord
+        // TODO: FIXME: 79k and 90k has the same mecha 6.12 but different power cord
         if (version[2] < 12)
             return &pwr70k;
         else
@@ -655,14 +674,46 @@ uint8_t *getPowerTexture()
     return &pwr50k;
 }
 
+char isPatchKnown()
+{
+    uint8_t build_date[5];
+    getMechaBuildDate(build_date);
+
+    uint8_t current_patch[224];
+
+    for (int i = 0; i < 112; i++)
+    {
+        if (!ReadNVM(400 + i, (uint16_t *)&current_patch[i * 2]))
+            break;
+    }
+
+    const uint8_t *patch = getPatch(build_date); // check upgrade patch
+    char ret             = memcmp(current_patch, patch, 224) == 0;
+    if (!ret)
+    {
+        patch = getForceUnlock(build_date); // check Force Unlock
+        ret   = memcmp(current_patch, patch, 224) == 0;
+        if (!ret)
+        {
+            patch = getOrigPatch(build_date); // Check original patch
+            ret   = memcmp(current_patch, patch, 224) == 0;
+            if (!ret)
+            {
+                ret = memcmp(current_patch, orig_patch610_A, 224) == 0; // 6.10 has 2 different patches
+            }
+        }
+    }
+
+
+    return ret;
+}
+
 void checkUnsupportedVersion()
 {
-    uint8_t version[3];
+    uint8_t version[4];
     uint8_t build_date[5];
-    // TODO: print mecha version for unsupported consoles too
     struct GSTEXTURE_holder *versionTextures;
     struct GSTEXTURE_holder *errorTextures;
-
 
     gsKit_clear(gsGlobal, Black);
 
@@ -688,6 +739,7 @@ void checkUnsupportedVersion()
         uint32_t serial[1];
         ReadNVM(0xF8, &ModelId);
         getSerial(serial);
+        getMechaVersion(version);
         struct GSTEXTURE_holder *serialTextures  = ui_printf(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "S/N: %07d\n", serial[0]);
 
         struct GSTEXTURE_holder *ModelIDTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID: 0x%X\n", ModelId);
@@ -712,6 +764,21 @@ void checkUnsupportedVersion()
         }
         else
         {
+            if (!isPatchKnown())
+            {
+                errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Please provide nvram backup, you have unknown patch!\n");
+
+                drawFrame();
+
+                freeGSTEXTURE_holder(versionTextures);
+                freeGSTEXTURE_holder(buildTextures);
+                freeGSTEXTURE_holder(errorTextures);
+                freeGSTEXTURE_holder(serialTextures);
+                freeGSTEXTURE_holder(ModelIDTextures);
+
+                SleepThread();
+                return;
+            }
             struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
 
             drawFrame();
@@ -732,7 +799,6 @@ void checkUnsupportedVersion()
     }
 }
 
-// TODO: provide similar function, but for checking original patch
 char isPatchAlreadyInstalled()
 {
     uint8_t build_date[5];
@@ -753,16 +819,14 @@ char isPatchAlreadyInstalled()
 
 char restoreBackup()
 {
-    // TODO: add more checks for backup!! Quite dangerous, it is better to patch NVM and undo patches
-    // high risk that you will restore wrong backup
-    // maybe we can keep mechapwn setting in ciphertext?
+    // TODO: maybe we can keep mechapwn setting in ciphertext?
     uint32_t serial[1];
     getSerial(serial);
-    uint8_t version[3];
+    uint8_t version[4];
     getMechaVersion(version);
 
     char nvm_path[256];
-    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07d.bin", version[1], version[2], serial[0]);
+    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], version[2], serial[0]);
 
     FILE *f = fopen(nvm_path, "rb");
     if (!f)
