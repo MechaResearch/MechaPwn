@@ -37,7 +37,7 @@
 #include "ui.h"
 #include "mass.h"
 
-static unsigned int big_size = 46, reg_size = 32;
+static unsigned int big_size = 52, reg_size = 36;
 // TODO: store existing areas on nvram on boot
 
 static void ResetIOP()
@@ -60,7 +60,7 @@ char unlockNVM()
 
     gsKit_clear(gsGlobal, Black);
 
-    struct GSTEXTURE_holder *versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+    struct GSTEXTURE_holder *versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], (version[2] | 1) - 1);
     struct GSTEXTURE_holder *buildTextures   = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
     const uint8_t *patch                     = getPatch(build_date);
@@ -315,18 +315,18 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
     menu.title        = "Select region";
     menu.x_text       = "X Select";
     menu.o_text       = "O Exit";
-    menu.option_count = 10;
+    menu.option_count = 9;
 
-    menu.options[0]   = "USA (Multi-7)";     // Aeng*U
-    menu.options[1]   = "Japan";             // Jjpn*J
-    menu.options[2]   = "Russia";            // Reng*R
-    menu.options[3]   = "Korea";             // Kkor*A
-    menu.options[4]   = "Taiwan";            // Htch*A
-    menu.options[5]   = "China";             // Csch*C
-    menu.options[6]   = "Asia";              // Heng*A
+    menu.options[0]   = "USA (Multi-7)"; // Aeng*U
+    menu.options[1]   = "Japan";         // Jjpn*J
+    menu.options[2]   = "Russia";        // Reng*R
+    menu.options[3]   = "Korea";         // Kkor*A
+    menu.options[4]   = "Taiwan";        // Htch*A
+    // menu.options[5]   = "China";             // Csch*C
+    menu.options[5]   = "Asia (Multi-7)";    // Heng*A
+    menu.options[6]   = "Mexico (Multi-7)";  // Aspa*M
     menu.options[7]   = "Europe (Multi-7)";  // Eeng*E
     menu.options[8]   = "Oceania (Multi-7)"; // Eeng*O
-    menu.options[9]   = "Mexico (Multi-7)";  // Aspa*M
 
     int selected      = drawMenu(&menu);
 
@@ -363,15 +363,20 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
             *region_params     = region_params_taiwan;
             *region_ciphertext = region_ciphertext_asia_cex;
         }
-        else if (selected == 5)
+        /* else if (selected == 5)
         {
             *region_params     = region_params_china;
             *region_ciphertext = region_ciphertext_china_cex;
-        }
-        else if (selected == 6)
+        } */
+        else if (selected == 5)
         {
             *region_params     = region_params_asia;
             *region_ciphertext = region_ciphertext_asia_cex;
+        }
+        else if (selected == 6)
+        {
+            *region_params     = region_params_mexico;
+            *region_ciphertext = region_ciphertext_mexico_cex;
         }
         else if (selected == 7)
         {
@@ -382,11 +387,6 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
         {
             *region_params     = region_params_oceania;
             *region_ciphertext = region_ciphertext_oceania_cex;
-        }
-        else if (selected == 9)
-        {
-            *region_params     = region_params_mexico;
-            *region_ciphertext = region_ciphertext_mexico_cex;
         }
         if (isDex)
         {
@@ -478,7 +478,7 @@ char backupNVM()
     getMechaVersion(version);
 
     char nvm_path[256];
-    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], version[2], serial[0]);
+    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], (version[2] | 1) - 1, serial[0]);
 
     FILE *f = fopen(nvm_path, "rb");
     if (f)
@@ -499,8 +499,21 @@ char backupNVM()
             y += reg_size;
 
             struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, text);
+            struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to exit.\n");
             drawFrame();
             freeGSTEXTURE_holder(textTextures);
+            freeGSTEXTURE_holder(exitTextures);
+            while (1)
+            {
+                u32 new_pad = ReadCombinedPadStatus();
+
+                if (new_pad & PAD_CROSS)
+                {
+                    ResetIOP();
+                    LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                    SleepThread();
+                }
+            }
             return 0;
         }
     }
@@ -551,7 +564,7 @@ char applyPatches(char isDex)
         menu.option_count = (isDex ? 3 : 2); // isDex
 
         menu.options[0]   = "Keep current patch";
-        menu.options[1]   = "Remove force unlock and restore original patch";
+        menu.options[1]   = "Restore original patch";
         if (isDex)
             menu.options[2] = "Install force unlock";
 
@@ -614,22 +627,69 @@ char applyPatches(char isDex)
         getMechaVersion(version);
 
         char nvm_path[256];
-        sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], version[2], serial[0]);
+        sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], (version[2] | 1) - 1, serial[0]);
         FILE *f = fopen(nvm_path, "rb");
         if (!f)
         {
             gsKit_clear(gsGlobal, Black);
 
-            char text[] = "Failed to open nvram backup!";
+            char text[] = "Failed to open NVRAM backup!";
 
             int x, y;
             getTextSize(reg_size, text, &x, &y);
             y += reg_size;
 
             struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, text);
+            struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to exit.\n");
             drawFrame();
             freeGSTEXTURE_holder(textTextures);
+            freeGSTEXTURE_holder(exitTextures);
+            while (1)
+            {
+                u32 new_pad = ReadCombinedPadStatus();
+
+                if (new_pad & PAD_CROSS)
+                {
+                    ResetIOP();
+                    LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                    SleepThread();
+                }
+            }
             return 0;
+        }
+        else
+        {
+            fseek(f, 0, SEEK_END);
+            int len = ftell(f);
+            fclose(f);
+            if (len != 1024)
+            {
+                gsKit_clear(gsGlobal, Black);
+
+                char text[] = "NVRAM backup is corrupted!";
+
+                int x, y;
+                getTextSize(reg_size, text, &x, &y);
+                y += reg_size;
+
+                struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, text);
+                struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to exit.\n");
+                drawFrame();
+                freeGSTEXTURE_holder(textTextures);
+                freeGSTEXTURE_holder(exitTextures);
+                while (1)
+                {
+                    u32 new_pad = ReadCombinedPadStatus();
+
+                    if (new_pad & PAD_CROSS)
+                    {
+                        ResetIOP();
+                        LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                        SleepThread();
+                    }
+                }
+                return 0;
+            }
         }
 
         int x, y;
@@ -664,13 +724,22 @@ uint8_t *getPowerTexture()
     if (version[1] == 6)
     {
         // TODO: FIXME: 79k and 90k has the same mecha 6.12 but different power cord
-        if (version[2] < 12)
+        /* if (version[2] < 12)
             return &pwr70k;
         else
+            return &pwr90k; */
+        uint16_t ModelId;
+        ReadNVM(0xF8, &ModelId);
+        if (ModelId < 0xd477) // TODO: or < 0xd474 ??
+            return &pwr70k;
+        else
+            // TODO: add picture for ps2 bravia
+            // if (ModelId != 0xd48f)
             return &pwr90k;
     }
 
     // TODO: add picture for DESR
+    // if (version[3] == 1) // DESR indicator
     return &pwr50k;
 }
 
@@ -720,7 +789,7 @@ void checkUnsupportedVersion()
     if (!getMechaBuildDate(build_date))
     {
         if (getMechaVersion(version))
-            versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+            versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], (version[2] | 1) - 1);
 
         errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "This MechaCon isn't supported!\n");
 
@@ -744,7 +813,7 @@ void checkUnsupportedVersion()
 
         struct GSTEXTURE_holder *ModelIDTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID: 0x%X\n", ModelId);
 
-        versionTextures                          = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], version[2]);
+        versionTextures                          = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], (version[2] | 1) - 1);
         struct GSTEXTURE_holder *buildTextures   = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
         // ModelID whitelist
@@ -760,7 +829,12 @@ void checkUnsupportedVersion()
         // d305 - d321 ??
         else if (ModelId == 0xd322)
             sprintf(RealModelName, "DTL-H75000A");
-        // d323 - d325 ??
+        /* else if (ModelId == 0xd323)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd324)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd325)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd326)
             sprintf(RealModelName, "DTL-H90000(a)");
         else if (ModelId == 0xd380)
@@ -787,7 +861,7 @@ void checkUnsupportedVersion()
         else if (ModelId == 0xd402)
             sprintf(RealModelName, "SCPH-50010/N");
         /* else if (ModelId == 0xd403)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd404)
             sprintf(RealModelName, "SCPH-50000 MB/NH");
         else if (ModelId == 0xd405)
@@ -805,42 +879,55 @@ void checkUnsupportedVersion()
         else if (ModelId == 0xd40b)
             sprintf(RealModelName, "SCPH-50001");
         /* else if (ModelId == 0xd40c)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd40d)
             sprintf(RealModelName, "SCPH-50006");
         /* else if (ModelId == 0xd40e)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd40f)
             sprintf(RealModelName, "SCPH-50008");
         /* else if (ModelId == 0xd410)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd411)
             sprintf(RealModelName, "SCPH-50000 NB");
-        // d412-d413
+        /* else if (ModelId == 0xd412)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd413)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd414)
             sprintf(RealModelName, "SCPH-55000 GT");
         else if (ModelId == 0xd415)
             sprintf(RealModelName, "SCPH-50009 SS");
-        // d416-d419
+        /* else if (ModelId == 0xd416)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd417)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd418)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd419)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd41a)
             sprintf(RealModelName, "SCPH-50008 SS");
         else if (ModelId == 0xd41b)
             sprintf(RealModelName, "SCPH-50004 AQ");
         else if (ModelId == 0xd41c)
             sprintf(RealModelName, "SCPH-50005 SS/N");
-        // d41d-d41e
+        /* else if (ModelId == 0xd41d)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd41e)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd41f)
             sprintf(RealModelName, "SCPH-50000 SA");
         else if (ModelId == 0xd420)
             sprintf(RealModelName, "SCPH-50004 SS");
         /* else if (ModelId == 0xd421)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd422)
             sprintf(RealModelName, "SCPH-50002 SS");
         else if (ModelId == 0xd423)
             sprintf(RealModelName, "SCPH-50003 SS");
         /* else if (ModelId == 0xd424)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd425)
             sprintf(RealModelName, "SCPH-50011");
         else if (ModelId == 0xd426)
@@ -862,17 +949,27 @@ void checkUnsupportedVersion()
         else if (ModelId == 0xd42e)
             sprintf(RealModelName, "SCPH-70007");
         /* else if (ModelId == 0xd42f)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd430)
             sprintf(RealModelName, "SCPH-70008");
-        // d431-d432
+        /* else if (ModelId == 0xd431)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd432)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd433)
             sprintf(RealModelName, "SCPH-70004 SS");
         /* else if (ModelId == 0xd434)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd435)
             sprintf(RealModelName, "SCPH-70001");
-        // d436-d439
+        /* else if (ModelId == 0xd436)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd437)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd438)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd439)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd43a)
             sprintf(RealModelName, "SCPH-70008");
         else if (ModelId == 0xd43b)
@@ -883,108 +980,175 @@ void checkUnsupportedVersion()
             sprintf(RealModelName, "SCPH-75003");
         else if (ModelId == 0xd43e)
             sprintf(RealModelName, "SCPH-75004");
-        // d43f-d440
+        /* else if (ModelId == 0xd43f)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd440)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd441)
             sprintf(RealModelName, "SCPH-75003");
         else if (ModelId == 0xd442)
             sprintf(RealModelName, "SCPH-75004 SS");
         /* else if (ModelId == 0xd443)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd444)
             sprintf(RealModelName, "SCPH-75000 CW");
         else if (ModelId == 0xd445)
             sprintf(RealModelName, "SCPH-75006");
-        // d446-d44b
+        /* else if (ModelId == 0xd446)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd447)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd448)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd449)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd44a)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd44b)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd44c)
             sprintf(RealModelName, "SCPH-75008");
         /* else if (ModelId == 0xd44d)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd44e)
-            sprintf(RealModelName, "SCPH-75001");
-        // d44f-d450
+            sprintf(RealModelName, "SCPH-77001");
+        /* else if (ModelId == 0xd44f)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd450)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd451)
             sprintf(RealModelName, "SCPH-77004");
         else if (ModelId == 0xd452)
             sprintf(RealModelName, "SCPH-77002 CW");
         /* else if (ModelId == 0xd453)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd454)
             sprintf(RealModelName, "SCPH-77004 SS");
         /* else if (ModelId == 0xd455)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd456)
             sprintf(RealModelName, "SCPH-77000 CW");
         /* else if (ModelId == 0xd457)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd458)
             sprintf(RealModelName, "SCPH-77006");
         else if (ModelId == 0xd459)
             sprintf(RealModelName, "SCPH-77007");
         else if (ModelId == 0xd45a)
             sprintf(RealModelName, "SCPH-77008");
-        // d45b-d4bc
+        /* else if (ModelId == 0xd45b)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd45c)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd45d)
             sprintf(RealModelName, "SCPH-77001 SS");
         else if (ModelId == 0xd45e)
             sprintf(RealModelName, "SCPH-77003");
         else if (ModelId == 0xd45f)
             sprintf(RealModelName, "SCPH-77004 PK");
-        // d460-d461
+        /* else if (ModelId == 0xd460)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd461)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd462)
             sprintf(RealModelName, "SCPH-77000 PK");
-        // d463-d464
+        /* else if (ModelId == 0xd463)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd464)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd465)
             sprintf(RealModelName, "SCPH-79001");
-        // d466-d468
+        /* else if (ModelId == 0xd466)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd467)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd468)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd469)
             sprintf(RealModelName, "SCPH-79001");
         /* else if (ModelId == 0xd46a)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd46b)
             sprintf(RealModelName, "SCPH-79006");
         /* else if (ModelId == 0xd46c)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd46d)
             sprintf(RealModelName, "SCPH-79000 SS");
         else if (ModelId == 0xd46e)
             sprintf(RealModelName, "SCPH-79003");
         /* else if (ModelId == 0xd46f)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd470)
             sprintf(RealModelName, "SCPH-79010");
-        // d471-d472
+        /* else if (ModelId == 0xd471)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd472)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd473)
             sprintf(RealModelName, "SCPH-79008");
-        // d474-d476
+        /* else if (ModelId == 0xd474)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd475)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd476)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd477)
             sprintf(RealModelName, "SCPH-90000 SS");
         else if (ModelId == 0xd478)
             sprintf(RealModelName, "SCPH-90006");
         else if (ModelId == 0xd479)
             sprintf(RealModelName, "SCPH-90006 CW");
-        // d47a-d47d
+        /* else if (ModelId == 0xd47a)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd47b)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd47c)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd47d)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd47e)
             sprintf(RealModelName, "SCPH-90007");
-        // d47f-d480
+        /* else if (ModelId == 0xd47f)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd480)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd481)
-            sprintf(RealModelName, "SCPH-90007");
+            sprintf(RealModelName, "SCPH-90001");
         /* else if (ModelId == 0xd482)
-            sprintf(RealModelName, "???"); */
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd483)
             sprintf(RealModelName, "SCPH-90004");
         else if (ModelId == 0xd484)
             sprintf(RealModelName, "SCPH-90004 SS");
         else if (ModelId == 0xd485)
             sprintf(RealModelName, "SCPH-90002");
-        // d486-d489
+        /* else if (ModelId == 0xd486)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd487)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd488)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd489)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd48a)
+            sprintf(RealModelName, "SCPH-90010");
+        else if (ModelId == 0xd48b)
+            sprintf(RealModelName, "SCPH-90000 CR");
+        else if (ModelId == 0xd48c)
             sprintf(RealModelName, "SCPH-90008");
-        // d48b-d48e
+        /* else if (ModelId == 0xd48b)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd48c)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd48d)
+               sprintf(RealModelName, "???");
+           else if (ModelId == 0xd48e)
+               sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd48f)
             sprintf(RealModelName, "PX300-1");
         else
         {
-            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "You have unknown ModelID, please report!\n");
+            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unkown, please report!\n");
 
             drawFrame();
 
@@ -1000,7 +1164,7 @@ void checkUnsupportedVersion()
 
         if (!getPatch(build_date))
         {
-            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "You have unknown MechaCon, please report!\n");
+            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "MechaCon unknown, please report!\n");
 
             drawFrame();
 
@@ -1018,7 +1182,7 @@ void checkUnsupportedVersion()
         {
             if (!isPatchKnown())
             {
-                errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Please provide nvram backup, you have unknown patch!\n");
+                errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Unknown patch, please report!\n");
 
                 drawFrame();
 
@@ -1080,31 +1244,66 @@ char restoreBackup()
     getMechaVersion(version);
 
     char nvm_path[256];
-    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], version[2], serial[0]);
+    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], (version[2] | 1) - 1, serial[0]);
 
     FILE *f = fopen(nvm_path, "rb");
     if (!f)
     {
         gsKit_clear(gsGlobal, Black);
 
-        char text[] = "Failed to open nvm.bin!";
+        char text[] = "Failed to open NVRAM backup!";
 
         int x, y;
         getTextSize(reg_size, text, &x, &y);
         y += reg_size;
 
         struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, text);
+        struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to exit.\n");
         drawFrame();
         freeGSTEXTURE_holder(textTextures);
+        freeGSTEXTURE_holder(exitTextures);
+        while (1)
+        {
+            u32 new_pad = ReadCombinedPadStatus();
+
+            if (new_pad & PAD_CROSS)
+            {
+                ResetIOP();
+                LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                SleepThread();
+            }
+        }
         return 0;
     }
+    else
+    {
+        fseek(f, 0, SEEK_END);
+        int len = ftell(f);
+        fclose(f);
+        if (len != 1024)
+        {
+            gsKit_clear(gsGlobal, Black);
+
+            char text[] = "Failed to open NVRAM backup!";
+
+            int x, y;
+            getTextSize(reg_size, text, &x, &y);
+            y += reg_size;
+
+            struct GSTEXTURE_holder *textTextures = draw_text((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, text);
+            drawFrame();
+            freeGSTEXTURE_holder(textTextures);
+            return 0;
+        }
+    }
+
 
     int x, y;
-    getTextSize(reg_size, "Restoring backup...", &x, &y);
+    getTextSize(reg_size, "Restoring NVRAM backup...", &x, &y);
     y += reg_size;
 
     gsKit_clear(gsGlobal, Black);
-    struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Restoring backup...");
+    struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Restoring NVRAM backup...");
     drawFrame();
     freeGSTEXTURE_holder(textTextures);
 
@@ -1186,7 +1385,7 @@ int main()
         menu.option_count = 2;
 
         menu.options[0]   = "Change region";
-        menu.options[1]   = "Restore NVM backup";
+        menu.options[1]   = "Restore NVRAM backup";
 
         int selected      = drawMenu(&menu);
 
