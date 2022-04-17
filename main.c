@@ -37,7 +37,7 @@
 #include "ui.h"
 #include "mass.h"
 
-static unsigned int big_size = 52, reg_size = 36;
+static unsigned int big_size = 50, reg_size = 36;
 // TODO: store existing areas on nvram on boot
 
 static void ResetIOP()
@@ -312,23 +312,40 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
     gsKit_clear(gsGlobal, Black);
 
     struct MENU menu;
-    menu.title        = "Select region";
-    menu.x_text       = "X Select";
-    menu.o_text       = "O Exit";
-    menu.option_count = 9;
+    menu.title  = "Select region";
+    menu.x_text = "X Select";
+    menu.o_text = "O Exit";
 
-    menu.options[0]   = "USA (Multi-7)"; // Aeng*U
-    menu.options[1]   = "Japan";         // Jjpn*J
-    menu.options[2]   = "Russia";        // Reng*R
-    menu.options[3]   = "Korea";         // Kkor*A
-    menu.options[4]   = "Taiwan";        // Htch*A
-    // menu.options[5]   = "China";             // Csch*C
-    menu.options[5]   = "Asia (Multi-7)";    // Heng*A
-    menu.options[6]   = "Mexico (Multi-7)";  // Aspa*M
-    menu.options[7]   = "Europe (Multi-7)";  // Eeng*E
-    menu.options[8]   = "Oceania (Multi-7)"; // Eeng*O
+    uint8_t version[4];
+    uint8_t isSlim = 0;
+    getMechaVersion(version);
+    if (version[1] == 5)
+        isSlim = 0;
+    else if (version[1] == 6)
+        isSlim = 1;
 
-    int selected      = drawMenu(&menu);
+    if (!(isSlim) && isDex)
+    {
+        menu.option_count = 1;
+        menu.options[0]   = "FAT-DEX region not supported"; // Aeng*U
+    }
+    else
+    {
+        menu.option_count = 9;
+        menu.options[0]   = "USA (Multi-7)"; // Aeng*U
+        menu.options[1]   = "Japan";         // Jjpn*J
+        menu.options[2]   = "Russia";        // Reng*R
+        menu.options[3]   = "Korea";         // Kkor*A
+        menu.options[4]   = "Taiwan";        // Htch*A
+        // menu.options[5]   = "China";             // Csch*C
+        menu.options[5]   = "Asia (Multi-7)";    // Heng*A
+        menu.options[6]   = "Mexico (Multi-7)";  // Aspa*M
+        menu.options[7]   = "Europe (Multi-7)";  // Eeng*E
+        menu.options[8]   = "Oceania (Multi-7)"; // Eeng*O
+    }
+
+
+    int selected = drawMenu(&menu);
 
     if (selected == -1)
     {
@@ -558,13 +575,13 @@ char applyPatches(char isDex)
         gsKit_clear(gsGlobal, Black);
 
         struct MENU menu;
-        menu.title        = "Patches menu";
+        menu.title        = "Patch menu";
         menu.x_text       = "X Select";
         menu.o_text       = "O Exit";
         menu.option_count = (isDex ? 3 : 2); // isDex
 
         menu.options[0]   = "Keep current patch";
-        menu.options[1]   = "Restore original patch";
+        menu.options[1]   = "Restore factory defaults";
         if (isDex)
             menu.options[2] = "Install force unlock";
 
@@ -588,7 +605,7 @@ char applyPatches(char isDex)
     if (applyOriginalPatch)
     {
         int x, y;
-        getTextSize(reg_size, "Applying original patch...", &x, &y);
+        getTextSize(reg_size, "Applying factory defaults...", &x, &y);
         y += reg_size;
 
         gsKit_clear(gsGlobal, Black);
@@ -1148,14 +1165,14 @@ void checkUnsupportedVersion()
             sprintf(RealModelName, "PX300-1");
         else
         {
-            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unkown, please report!\n");
-
+            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unknown, please report!\n");
             drawFrame();
 
             freeGSTEXTURE_holder(versionTextures);
             freeGSTEXTURE_holder(buildTextures);
             freeGSTEXTURE_holder(errorTextures);
             freeGSTEXTURE_holder(serialTextures);
+            freeGSTEXTURE_holder(ModelIDTextures);
 
             SleepThread();
             return;
@@ -1165,7 +1182,36 @@ void checkUnsupportedVersion()
         if (!getPatch(build_date))
         {
             errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "MechaCon unknown, please report!\n");
+            drawFrame();
 
+            freeGSTEXTURE_holder(versionTextures);
+            freeGSTEXTURE_holder(buildTextures);
+            freeGSTEXTURE_holder(errorTextures);
+            freeGSTEXTURE_holder(serialTextures);
+            freeGSTEXTURE_holder(ModelIDTextures);
+            freeGSTEXTURE_holder(modelnameTextures);
+
+            SleepThread();
+            return;
+        }
+        else if (!isPatchKnown())
+        {
+            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Unknown patch, please report!\n");
+            drawFrame();
+
+            freeGSTEXTURE_holder(versionTextures);
+            freeGSTEXTURE_holder(buildTextures);
+            freeGSTEXTURE_holder(errorTextures);
+            freeGSTEXTURE_holder(serialTextures);
+            freeGSTEXTURE_holder(ModelIDTextures);
+            freeGSTEXTURE_holder(modelnameTextures);
+
+            SleepThread();
+            return;
+        }
+        else if ((ModelId >= 0xd300) && (ModelId < 0xd380))
+        {
+            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "TEST/DTL unit, aborting!\n");
             drawFrame();
 
             freeGSTEXTURE_holder(versionTextures);
@@ -1180,29 +1226,13 @@ void checkUnsupportedVersion()
         }
         else
         {
-            if (!isPatchKnown())
-            {
-                errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Unknown patch, please report!\n");
-
-                drawFrame();
-
-                freeGSTEXTURE_holder(versionTextures);
-                freeGSTEXTURE_holder(buildTextures);
-                freeGSTEXTURE_holder(errorTextures);
-                freeGSTEXTURE_holder(serialTextures);
-                freeGSTEXTURE_holder(ModelIDTextures);
-                freeGSTEXTURE_holder(modelnameTextures);
-
-                SleepThread();
-                return;
-            }
             struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
-
             drawFrame();
 
             freeGSTEXTURE_holder(versionTextures);
             freeGSTEXTURE_holder(buildTextures);
             freeGSTEXTURE_holder(exitTextures);
+            freeGSTEXTURE_holder(serialTextures);
             freeGSTEXTURE_holder(ModelIDTextures);
             freeGSTEXTURE_holder(modelnameTextures);
         }
