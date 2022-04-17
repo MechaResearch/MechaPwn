@@ -16,7 +16,7 @@ The authors hold no responsibility should you break/damage your PlayStation 2 co
 
 Older[^Pre-Dragon] consoles do NOT use a Dragon-based mechacon and therefore are not supported. No support is planned for those in the future.
 
-## FMCB and DVD player
+### FMCB and DVD player
 
 - Deckard[^Deckard]-only: FMCB uses `systemupdate exploit` that depends on `rom0:ROMVER` region letter. On Deckard[^Deckard] units MechaPwn can change the region letter: DEX option will install `A` region for any selected region, CEX option will use region-specific letter. To avoid broken FMCB, install FMCB cross-region before using MechaPwn.
 - CEX option only: FMCB 1.8 and older are region locked. It will stop to work if you change region under CEX option. To avoid this - use only DEX option or upgrade to FMCB 1.9
@@ -61,12 +61,17 @@ On all units
 - Boot masterpatched PS2 backups from the console's original region by skipping the logo check (for example, by loading a disc using [wlaunchELF](https://github.com/ps2homebrew/wLaunchELF))
 - Boot burned PS1 backups, original PS1 and PS2 disks from all-region by skipping the logo check (for example, by loading a disc using [wlaunchELF](https://github.com/ps2homebrew/wLaunchELF))
 - 70k[^70k] and Deckard[^Deckard] only: Change OSD and DVD region
+- Deckard[^Deckard] only: force NTSC-U region and video mode for PS2/PS1 titles
 
 On all-region Deckard[^Deckard] units, FAT[^Fat]/70k[^70k] units from regions North America or Asia additionally
 
 - Boot burned PS1 backups, original PS1 and PS2 disks from all-region directly from OSD
 
 ### FAQ
+
+#### Why do my screen get noisy and blurry?
+
+Your TV doesnt support NTSC or PAL signal. MechaPwn can change default video mode, for example DEX on Deckard[^Deckard] units will force NTSC video mode. Choose CEX option or use different TV.
 
 #### Why do PAL/NTSC-J consoles do not play NTSC/PAL discs (on SCPH-70000 and earlier)?
 
@@ -98,10 +103,10 @@ Master patch creation isnt covered by this FAQ. Try to search for *PSX/PS2 Disc 
 
 ### Playstation 2 models description
 
-- [^Pre-Dragon]: SCPH-1x000 - SCPH-3900x models.
-- [^Dragon]: SCPH-5xxxx - SCPH-9xxxx + PSX DESR + Sony Bravia KDL-22PX300 tvcombo. Dragon subdivided into:
-  - [^Deckard]: SCPH-750xx - SCPH-900xx models + Sony Bravia KDL-22PX300 tvcombo
-  - [^Pre-Deckard]: All the above:
-    - [^Fat]: SCPH-5xxxx models
-    - [^DESR]: PSX DVR recorders, Japan only, DESR-5xxx and DESR-7xxx.
-    - [^70k]: SCPH-700xx models
+[^Pre-Dragon]: SCPH-1x000 - SCPH-3900x models.
+[^Dragon]: SCPH-5xxxx - SCPH-9xxxx + PSX DESR + Sony Bravia KDL-22PX300 tvcombo. Dragon subdivided into:
+[^Deckard]: SCPH-750xx - SCPH-900xx models + Sony Bravia KDL-22PX300 tvcombo
+[^Pre-Deckard]: All the above:
+[^Fat]: SCPH-5xxxx models
+[^DESR]: PSX DVR recorders, Japan only, DESR-5xxx and DESR-7xxx.
+[^70k]: SCPH-700xx models
