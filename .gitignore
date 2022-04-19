@@ -3,5 +3,8 @@
 *.s
 *.pyc
 .*
+*.elf
 
 !.github
+!.editorconfig
+!.clang-format

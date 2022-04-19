@@ -16,11 +16,11 @@
 
 struct MechaScmdParams
 {
-	u8 cmd;
-	u8 input[16];
-	u8 inputlength;
-	u8 output[16];
-	int result;
+    u8 cmd;
+    u8 input[16];
+    u8 inputlength;
+    u8 output[16];
+    int result;
 };
 
-#define MECHAPROXY_SCMD_HEADER		0x80000A01
+#define MECHAPROXY_SCMD_HEADER 0x80000A01
