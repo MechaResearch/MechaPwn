@@ -311,11 +311,6 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
 {
     gsKit_clear(gsGlobal, Black);
 
-    struct MENU menu;
-    menu.title  = "Select region";
-    menu.x_text = "X Select";
-    menu.o_text = "O Exit";
-
     uint8_t version[4];
     uint8_t isSlim = 0;
     getMechaVersion(version);
@@ -324,10 +319,15 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
     else if (version[1] == 6)
         isSlim = 1;
 
+    struct MENU menu;
+    menu.title  = "Select region";
+    menu.x_text = "X Select";
+    menu.o_text = "O Exit";
+
     if (!(isSlim) && isDex)
     {
         menu.option_count = 1;
-        menu.options[0]   = "FAT-DEX region not supported"; // Aeng*U
+        menu.options[0]   = "FAT-DEX region change not supported"; // Aeng*U
     }
     else
     {
@@ -854,6 +854,7 @@ void checkUnsupportedVersion()
                sprintf(RealModelName, "???"); */
         else if (ModelId == 0xd326)
             sprintf(RealModelName, "DTL-H90000(a)");
+        // d327-d37f
         else if (ModelId == 0xd380)
             sprintf(RealModelName, "DESR-7000");
         else if (ModelId == 0xd381)
@@ -930,9 +931,9 @@ void checkUnsupportedVersion()
         else if (ModelId == 0xd41c)
             sprintf(RealModelName, "SCPH-50005 SS/N");
         /* else if (ModelId == 0xd41d)
-               sprintf(RealModelName, "???");
-           else if (ModelId == 0xd41e)
                sprintf(RealModelName, "???"); */
+        else if (ModelId == 0xd41e)
+            sprintf(RealModelName, "SCPH-50000 CW");
         else if (ModelId == 0xd41f)
             sprintf(RealModelName, "SCPH-50000 SA");
         else if (ModelId == 0xd420)
@@ -1196,18 +1197,27 @@ void checkUnsupportedVersion()
         }
         else if (!isPatchKnown())
         {
-            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Unknown patch, please report!\n");
+            uint8_t current_patch[224];
+
+            for (int i = 0; i < 112; i++)
+            {
+                if (!ReadNVM(400 + i, (uint16_t *)&current_patch[i * 2]))
+                    break;
+            }
+            struct GSTEXTURE_holder *warnTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Unknown patch, please report!\n");
+            struct GSTEXTURE_holder *warnTextures2 = ui_printf(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "  %02X %02X %02X %02X %02X\n", current_patch[0], current_patch[1], current_patch[2], current_patch[3], current_patch[4]);
+            struct GSTEXTURE_holder *exitTextures  = draw_text(8, 8 + big_size + big_size / 2 + 7 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
             drawFrame();
+
+            freeGSTEXTURE_holder(warnTextures1);
+            freeGSTEXTURE_holder(warnTextures2);
 
             freeGSTEXTURE_holder(versionTextures);
             freeGSTEXTURE_holder(buildTextures);
-            freeGSTEXTURE_holder(errorTextures);
+            freeGSTEXTURE_holder(exitTextures);
             freeGSTEXTURE_holder(serialTextures);
             freeGSTEXTURE_holder(ModelIDTextures);
             freeGSTEXTURE_holder(modelnameTextures);
-
-            SleepThread();
-            return;
         }
         else if ((ModelId >= 0xd300) && (ModelId < 0xd380))
         {
@@ -1226,7 +1236,7 @@ void checkUnsupportedVersion()
         }
         else
         {
-            struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
+            struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 7 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
             drawFrame();
 
             freeGSTEXTURE_holder(versionTextures);
