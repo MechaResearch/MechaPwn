@@ -716,7 +716,7 @@ char applyPatches(char isDex)
         drawFrame();
         freeGSTEXTURE_holder(textTextures);
 
-        fseek(f, 400 * 2, SEEK_SET);
+        f = fopen(nvm_path, "rb");
         for (int i = 0; i < 112; i++)
         {
 
@@ -900,8 +900,8 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-50004 SS");
     else if (ModelId == 0xd40b)
         sprintf(RealModelName, "SCPH-50001");
-    /* else if (ModelId == 0xd40c)
-           sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd40c)
+        sprintf(RealModelName, "SCPH-50005/N");
     else if (ModelId == 0xd40d)
         sprintf(RealModelName, "SCPH-50006");
     /* else if (ModelId == 0xd40e)
@@ -1243,7 +1243,6 @@ void checkUnsupportedVersion()
     freeGSTEXTURE_holder(serialTextures);
     freeGSTEXTURE_holder(buildTextures);
     freeGSTEXTURE_holder(versionTextures);
-    freeGSTEXTURE_holder(errorTextures);
     freeGSTEXTURE_holder(warnTextures2);
     freeGSTEXTURE_holder(warnTextures1);
 
@@ -1290,7 +1289,6 @@ char restoreBackup()
     if (!f)
     {
         gsKit_clear(gsGlobal, Black);
-
         char text[] = "Failed to open NVRAM backup!";
 
         int x, y;
@@ -1323,7 +1321,6 @@ char restoreBackup()
         if (len != 1024)
         {
             gsKit_clear(gsGlobal, Black);
-
             char text[] = "Failed to open NVRAM backup!";
 
             int x, y;
@@ -1337,7 +1334,6 @@ char restoreBackup()
         }
     }
 
-
     int x, y;
     getTextSize(reg_size, "Restoring NVRAM backup...", &x, &y);
     y += reg_size;
@@ -1347,9 +1343,9 @@ char restoreBackup()
     drawFrame();
     freeGSTEXTURE_holder(textTextures);
 
+    f = fopen(nvm_path, "rb");
     for (int i = 0; i < 0x200; i++)
     {
-
         uint16_t data;
         fread(&data, 1, 2, f);
         if (!WriteNVM(i, data))
