@@ -262,6 +262,26 @@ char write_region(uint8_t *region_params, uint8_t *region_ciphertext)
         for (int i = 0; i < 12; i += 2)
             if (!WriteNVM(192 + i / 2, *(uint16_t *)&region_params[i]))
                 break;
+
+        // PS1 NTSC4.43 possible fix
+        uint16_t ps1_config; // offset 0x284: 00 10
+        uint16_t ps1_chksum; // offset 0x28e: 00 50
+        ReadNVM(322, &ps1_config);
+        ReadNVM(327, &ps1_chksum);
+
+        if (region_params[5] == 0x45) // if PS1 mode set to E (Europe)
+        {
+            ps1_config = ps1_config | 0x1000; // force set 00 10
+            ps1_chksum = ps1_chksum | 0x1000;
+        }
+        else
+        {
+            ps1_config = ps1_config & 0xEFFF; // force clear 00 10
+            ps1_chksum = ps1_chksum & 0xEFFF;
+        }
+
+        WriteNVM(322, ps1_config);
+        WriteNVM(327, ps1_chksum);
     }
 
     if (region_ciphertext)
@@ -607,7 +627,7 @@ char applyPatches(char isDex)
         y += reg_size;
 
         gsKit_clear(gsGlobal, Black);
-        struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Applying original patch...");
+        struct GSTEXTURE_holder *textTextures = ui_printf((gsGlobal->Width - x) / 2, (gsGlobal->Height - y) / 2, reg_size, 0xFFFFFF, "Applying factory defaults...");
         drawFrame();
         freeGSTEXTURE_holder(textTextures);
 
@@ -787,7 +807,6 @@ char isPatchKnown()
             }
         }
     }
-
 
     return ret;
 }
