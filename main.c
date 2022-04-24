@@ -737,6 +737,7 @@ char applyPatches(char isDex)
         freeGSTEXTURE_holder(textTextures);
 
         f = fopen(nvm_path, "rb");
+		fseek(f, 400 * 2, SEEK_SET);
         for (int i = 0; i < 112; i++)
         {
 
