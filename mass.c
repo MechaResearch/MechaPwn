@@ -18,6 +18,8 @@
 #include <string.h>
 #include <kernel.h>
 #include <sifrpc.h>
+#define NEWLIB_PORT_AWARE
+#include <fileXio_rpc.h> // fileXioDevctl
 
 #include "mass.h"
 #include "masswatcher.h"
@@ -44,6 +46,8 @@ int MassInit()
 void MassDeinit()
 {
     memset(&SifRpcClientMass, 0, sizeof(SifRpcClientData_t));
+    // As required by some (typically 2.5") HDDs, issue the SCSI STOP UNIT command to avoid causing an emergency park.
+    fileXioDevctl("mass:", 0x0001, NULL, 0, NULL, 0);
 }
 
 char MassCheck()

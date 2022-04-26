@@ -1,26 +1,26 @@
 # MechaPwn
 
-> For questions @[balika on twitter.com](https://twitter.com/balika011).
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=flat&logo=Twitter&label=Follow%20%40balika011)](https://twitter.com/balika011) [![Discord](https://img.shields.io/discord/652861436992946216?style=flat&logo=Discord)](https://discord.gg/CVFUa9xh6B)
 
 Any issue opened that is not an actual issue, but a question will be closed.
 
-> :warning: Deckard[^Deckard] users: Disclaimer: if you use FMCB, ensure that you have installed the cross-region version. :warning:
+> :warning: Deckard[^3] users: Disclaimer: if you use FMCB, ensure that you have installed the **cross-region** version. :warning:
 
 Real DEX (non-QA) flags have not been added to the public version of MechaPwn for your safety.
 
 The authors hold no responsibility should you break/damage your PlayStation 2 console using this software.
 
-- This tool can be used to change the Mechacon region and configuration flags for Dragon[^Dragon] units.
-- This tool can be used to change OSD region and language set and DVD player region for 70k[^70k] and Deckard[^Deckard] units.
-- This tool can be used to change PS2 Disk region and PS1 Disk region for Deckard[^Deckard] units.
+- This tool can be used to change the Mechacon region and configuration flags for Dragon[^2] units.
+- This tool can be used to change OSD region/language set and DVD player region for 70k[^7] and Deckard[^3] units.
+- This tool can be used to change PS2 Disk region and PS1 Disk region for Deckard[^3] units.
 
-Older[^Pre-Dragon] consoles do NOT use a Dragon-based mechacon and therefore are not supported. No support is planned for those in the future.
+Older[^1] consoles do NOT use a Dragon-based mechacon and therefore are not supported. No support is planned for those in the future.
 
 ### FMCB and DVD player
 
-- Deckard[^Deckard]-only: FMCB uses `systemupdate exploit` that depends on `rom0:ROMVER` region letter. On Deckard[^Deckard] units MechaPwn can change the region letter: DEX option will install `A` region for any selected region, CEX option will use region-specific letter. To avoid broken FMCB, install FMCB cross-region before using MechaPwn.
+- Deckard[^3]-only: FMCB uses `systemupdate exploit` that depends on `rom0:ROMVER` region letter. On Deckard[^3] units MechaPwn can change the region letter: DEX option will install `A` region for any selected region, CEX option will use region-specific letter. To avoid broken FMCB, install FMCB cross-region before using MechaPwn.
 - CEX option only: FMCB 1.8 and older are region locked. It will stop to work if you change region under CEX option. To avoid this - use only DEX option or upgrade to FMCB 1.9
-- CEX option only: DVD player on Pre-Deckard[^Pre-Deckard] models is region locked. It (and DVD player based exploits like FreeDVDBoot) will stop to work if you change region under CEX option. To avoid this - use only DEX option or install DVD player update to memory card.
+- CEX option only: DVD player on Pre-Deckard[^4] models is region locked. It (and DVD player based exploits like FreeDVDBoot) will stop to work if you change region under CEX option. To avoid this - use only DEX option or install DVD player update to memory card.
 - Force Unlock will disable DVD player
 
 ## How to use?
@@ -35,21 +35,28 @@ _You will need to reinstall the exploit patch to change your region again_
 
 ### Explanations of the menu options
 
-Retail-DEX (Debug) will set a QA Flagged DEX configuration/region and clear all common region flags. This allows mechacon to read discs from all regions as well as masterdiscs (the retail option does not). This also allows executing all-region kelfs. On Deckard[^Deckard], this also forces NTSC video mode and forces PS2 and PS1 titles to run in the NA region.
+Retail-DEX (Debug) will set a QA Flagged DEX configuration/region and clear all common region flags. This allows mechacon to read discs from all regions as well as masterdiscs (the retail option does not). This also allows executing all-region kelfs. On Deckard[^3], this also forces NTSC video mode and forces PS2 and PS1 titles to run in the NA region.
 
-CEX (Retail) will just set the region flag of your choosing. This option also restricts other regions from running. Be careful - on FAT[^Fat] units installing CEX->USA on SCPH-50004 will result in that European disks will not boot due to mechacon region beeing NTSC, and North American disks will not boot due to OSD ps2logo checking for PAL.
+CEX (Retail) will just set the region flag of your choosing. This option also restricts other regions from running. Be careful - on FAT[^5] units installing CEX->USA on SCPH-50004 will result in that European disks will not boot due to mechacon region beeing NTSC, and North American disks will not boot due to OSD ps2logo checking for PAL.
 
-The next screen will allow choosing between predefined region sets on slims (70k[^70k] and Deckard[^Deckard]). It will change OSD behavior (for example, language set) and DVD Player region.
+The next screen will allow choosing between predefined region sets on slims (70k[^7] and Deckard[^3]). It will change OSD behavior (for example, language set) and DVD Player region.
 
 ### How does it work?
 
-The Dragon[^Dragon]-based MechaCon store configuration flags and patches encrypted in their EEPROM, the patch DES key was eventually bruteforced that allows code execution on those units and for the full keystore to be dumped.
+The Dragon[^2]-based MechaCon store configuration flags and patches encrypted in their EEPROM, the patch DES key was eventually bruteforced that allows code execution on those units and for the full keystore to be dumped.
 
 Normally, the patch area is write-protected and cannot be written to at runtime except while using PMAP in TEST mode (this requires soldering). Furthermore, the configuration area can only be written to when it is empty.
 
 This is done to prevent an attacker or anyone outside of Sony's factory from overwriting the mechacon configuration.
 
 However, an exploitable bug was found in the WriteConfig function that allows writing arbitrary data to the patch area. This allows writing a mechacon patch that disables the write protection on mechacon configuration bits and thus sets specific regions and flags to mechacon.
+
+### DSP limitations
+
+1. DSP does not store disk key (16 bytes) inside its registers. This only affects retail units, real DTL units does not have this `bug?/feature?` cause DTL units have another DSP chip revision. The mechacon copies disc ID data from masterdisc sector into the DSP registers and later in CDVDMAN on DTL units. Retail DSP always read back from disc. This will block MasterPatched disks form running directly from OSD.
+2. Burning coils. If a disc has bad ECC (error correction) data on the error correction area of each sector, there's a chance it may crash the DSP during a read, given that the coils are driven using PWM (pulse width modulation) there's a 50% chance it may crash while the coil is energized. The coil is not designed to receive constant current so it can be damaged. It doesn't crash with silver discs, it **may** crash with burnt discs, it only depends if the ECC data is bogus or not. While this problem is not caused by MechaPwn, MechaPwn will increase its probability, so you are warned. There exists several hardware solutions for that bug: so called, pin17 fix, romeo fix (for FAT[^5]), subzero mod (for 70k[^7]).
+
+## Advantages
 
 DEX option allows the following:
 
@@ -60,10 +67,10 @@ On all units
 - Boot burned PS1 backups from the console's original region directly from OSD
 - Boot masterpatched PS2 backups from the console's original region by skipping the logo check (for example, by loading a disc using [wlaunchELF](https://github.com/ps2homebrew/wLaunchELF))
 - Boot burned PS1 backups, original PS1 and PS2 disks from all-region by skipping the logo check (for example, by loading a disc using [wlaunchELF](https://github.com/ps2homebrew/wLaunchELF))
-- 70k[^70k] and Deckard[^Deckard] only: Change OSD and DVD region
-- Deckard[^Deckard] only: force NTSC-U region and video mode for PS2/PS1 titles
+- 70k[^7] and Deckard[^3] only: Change OSD and DVD region
+- Deckard[^3] only: force NTSC-U region and video mode for PS2/PS1 titles
 
-On all-region Deckard[^Deckard] units, FAT[^Fat]/70k[^70k] units from regions North America or Asia additionally
+On all-region Deckard[^3] units, FAT[^5]/70k[^7] units from regions North America or Asia additionally
 
 - Boot burned PS1 backups, original PS1 and PS2 disks from all-region directly from OSD
 
@@ -71,7 +78,7 @@ On all-region Deckard[^Deckard] units, FAT[^Fat]/70k[^70k] units from regions No
 
 #### Why do my screen get noisy and blurry?
 
-Your TV doesnt support NTSC or PAL signal. MechaPwn can change default video mode, for example DEX on Deckard[^Deckard] units will force NTSC video mode. Choose CEX option or use different TV.
+Your TV doesnt support NTSC or PAL signal. MechaPwn can change default video mode, for example DEX on Deckard[^3] units will force NTSC video mode. Choose CEX option or use different TV.
 
 #### Why do PAL/NTSC-J consoles do not play NTSC/PAL discs (on SCPH-70000 and earlier)?
 
@@ -103,10 +110,10 @@ Master patch creation isnt covered by this FAQ. Try to search for *PSX/PS2 Disc 
 
 ### Playstation 2 models description
 
-[^Pre-Dragon]: SCPH-1x000 - SCPH-3900x models.
-[^Dragon]: SCPH-5xxxx - SCPH-9xxxx + PSX DESR + Sony Bravia KDL-22PX300 tvcombo. Dragon subdivided into:
-[^Deckard]: SCPH-750xx - SCPH-900xx models + Sony Bravia KDL-22PX300 tvcombo
-[^Pre-Deckard]: All the above:
-[^Fat]: SCPH-5xxxx models
-[^DESR]: PSX DVR recorders, Japan only, DESR-5xxx and DESR-7xxx.
-[^70k]: SCPH-700xx models
+[^1]: Pre-Dragon: SCPH-1x000 - SCPH-3900x models.
+[^2]: Dragon: SCPH-5xxxx - SCPH-9xxxx + PSX DESR + Sony Bravia KDL-22PX300 tvcombo. Dragon subdivided into:
+[^3]: Deckard: SCPH-750xx - SCPH-900xx models + Sony Bravia KDL-22PX300 tvcombo
+[^4]: Pre-Deckard: All the above:
+[^5]: FAT: SCPH-5xxxx models
+[^6]: DESR: PSX DVR recorders, Japan only, DESR-5xxx and DESR-7xxx.
+[^7]: 70k: SCPH-700xx models

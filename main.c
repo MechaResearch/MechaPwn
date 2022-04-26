@@ -43,9 +43,12 @@ static unsigned int big_size = 50, reg_size = 36;
 static void ResetIOP()
 {
     SifInitRpc(0);
-    SifIopReset("", 0);
+    while (!SifIopReset("", 0))
+    {
+    };
     while (!SifIopSync())
-        ;
+    {
+    };
     SifInitRpc(0);
     SifLoadFileInit();
 }
@@ -588,37 +591,30 @@ char applyPatches(char isDex)
     const uint8_t *force_unlock = getForceUnlock(build_date);
     const uint8_t *orig_patch   = getOrigPatch(build_date);
 
-    if (force_unlock)
+    gsKit_clear(gsGlobal, Black);
+
+    struct MENU menu;
+    menu.title        = "Patch menu";
+    menu.x_text       = "X Select";
+    menu.o_text       = "O Exit";
+    menu.option_count = (isDex ? 3 : 2); // isDex
+
+    menu.options[0]   = "Keep current patch";
+    menu.options[1]   = "Restore factory defaults";
+    if (isDex && force_unlock)
+        menu.options[2] = "Install force unlock";
+
+    int selected = drawMenu(&menu);
+    if (selected == -1)
     {
-        gsKit_clear(gsGlobal, Black);
-
-        struct MENU menu;
-        menu.title        = "Patch menu";
-        menu.x_text       = "X Select";
-        menu.o_text       = "O Exit";
-        menu.option_count = (isDex ? 3 : 2); // isDex
-
-        menu.options[0]   = "Keep current patch";
-        menu.options[1]   = "Restore factory defaults";
-        if (isDex)
-            menu.options[2] = "Install force unlock";
-
-        int selected = drawMenu(&menu);
-        if (selected == -1)
-        {
-            ResetIOP();
-            LoadExecPS2("rom0:OSDSYS", 0, NULL);
-            SleepThread();
-        }
-        else if (selected == 1)
-        {
-            applyOriginalPatch = 1;
-        }
-        else if (selected == 2)
-        {
-            applyForceUnlock = 1;
-        }
+        ResetIOP();
+        LoadExecPS2("rom0:OSDSYS", 0, NULL);
+        SleepThread();
     }
+    else if (selected == 1)
+        applyOriginalPatch = 1;
+    else if (selected == 2)
+        applyForceUnlock = 1;
 
     if (applyOriginalPatch)
     {
@@ -737,7 +733,7 @@ char applyPatches(char isDex)
         freeGSTEXTURE_holder(textTextures);
 
         f = fopen(nvm_path, "rb");
-		fseek(f, 400 * 2, SEEK_SET);
+        fseek(f, 400 * 2, SEEK_SET);
         for (int i = 0; i < 112; i++)
         {
 
@@ -782,29 +778,35 @@ uint8_t *getPowerTexture()
 char isPatchKnown()
 {
     uint8_t build_date[5];
-    getMechaBuildDate(build_date);
-
     uint8_t current_patch[224];
-
+    char ret = 0;
     for (int i = 0; i < 112; i++)
     {
         if (!ReadNVM(400 + i, (uint16_t *)&current_patch[i * 2]))
             break;
     }
+    getMechaBuildDate(build_date);
+    uint8_t *patch = (uint8_t *)getOrigPatch(build_date);
 
-    const uint8_t *patch = getPatch(build_date); // check upgrade patch
-    char ret             = memcmp(current_patch, patch, 224) == 0;
-    if (!ret)
+    if (patch)
     {
-        patch = getForceUnlock(build_date); // check Force Unlock
-        ret   = memcmp(current_patch, patch, 224) == 0;
+        ret = memcmp(current_patch, patch, 224) == 0;
+        free(patch);
+        patch = NULL;
         if (!ret)
         {
-            patch = getOrigPatch(build_date); // Check original patch
-            ret   = memcmp(current_patch, patch, 224) == 0;
-            if (!ret)
+            patch = (uint8_t *)getPatch(build_date);
+            if (patch)
             {
-                ret = memcmp(current_patch, orig_patch610_A, 224) == 0; // 6.10 has 2 different patches
+                ret = memcmp(current_patch, patch, 224) == 0;
+                free(patch);
+                patch = NULL;
+                if (!ret)
+                {
+                    patch = (uint8_t *)getForceUnlock(build_date);
+                    if (patch)
+                        ret = memcmp(current_patch, orig_patch610_A, 224) == 0;
+                }
             }
         }
     }
@@ -817,11 +819,13 @@ void checkUnsupportedVersion()
     uint8_t version[4];
     uint8_t build_date[5];
     char RealModelName[20];
+    char color[20];
     struct GSTEXTURE_holder *versionTextures;
     struct GSTEXTURE_holder *buildTextures;
     struct GSTEXTURE_holder *serialTextures;
     struct GSTEXTURE_holder *ModelIDTextures;
     struct GSTEXTURE_holder *modelnameTextures;
+    struct GSTEXTURE_holder *colorTextures;
     struct GSTEXTURE_holder *warnTextures1;
     struct GSTEXTURE_holder *warnTextures2;
 
@@ -867,7 +871,15 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "DTL-H50002");
     else if (ModelId == 0xd304)
         sprintf(RealModelName, "DTL-H50009");
-    // d305 - d321 ??
+    // d305 - d31d ??
+    else if (ModelId == 0xd31e)
+        sprintf(RealModelName, "DTL-H70002");
+    /* else if (ModelId == 0xd31f)
+           sprintf(RealModelName, "???");
+       else if (ModelId == 0xd320)
+           sprintf(RealModelName, "???");
+       else if (ModelId == 0xd321)
+           sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd322)
         sprintf(RealModelName, "DTL-H75000A");
     /* else if (ModelId == 0xd323)
@@ -1204,11 +1216,35 @@ void checkUnsupportedVersion()
     }
     modelnameTextures = ui_printf(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Real Model Name: %s\n", RealModelName);
 
+    sprintf(color, "Black");
+    if ((ModelId >= 0xd380 && ModelId <= 0xd388 && ModelId != 0xd384) ||
+        (ModelId == 0xd414) || (ModelId == 0xd41e) || (ModelId == 0xd444) ||
+        (ModelId == 0xd452) || (ModelId == 0xd456) || (ModelId == 0xd479))
+        sprintf(color, "White");
+    else if ((ModelId == 0xd408) || (ModelId == 0xd40a) || (ModelId == 0xd415) ||
+             (ModelId == 0xd41a) || (ModelId == 0xd41c) || (ModelId == 0xd420) ||
+             (ModelId == 0xd422) || (ModelId == 0xd423) || (ModelId == 0xd433) ||
+             (ModelId == 0xd442) || (ModelId == 0xd454) || (ModelId == 0xd45d) ||
+             (ModelId == 0xd46d) || (ModelId == 0xd477) || (ModelId == 0xd484) ||
+             (ModelId == 0xd384))
+        sprintf(color, "Satin Silver");
+    else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462))
+        sprintf(color, "Sakura Pink");
+    else if (ModelId == 0xd404)
+        sprintf(color, "Midnight Blue");
+    else if (ModelId == 0xd41b)
+        sprintf(color, "Aqua Blue");
+    else if (ModelId == 0xd48b)
+        sprintf(color, "Cinnabar Red");
+
+    colorTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Console color: %s\n", color);
+
     if ((ModelId >= 0xd300) && (ModelId < 0xd380))
     {
         errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Real TEST/DTL units not supported!\n");
         drawFrame();
 
+        freeGSTEXTURE_holder(colorTextures);
         freeGSTEXTURE_holder(modelnameTextures);
         freeGSTEXTURE_holder(ModelIDTextures);
         freeGSTEXTURE_holder(serialTextures);
@@ -1224,6 +1260,7 @@ void checkUnsupportedVersion()
     {
         errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "MechaCon unknown, please report!\n");
         drawFrame();
+        freeGSTEXTURE_holder(colorTextures);
         freeGSTEXTURE_holder(modelnameTextures);
         freeGSTEXTURE_holder(ModelIDTextures);
         freeGSTEXTURE_holder(serialTextures);
@@ -1234,17 +1271,25 @@ void checkUnsupportedVersion()
         return;
     }
 
-    if (!isPatchKnown())
+    if (version[3] != 1)
     {
-        uint8_t current_patch[224];
-
-        for (int i = 0; i < 112; i++)
+        if (!isPatchKnown())
         {
-            if (!ReadNVM(400 + i, (uint16_t *)&current_patch[i * 2]))
-                break;
+            uint8_t current_patch[224];
+
+            for (int i = 0; i < 112; i++)
+            {
+                if (!ReadNVM(400 + i, (uint16_t *)&current_patch[i * 2]))
+                    break;
+            }
+            warnTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Unknown patch, please report!\n");
+            warnTextures2 = ui_printf(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "  %02X %02X %02X %02X %02X\n", current_patch[0], current_patch[1], current_patch[2], current_patch[3], current_patch[4]);
         }
-        warnTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Unknown patch, please report!\n");
-        warnTextures2 = ui_printf(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "  %02X %02X %02X %02X %02X\n", current_patch[0], current_patch[1], current_patch[2], current_patch[3], current_patch[4]);
+        else
+        {
+            warnTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "\n");
+            warnTextures2 = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "\n");
+        }
     }
     else
     {
@@ -1252,12 +1297,11 @@ void checkUnsupportedVersion()
         warnTextures2 = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "\n");
     }
 
-
-
     struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 7 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
     drawFrame();
 
     freeGSTEXTURE_holder(exitTextures);
+    freeGSTEXTURE_holder(colorTextures);
     freeGSTEXTURE_holder(modelnameTextures);
     freeGSTEXTURE_holder(ModelIDTextures);
     freeGSTEXTURE_holder(serialTextures);
@@ -1464,6 +1508,7 @@ int main()
     }
 
     gsKit_clear(gsGlobal, Black);
+    MassDeinit();
 
     struct GSTEXTURE_holder *imageTextures = drawImage((gsGlobal->Width - 400) / 2, (gsGlobal->Height - (225 + 60)) / 2, 400, 225, powerTexture);
 
