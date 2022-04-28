@@ -25,7 +25,7 @@ Older[^1] consoles do NOT use a Dragon-based mechacon and therefore are not supp
 
 ## How to use?
 
-0) Make sure if you are using FMCB **you have "cross-region" installed**.
+0) Make sure if you are using FMCB **you have "CROSS-REGION" installed**.
 
 1) Run MechaPwn once to install the exploit patch/payload. An initial backup of your mechacon EEPROM will be made to the USB mass storage device (keep it safe!), then power off the console by disconnecting it from the mains when asked (mechacon is on, even when the ps2 CPUs is off, so you MUST disconnect the power cord!)
 2) Run MechaPwn again to choose which region you want.
@@ -56,7 +56,7 @@ However, an exploitable bug was found in the WriteConfig function that allows wr
 1. DSP does not store disk key (16 bytes) inside its registers. This only affects retail units, real DTL units does not have this `bug?/feature?` cause DTL units have another DSP chip revision. The mechacon copies disc ID data from masterdisc sector into the DSP registers and later in CDVDMAN on DTL units. Retail DSP always read back from disc. This will block MasterPatched disks form running directly from OSD.
 2. Burning coils. If a disc has bad ECC (error correction) data on the error correction area of each sector, there's a chance it may crash the DSP during a read, given that the coils are driven using PWM (pulse width modulation) there's a 50% chance it may crash while the coil is energized. The coil is not designed to receive constant current so it can be damaged. It doesn't crash with silver discs, it **may** crash with burnt discs, it only depends if the ECC data is bogus or not. While this problem is not caused by MechaPwn, MechaPwn will increase its probability, so you are warned. There exists several hardware solutions for that bug: so called, pin17 fix, romeo fix (for FAT[^5]), subzero mod (for 70k[^7]).
 
-## Advantages
+## Program Advantages
 
 DEX option allows the following:
 
@@ -86,7 +86,7 @@ The IOP ROM on those consoles has enforced strict logo decryption checks both in
 
 #### Why do consoles not run masterdiscs directly from the OSD?
 
-Additional protection exists on the DSP, which is different in retail and debug consoles, the debug one allows mechacon to store the masterdisc XOR key in its registers, the retail one does not.
+Additional protection exists on the DSP, which is different in retail and debugs consoles, the debug one allows mechacon to store the masterdisc XOR key in its registers, but the retail one does not.
 Bypassing the logo check bypasses this protection (this can be done using [wlaunchELF](https://github.com/ps2homebrew/wLaunchELF) or a future cdvdman patch using a ps2 homebrew)
 
 #### My PS2 has a modchip. Will it work for me?
@@ -95,7 +95,7 @@ We don't know. This depends on what modchip you are using. It has been reported 
 
 #### What is Force Unlock?
 
-Force-Unlock is a very much needed feature for homebrew applications, like Neo Geo emulation, PS2 Linux for reading CD and DVD-ROM discs.
+Force-Unlock is a feature for homebrew applications, like Neo Geo emulation, PS2 Linux for reading CD and DVD-ROM discs.
 What it's meant to do is unlock the disk drive for access.
 
 > :warning: Important note: If you enable Force Unlock every CD and DVD will be detected as a PS2 disc, meaning it breaks PS1 games and DVD-Video**

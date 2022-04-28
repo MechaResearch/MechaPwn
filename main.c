@@ -42,6 +42,7 @@ static unsigned int big_size = 50, reg_size = 36;
 
 static void ResetIOP()
 {
+    MassDeinit();
     SifInitRpc(0);
     while (!SifIopReset("", 0))
     {
@@ -305,14 +306,27 @@ void selectCexDex(char *isDex)
 {
     gsKit_clear(gsGlobal, Black);
 
+    uint8_t version[4];
+    uint8_t isSlim = 0;
+    getMechaVersion(version);
+    if (version[1] == 5)
+        isSlim = 0;
+    else if (version[1] == 6)
+        isSlim = 1;
+
     struct MENU menu;
     menu.title        = "Select console type";
     menu.x_text       = "X Select";
     menu.o_text       = "O Exit";
-    menu.option_count = 2;
+    menu.option_count = 1;
     menu.options[0]   = "Retail-DEX";
-    menu.options[1]   = "CEX (retail)";
-    int selected      = drawMenu(&menu);
+    if (isSlim)
+    {
+        menu.option_count = 2;
+        menu.options[1]   = "CEX (retail)";
+    }
+
+    int selected = drawMenu(&menu);
 
     gsKit_clear(gsGlobal, Black);
 
@@ -332,6 +346,7 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
 {
     gsKit_clear(gsGlobal, Black);
 
+    int selected = 0;
     uint8_t version[4];
     uint8_t isSlim = 0;
     getMechaVersion(version);
@@ -340,33 +355,27 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
     else if (version[1] == 6)
         isSlim = 1;
 
-    struct MENU menu;
-    menu.title  = "Select region";
-    menu.x_text = "X Select";
-    menu.o_text = "O Exit";
+    if (isSlim)
+    {
+        struct MENU menu;
+        menu.title        = "Select region";
+        menu.x_text       = "X Select";
+        menu.o_text       = "O Exit";
 
-    if (!(isSlim) && isDex)
-    {
-        menu.option_count = 1;
-        menu.options[0]   = "FAT-DEX region change not supported"; // Aeng*U
-    }
-    else
-    {
         menu.option_count = 9;
         menu.options[0]   = "USA (Multi-7)"; // Aeng*U
         menu.options[1]   = "Japan";         // Jjpn*J
         menu.options[2]   = "Russia";        // Reng*R
         menu.options[3]   = "Korea";         // Kkor*A
         menu.options[4]   = "Taiwan";        // Htch*A
-        // menu.options[5]   = "China";             // Csch*C
+        // menu.options[5]   = "China";             // Csch*C // slim OSD will crash
         menu.options[5]   = "Asia (Multi-7)";    // Heng*A
         menu.options[6]   = "Mexico (Multi-7)";  // Aspa*M
         menu.options[7]   = "Europe (Multi-7)";  // Eeng*E
         menu.options[8]   = "Oceania (Multi-7)"; // Eeng*O
+
+        selected          = drawMenu(&menu);
     }
-
-
-    int selected = drawMenu(&menu);
 
     if (selected == -1)
     {
@@ -574,7 +583,6 @@ char backupNVM()
         fwrite(&data, 1, 2, f);
     }
 
-    // TODO: open file again, check if its size isnt zero, or maybe even compare with nvm again
     // TODO: add more messages to the screen about backuping
     fclose(f);
 
@@ -755,14 +763,13 @@ uint8_t *getPowerTexture()
 
     if (version[1] == 6)
     {
-        // TODO: FIXME: 79k and 90k has the same mecha 6.12 but different power cord
         /* if (version[2] < 12)
             return &pwr70k;
         else
             return &pwr90k; */
         uint16_t ModelId;
         ReadNVM(0xF8, &ModelId);
-        if (ModelId < 0xd477) // TODO: or < 0xd474 ??
+        if (ModelId < 0xd475) // TODO: or < 0xd476 find out what console model is 0xd475
             return &pwr70k;
         else
             // TODO: add picture for ps2 bravia
@@ -826,11 +833,12 @@ void checkUnsupportedVersion()
     struct GSTEXTURE_holder *ModelIDTextures;
     struct GSTEXTURE_holder *modelnameTextures;
     struct GSTEXTURE_holder *colorTextures;
-    struct GSTEXTURE_holder *warnTextures1;
-    struct GSTEXTURE_holder *warnTextures2;
+    // struct GSTEXTURE_holder *warnTextures1;
+    // struct GSTEXTURE_holder *warnTextures2;
 
     struct GSTEXTURE_holder *errorTextures;
 
+    backupNVM();
     gsKit_clear(gsGlobal, Black);
 
     if (!getMechaVersion(version))
@@ -980,8 +988,8 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-50002 SS");
     else if (ModelId == 0xd423)
         sprintf(RealModelName, "SCPH-50003 SS");
-    /* else if (ModelId == 0xd424)
-           sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd424)
+        sprintf(RealModelName, "SCPH-50000 PW");
     else if (ModelId == 0xd425)
         sprintf(RealModelName, "SCPH-50011");
     else if (ModelId == 0xd426)
@@ -1119,7 +1127,7 @@ void checkUnsupportedVersion()
        else if (ModelId == 0xd468)
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd469)
-        sprintf(RealModelName, "SCPH-79001");
+        sprintf(RealModelName, "SCPH-79001 SS");
     /* else if (ModelId == 0xd46a)
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd46b)
@@ -1140,12 +1148,12 @@ void checkUnsupportedVersion()
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd473)
         sprintf(RealModelName, "SCPH-79008");
-    /* else if (ModelId == 0xd474)
-           sprintf(RealModelName, "???");
-       else if (ModelId == 0xd475)
-           sprintf(RealModelName, "???");
-       else if (ModelId == 0xd476)
+    else if (ModelId == 0xd474)
+        sprintf(RealModelName, "SCPH-79001 CW");
+    /* else if (ModelId == 0xd475)
            sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd476)
+        sprintf(RealModelName, "SCPH-90000 CW");
     else if (ModelId == 0xd477)
         sprintf(RealModelName, "SCPH-90000 SS");
     else if (ModelId == 0xd478)
@@ -1168,8 +1176,8 @@ void checkUnsupportedVersion()
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd481)
         sprintf(RealModelName, "SCPH-90001");
-    /* else if (ModelId == 0xd482)
-           sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd482)
+        sprintf(RealModelName, "SCPH-90001 SS");
     else if (ModelId == 0xd483)
         sprintf(RealModelName, "SCPH-90004");
     else if (ModelId == 0xd484)
@@ -1219,16 +1227,17 @@ void checkUnsupportedVersion()
     sprintf(color, "Black");
     if ((ModelId >= 0xd380 && ModelId <= 0xd388 && ModelId != 0xd384) ||
         (ModelId == 0xd414) || (ModelId == 0xd41e) || (ModelId == 0xd444) ||
-        (ModelId == 0xd452) || (ModelId == 0xd456) || (ModelId == 0xd479))
+        (ModelId == 0xd452) || (ModelId == 0xd456) || (ModelId == 0xd474) ||
+        (ModelId == 0xd476) || (ModelId == 0xd479))
         sprintf(color, "White");
     else if ((ModelId == 0xd408) || (ModelId == 0xd40a) || (ModelId == 0xd415) ||
              (ModelId == 0xd41a) || (ModelId == 0xd41c) || (ModelId == 0xd420) ||
              (ModelId == 0xd422) || (ModelId == 0xd423) || (ModelId == 0xd433) ||
              (ModelId == 0xd442) || (ModelId == 0xd454) || (ModelId == 0xd45d) ||
-             (ModelId == 0xd46d) || (ModelId == 0xd477) || (ModelId == 0xd484) ||
-             (ModelId == 0xd384))
+             (ModelId == 0xd46d) || (ModelId == 0xd477) || (ModelId == 0xd482) ||
+             (ModelId == 0xd484) || (ModelId == 0xd384))
         sprintf(color, "Satin Silver");
-    else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462))
+    else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462) || (ModelId == 0xd469))
         sprintf(color, "Sakura Pink");
     else if (ModelId == 0xd404)
         sprintf(color, "Midnight Blue");
@@ -1236,6 +1245,12 @@ void checkUnsupportedVersion()
         sprintf(color, "Aqua Blue");
     else if (ModelId == 0xd48b)
         sprintf(color, "Cinnabar Red");
+    else if ((ModelId == 0xd42b) || (ModelId == 0xd42c) || (ModelId == 0xd42e) ||
+             (ModelId == 0xd430) || (ModelId == 0xd43a) || (ModelId == 0xd441) ||
+             (ModelId == 0xd44c) || (ModelId == 0xd459) || (ModelId == 0xd45e) ||
+             (ModelId == 0xd465) || (ModelId == 0xd46b) || (ModelId == 0xd46e) ||
+             (ModelId == 0xd47e))
+        sprintf(color, "Unknown");
 
     colorTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Console color: %s\n", color);
 
@@ -1271,31 +1286,25 @@ void checkUnsupportedVersion()
         return;
     }
 
-    if (version[3] != 1)
+    // todo: fixme: find out why isPatchKnown is crashing
+    /* if (!isPatchKnown())
     {
-        if (!isPatchKnown())
-        {
-            uint8_t current_patch[224];
+        uint8_t current_patch[224];
 
-            for (int i = 0; i < 112; i++)
-            {
-                if (!ReadNVM(400 + i, (uint16_t *)&current_patch[i * 2]))
-                    break;
-            }
-            warnTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Unknown patch, please report!\n");
-            warnTextures2 = ui_printf(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "  %02X %02X %02X %02X %02X\n", current_patch[0], current_patch[1], current_patch[2], current_patch[3], current_patch[4]);
-        }
-        else
+        for (int i = 0; i < 112; i++)
         {
-            warnTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "\n");
-            warnTextures2 = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "\n");
+            if (!ReadNVM(400 + i, (uint16_t *)&current_patch[i * 2]))
+                break;
         }
+        warnTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Unknown patch, please report!\n");
+        warnTextures2 = ui_printf(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "  %02X %02X %02X %02X %02X\n", current_patch[0], current_patch[1], current_patch[2], current_patch[3], current_patch[4]);
     }
     else
     {
         warnTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "\n");
         warnTextures2 = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "\n");
-    }
+    } */
+
 
     struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 7 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
     drawFrame();
@@ -1307,8 +1316,8 @@ void checkUnsupportedVersion()
     freeGSTEXTURE_holder(serialTextures);
     freeGSTEXTURE_holder(buildTextures);
     freeGSTEXTURE_holder(versionTextures);
-    freeGSTEXTURE_holder(warnTextures2);
-    freeGSTEXTURE_holder(warnTextures1);
+    // freeGSTEXTURE_holder(warnTextures2);
+    // freeGSTEXTURE_holder(warnTextures1);
 
     while (1)
     {
@@ -1465,6 +1474,7 @@ int main()
     uint8_t *powerTexture = getPowerTexture();
 
     char rerun            = 0;
+    int selected          = 0;
     if (!IsNVMUnlocked())
     {
         rerun = 1;
@@ -1487,7 +1497,7 @@ int main()
         menu.options[0]   = "Change region";
         menu.options[1]   = "Restore NVRAM backup";
 
-        int selected      = drawMenu(&menu);
+        selected          = drawMenu(&menu);
 
         if (selected == -1)
         {
@@ -1519,14 +1529,19 @@ int main()
     struct GSTEXTURE_holder *unplugTextures = draw_text((gsGlobal->Width - x1) / 2, ((gsGlobal->Height - (225 + 60)) / 2) + 225, reg_size, 0xFFFFFF, text1);
 
     struct GSTEXTURE_holder *rerunTextures  = 0;
+
+    const char *text2;
+    int x2, y2;
     if (rerun)
-    {
-        const char *text2 = "Run MechaPwn again.";
-        int x2, y2;
-        getTextSize(reg_size, text2, &x2, &y2);
-        y2 += reg_size;
-        rerunTextures = draw_text((gsGlobal->Width - x2) / 2, ((gsGlobal->Height - (195)) / 2) + 225, reg_size, 0xFFFFFF, text2);
-    }
+        text2 = "Run MechaPwn again.";
+    else if (selected == 1)
+        text2 = "Backup restored successfuly.";
+    else
+        text2 = "Installation complete! Enjoy MechaPwn";
+
+    getTextSize(reg_size, text2, &x2, &y2);
+    y2 += reg_size;
+    rerunTextures = draw_text((gsGlobal->Width - x2) / 2, ((gsGlobal->Height - (195)) / 2) + 225, reg_size, 0xFFFFFF, text2);
 
     drawFrame();
     if (rerunTextures)
