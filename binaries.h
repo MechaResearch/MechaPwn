@@ -26,11 +26,11 @@ extern u32 size_freesio2;
 extern uint8_t freepad;
 extern u32 size_freepad;
 
-// extern uint8_t mcman;
-// extern u32 size_mcman;
+extern uint8_t mcman;
+extern u32 size_mcman;
 
-// extern uint8_t mcserv;
-// extern u32 size_mcserv;
+extern uint8_t mcserv;
+extern u32 size_mcserv;
 
 extern uint8_t USBD;
 extern u32 size_USBD;
