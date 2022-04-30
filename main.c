@@ -827,6 +827,50 @@ char isPatchKnown()
     return ret;
 }
 
+void checkFMCB()
+{
+    uint8_t version[4];
+    uint8_t isSlim = 0;
+    getMechaVersion(version);
+    if (version[1] == 5)
+        isSlim = 0;
+    else if (version[1] == 6)
+        isSlim = 1;
+    if (isSlim)
+    {
+        // Check for NA FMCB folder on slims, this is minimal check
+        FILE *f = fopen("mc0:/BAEXEC-SYSTEM/osdmain.elf", "rb");
+        if (f) // FMCB mc0 is ok, skipping
+            fclose(f);
+        else
+        {
+            f = fopen("mc1:/BAEXEC-SYSTEM/osdmain.elf", "rb");
+            if (f) // FMCB mc1 is ok, skipping
+                fclose(f);
+            else
+            {
+                gsKit_clear(gsGlobal, Black);
+                struct GSTEXTURE_holder *errorTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "FMCB Cross-region not found!!!\n");
+                struct GSTEXTURE_holder *errorTextures2 = draw_text(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "FMCB may stop to work after installation.\n");
+                struct GSTEXTURE_holder *exitTextures   = draw_text(8, 8 + big_size + big_size / 2 + 7 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
+                drawFrame();
+
+                freeGSTEXTURE_holder(exitTextures);
+                freeGSTEXTURE_holder(errorTextures2);
+                freeGSTEXTURE_holder(errorTextures1);
+
+                while (1)
+                {
+                    u32 new_pad = ReadCombinedPadStatus();
+
+                    if (new_pad & PAD_CROSS)
+                        break;
+                }
+            }
+        }
+    }
+}
+
 void checkUnsupportedVersion()
 {
     uint8_t version[4];
@@ -1334,7 +1378,6 @@ void checkUnsupportedVersion()
     }
 }
 
-
 char isPatchAlreadyInstalled()
 {
     uint8_t build_date[5];
@@ -1476,6 +1519,7 @@ int main()
 
     drawLogo();
 
+    checkFMCB();
     checkUnsupportedVersion();
 
     uint8_t *powerTexture = getPowerTexture();
