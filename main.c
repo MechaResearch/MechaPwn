@@ -42,7 +42,6 @@ static unsigned int big_size = 50, reg_size = 36;
 
 static void ResetIOP()
 {
-    MassDeinit();
     SifInitRpc(0);
     while (!SifIopReset("", 0))
     {
@@ -186,6 +185,9 @@ int drawMenu(struct MENU *menu)
     }
 }
 
+uint8_t pal_defaults[]                  = {0x40, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x50};
+uint8_t ntsc_defaults[]                 = {0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40};
+
 // HKkorJAG
 // ||||||||
 // |||||||G - rom1:DVDVER last byte (only in PS3) (possible values: " UEAGDCM", space symbol for Japan)
@@ -251,7 +253,15 @@ void sum_buffer(uint8_t *buffer, int length)
     buffer[length - 1] = ~sum;
 }
 
-char write_region(uint8_t *region_params, uint8_t *region_ciphertext)
+void sum_buffer2(uint8_t *buffer, int length)
+{
+    uint8_t sum = 0;
+    for (int i = 0; i < length - 1; i++)
+        sum += buffer[i];
+    buffer[length - 1] = sum;
+}
+
+char write_region(uint8_t *region_params, uint8_t *region_ciphertext, uint8_t *config)
 {
     uint8_t version[4];
     uint8_t isSlim = 0;
@@ -263,29 +273,14 @@ char write_region(uint8_t *region_params, uint8_t *region_ciphertext)
 
     if (isSlim)
     {
+        // PS1 NTSC4.43 possible fix
+        for (int i = 0; i < 16; i += 2)
+            if (!WriteNVM(320 + i / 2, *(uint16_t *)&config[i]))
+                break;
+
         for (int i = 0; i < 12; i += 2)
             if (!WriteNVM(192 + i / 2, *(uint16_t *)&region_params[i]))
                 break;
-
-        // PS1 NTSC4.43 possible fix
-        uint16_t ps1_config; // offset 0x284: 00 10
-        uint16_t ps1_chksum; // offset 0x28e: 00 50
-        ReadNVM(322, &ps1_config);
-        ReadNVM(327, &ps1_chksum);
-
-        if (region_params[5] == 0x45) // if PS1 mode set to E (Europe)
-        {
-            ps1_config = ps1_config | 0x1000; // force set 00 10
-            ps1_chksum = ps1_chksum | 0x1000;
-        }
-        else
-        {
-            ps1_config = ps1_config & 0xEFFF; // force clear 00 10
-            ps1_chksum = ps1_chksum & 0xEFFF;
-        }
-
-        WriteNVM(322, ps1_config);
-        WriteNVM(327, ps1_chksum);
     }
 
     if (region_ciphertext)
@@ -342,7 +337,7 @@ void selectCexDex(char *isDex)
     *isDex = selected == 0;
 }
 
-void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_ciphertext)
+void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_ciphertext, uint8_t **config)
 {
     gsKit_clear(gsGlobal, Black);
 
@@ -389,55 +384,66 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
         {
             *region_params     = region_params_usa;
             *region_ciphertext = region_ciphertext_usa_cex;
+            *config            = ntsc_defaults;
         }
         else if (selected == 1)
         {
             *region_params     = region_params_japan;
             *region_ciphertext = region_ciphertext_japan_cex;
+            *config            = ntsc_defaults;
         }
         else if (selected == 2)
         {
             *region_params     = region_params_russia;
             *region_ciphertext = region_ciphertext_russia_cex;
+            *config            = pal_defaults;
         }
         else if (selected == 3)
         {
             *region_params     = region_params_korea;
             *region_ciphertext = region_ciphertext_korea_cex;
+            *config            = ntsc_defaults;
         }
         else if (selected == 4)
         {
             *region_params     = region_params_taiwan;
             *region_ciphertext = region_ciphertext_asia_cex;
+            *config            = ntsc_defaults;
         }
         /* else if (selected == 5)
         {
             *region_params     = region_params_china;
             *region_ciphertext = region_ciphertext_china_cex;
+            *config            = ntsc_defaults;
         } */
         else if (selected == 5)
         {
             *region_params     = region_params_asia;
             *region_ciphertext = region_ciphertext_asia_cex;
+            *config            = ntsc_defaults;
         }
         else if (selected == 6)
         {
             *region_params     = region_params_mexico;
             *region_ciphertext = region_ciphertext_mexico_cex;
+            *config            = ntsc_defaults;
         }
         else if (selected == 7)
         {
             *region_params     = region_params_europe;
             *region_ciphertext = region_ciphertext_europe_cex;
+            *config            = pal_defaults;
         }
         else if (selected == 8)
         {
             *region_params     = region_params_oceania;
             *region_ciphertext = region_ciphertext_oceania_cex;
+            *config            = pal_defaults;
         }
         if (isDex)
         {
             *region_ciphertext  = region_ciphertext_dex;
+            *config             = ntsc_defaults;
             region_params[0][0] = 0x41; // A - PS2 disable checks
             region_params[0][5] = 0x41; // A - PS1 disable checks
         }
@@ -450,9 +456,10 @@ void setRegion(char *isDex)
 
     uint8_t *region_params     = 0;
     uint8_t *region_ciphertext = 0;
-    selectRegion(*isDex, &region_params, &region_ciphertext);
+    uint8_t *config            = 0;
+    selectRegion(*isDex, &region_params, &region_ciphertext, &config);
 
-    write_region(region_params, region_ciphertext);
+    write_region(region_params, region_ciphertext, config);
 }
 
 uint8_t *frames[] = {
@@ -788,10 +795,9 @@ char isPatchKnown()
     uint8_t current_patch[224];
     char ret = 0;
     for (int i = 0; i < 112; i++)
-    {
         if (!ReadNVM(400 + i, (uint16_t *)&current_patch[i * 2]))
             break;
-    }
+
     getMechaBuildDate(build_date);
     uint8_t *patch = (uint8_t *)getOrigPatch(build_date);
 
@@ -1151,7 +1157,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd474)
         sprintf(RealModelName, "SCPH-79001 CW");
     else if (ModelId == 0xd475)
-           sprintf(RealModelName, "SCPH-90000");
+        sprintf(RealModelName, "SCPH-90000");
     else if (ModelId == 0xd476)
         sprintf(RealModelName, "SCPH-90000 CW");
     else if (ModelId == 0xd477)
