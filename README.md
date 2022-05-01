@@ -33,13 +33,23 @@ Older[^1] consoles do NOT use a Dragon-based mechacon and therefore are not supp
 
 _You will need to reinstall the exploit patch to change your region again_
 
-### Explanations of the menu options
+### Explanations of the app screens
 
-Retail-DEX (Debug) will set a QA Flagged DEX configuration/region and clear all common region flags. This allows mechacon to read discs from all regions as well as masterdiscs (the retail option does not). This also allows executing all-region kelfs. On Deckard[^3], this also forces NTSC video mode and forces PS2 and PS1 titles to run in the NA region.
+MechaPwn logo will wait until USB device is ready.
 
-CEX (Retail) will just set the region flag of your choosing. This option also restricts other regions from running. Be careful - on FAT[^5] units installing CEX->USA on SCPH-50004 will result in that European disks will not boot due to mechacon region beeing NTSC, and North American disks will not boot due to OSD ps2logo checking for PAL.
+Backup nvram. MechaPwn will backup your console NVRAM data into USB. This will work on any console, so the app can be used for dumping NVRAM.
 
-The next screen will allow choosing between predefined region sets on slims (70k[^7] and Deckard[^3]). It will change OSD behavior (for example, language set) and DVD Player region.
+Information scren. Will show data about your console: Serial number, model ID, real model name, mechacon firmware version and timestamp. If your console is untested or unsupported, MechaPwn will block itself. If you see a message "please report ..." feel free to open an issue and your console data will be tested for compatibility with MechaPwn.
+
+FMCB check. For slim consoles MechaPwn will check that FMCB is installed for US region. Again, please use FMCB cross-region install. If you have compatible FMCB, this screen will be skipped.
+
+Next screen will allow to change region or restore saved NVRAM backup from the USB.
+
+Console type screen. DEX will set a QA Flagged DEX configuration/region and clear all common region flags. This allows mechacon to read discs from all regions as well as masterdiscs (the retail option does not). This also allows executing all-region kelfs. On Deckard[^3], this also forces NTSC video mode and forces PS2 and PS1 titles to run in the NA region. On FAT CEX option is disabled as confirmed to be too dangerous. On slims CEX (Retail) will just set the region flag of your choosing. This option also restricts other regions from running.
+
+The next screen will allow choosing between predefined region sets on slims (70k[^7] and Deckard[^3]). It will change OSD behavior (for example, language set) and DVD Player region. Keep in mind that DEX type will use NTSC-U for PS2 and PS1 titles in any region.
+
+Patch menu. This menu will allow to keep current patch, install factory defaults and install force unlock. Factory Defaults will aloow to uninstall Force Unlock.
 
 ### How does it work?
 

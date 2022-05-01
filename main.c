@@ -318,6 +318,7 @@ void selectCexDex(char *isDex)
     if (isSlim)
     {
         menu.option_count = 2;
+        menu.options[0]   = "DEX (PS2/PS1 region NTSC-U)";
         menu.options[1]   = "CEX (retail)";
     }
 
@@ -353,7 +354,7 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
     if (isSlim)
     {
         struct MENU menu;
-        menu.title        = "Select region";
+        menu.title        = "Select region (OSD/DVD)";
         menu.x_text       = "X Select";
         menu.o_text       = "O Exit";
 
@@ -612,12 +613,15 @@ char applyPatches(char isDex)
     menu.title        = "Patch menu";
     menu.x_text       = "X Select";
     menu.o_text       = "O Exit";
-    menu.option_count = (isDex ? 3 : 2); // isDex
+    menu.option_count = 2;
 
     menu.options[0]   = "Keep current patch";
     menu.options[1]   = "Restore factory defaults";
     if (isDex && force_unlock)
-        menu.options[2] = "Install force unlock";
+    {
+        menu.option_count = 3;
+        menu.options[2]   = "Install force unlock";
+    }
 
     int selected = drawMenu(&menu);
     if (selected == -1)
@@ -776,11 +780,11 @@ uint8_t *getPowerTexture()
             return &pwr90k; */
         uint16_t ModelId;
         ReadNVM(0xF8, &ModelId);
-        if (ModelId < 0xd475) // TODO: or < 0xd476 find out what console model is 0xd475
+        if (ModelId < 0xd475)
             return &pwr70k;
         else
             // TODO: add picture for ps2 bravia
-            // if (ModelId != 0xd48f)
+            // if (ModelId == 0xd48f)
             return &pwr90k;
     }
 
@@ -850,21 +854,35 @@ void checkFMCB()
             else
             {
                 gsKit_clear(gsGlobal, Black);
-                struct GSTEXTURE_holder *errorTextures1 = draw_text(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "FMCB Cross-region not found!!!\n");
-                struct GSTEXTURE_holder *errorTextures2 = draw_text(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "FMCB may stop to work after installation.\n");
-                struct GSTEXTURE_holder *exitTextures   = draw_text(8, 8 + big_size + big_size / 2 + 7 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
+                int title_x, title_y;
+                getTextSize(big_size, "FMCB check", &title_x, &title_y);
+
+                struct GSTEXTURE_holder *TitleTexture     = draw_text((gsGlobal->Width - title_x) / 2, 8, big_size, 0xFFFFFF, "FMCB check");
+
+                struct GSTEXTURE_holder *errorTextures1   = draw_text(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "FMCB Cross-region not found!!!\n");
+                struct GSTEXTURE_holder *errorTextures2   = draw_text(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "FMCB may stop to work after installation.\n");
+                struct GSTEXTURE_holder *continueTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press O to continue.\n");
+                struct GSTEXTURE_holder *exitTextures     = draw_text(8, 8 + big_size + big_size / 2 + 7 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to exit.\n");
                 drawFrame();
 
                 freeGSTEXTURE_holder(exitTextures);
+                freeGSTEXTURE_holder(continueTextures);
                 freeGSTEXTURE_holder(errorTextures2);
                 freeGSTEXTURE_holder(errorTextures1);
+                freeGSTEXTURE_holder(TitleTexture);
 
                 while (1)
                 {
                     u32 new_pad = ReadCombinedPadStatus();
 
-                    if (new_pad & PAD_CROSS)
+                    if (new_pad & PAD_CIRCLE)
                         break;
+                    else if (new_pad & PAD_CROSS)
+                    {
+                        gsKit_clear(gsGlobal, Black);
+                        ResetIOP();
+                        LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                    }
                 }
             }
         }
@@ -1211,13 +1229,13 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd479)
         sprintf(RealModelName, "SCPH-90006 CW");
     /* else if (ModelId == 0xd47a)
-           sprintf(RealModelName, "???");
-       else if (ModelId == 0xd47b)
-           sprintf(RealModelName, "???");
-       else if (ModelId == 0xd47c)
-           sprintf(RealModelName, "???");
-       else if (ModelId == 0xd47d)
            sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd47b)
+        sprintf(RealModelName, "SCPH-90005");
+    /* else if (ModelId == 0xd47c)
+        sprintf(RealModelName, "???");
+    else if (ModelId == 0xd47d)
+        sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd47e)
         sprintf(RealModelName, "SCPH-90007");
     /* else if (ModelId == 0xd47f)
@@ -1519,8 +1537,8 @@ int main()
 
     drawLogo();
 
-    checkFMCB();
     checkUnsupportedVersion();
+    checkFMCB();
 
     uint8_t *powerTexture = getPowerTexture();
 
