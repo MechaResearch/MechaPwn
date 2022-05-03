@@ -771,26 +771,24 @@ uint8_t *getPowerTexture()
 {
     uint8_t version[4];
     getMechaVersion(version);
+    uint16_t ModelId;
+    ReadNVM(0xF8, &ModelId);
 
     if (version[1] == 6)
     {
-        /* if (version[2] < 12)
-            return &pwr70k;
-        else
-            return &pwr90k; */
-        uint16_t ModelId;
-        ReadNVM(0xF8, &ModelId);
         if (ModelId < 0xd475)
             return &pwr70k;
+        else if (ModelId == 0xd48f)
+            return &pwrtvcombo;
         else
-            // TODO: add picture for ps2 bravia
-            // if (ModelId == 0xd48f)
             return &pwr90k;
     }
-
-    // TODO: add picture for DESR
-    // if (version[3] == 1) // DESR indicator
-    return &pwr50k;
+    else if ((ModelId >= 0xd380) && (ModelId <= 0xd384))
+        return &pwrpsx1;
+    else if ((ModelId >= 0xd385) && (ModelId < 0xd400))
+        return &pwrpsx2;
+    else
+        return &pwr50k;
 }
 
 char isPatchKnown()
@@ -1177,9 +1175,9 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd45f)
         sprintf(RealModelName, "SCPH-77004 PK");
     /* else if (ModelId == 0xd460)
-           sprintf(RealModelName, "???");
-       else if (ModelId == 0xd461)
            sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd461)
+        sprintf(RealModelName, "SCPH-77000 SS");
     else if (ModelId == 0xd462)
         sprintf(RealModelName, "SCPH-77000 PK");
     /* else if (ModelId == 0xd463)
@@ -1302,10 +1300,11 @@ void checkUnsupportedVersion()
              (ModelId == 0xd41a) || (ModelId == 0xd41c) || (ModelId == 0xd420) ||
              (ModelId == 0xd422) || (ModelId == 0xd423) || (ModelId == 0xd433) ||
              (ModelId == 0xd442) || (ModelId == 0xd454) || (ModelId == 0xd45d) ||
-             (ModelId == 0xd46d) || (ModelId == 0xd477) || (ModelId == 0xd482) ||
-             (ModelId == 0xd484) || (ModelId == 0xd384))
+             (ModelId == 0xd461) || (ModelId == 0xd46d) || (ModelId == 0xd477) ||
+             (ModelId == 0xd482) || (ModelId == 0xd484) || (ModelId == 0xd384))
         sprintf(color, "Satin Silver");
-    else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462) || (ModelId == 0xd469))
+    else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462) ||
+             (ModelId == 0xd469))
         sprintf(color, "Sakura Pink");
     else if (ModelId == 0xd404)
         sprintf(color, "Midnight Blue");

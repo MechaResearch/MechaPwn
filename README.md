@@ -22,6 +22,7 @@ Older[^1] consoles do NOT use a Dragon-based mechacon and therefore are not supp
 - CEX option only: FMCB 1.8 and older are region locked. It will stop to work if you change region under CEX option. To avoid this - use only DEX option or upgrade to FMCB 1.9
 - CEX option only: DVD player on Pre-Deckard[^4] models is region locked. It (and DVD player based exploits like FreeDVDBoot) will stop to work if you change region under CEX option. To avoid this - use only DEX option or install DVD player update to memory card.
 - Force Unlock will disable DVD player
+- Deckard[^3]-only, PAL and Japan units only: FMCB, dvdplayer hack from krHACKen, gameplay history, etc will change its location. If you don't want to loose functionality, ensure that all `B?EXEC-` and `B?SYSTEM-` folders have their content copied into respective `BAEXEC-` and `BASYSTEM-` folders.
 
 ## How to use?
 
@@ -64,7 +65,7 @@ However, an exploitable bug was found in the WriteConfig function that allows wr
 ### DSP limitations
 
 1. DSP does not store disk key (16 bytes) inside its registers. This only affects retail units, real DTL units does not have this `bug?/feature?` cause DTL units have another DSP chip revision. The mechacon copies disc ID data from masterdisc sector into the DSP registers and later in CDVDMAN on DTL units. Retail DSP always read back from disc. This will block MasterPatched disks form running directly from OSD.
-2. Burning coils. If a disc has bad ECC (error correction) data on the error correction area of each sector, there's a chance it may crash the DSP during a read, given that the coils are driven using PWM (pulse width modulation) there's a 50% chance it may crash while the coil is energized. The coil is not designed to receive constant current so it can be damaged. It doesn't crash with silver discs, it **may** crash with burnt discs, it only depends if the ECC data is bogus or not. While this problem is not caused by MechaPwn, MechaPwn will increase its probability, so you are warned. There exists several hardware solutions for that bug: so called, pin17 fix, romeo fix (for FAT[^5]), subzero mod (for 70k[^7]).
+2. Burning coils. Affects any FAT[^5] and 70k[^7] consoles. If a disc has bad ECC (error correction) data on the error correction area of each sector, there's a chance it may crash the DSP during a read, given that the coils are driven using PWM (pulse width modulation) there's a 50% chance it may crash while the coil is energized. The coil is not designed to receive constant current so it can be damaged. It doesn't crash with silver discs (without scrapes), it **may** crash with burnt discs, it only depends if the ECC data is bogus or not. While this problem is not caused by MechaPwn, MechaPwn will increase its probability, so you are warned. There exists several hardware solutions for that bug: so called, pin17 fix, romeo fix (for FAT[^5]), subzero mod (for 70k[^7]).
 
 ## Program Advantages
 
