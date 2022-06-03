@@ -264,20 +264,26 @@ void sum_buffer2(uint8_t *buffer, int length)
 char write_region(uint8_t *region_params, uint8_t *region_ciphertext, uint8_t *config)
 {
     uint8_t version[4];
-    uint8_t isSlim = 0;
+    uint8_t isSlim    = 0;
+    uint8_t isDeckard = 0;
     getMechaVersion(version);
-    if (version[1] == 5)
-        isSlim = 0;
-    else if (version[1] == 6)
+    if (version[1] == 6)
+    {
         isSlim = 1;
+        if (version[2] >= 6)
+            isDeckard = 1;
+    }
 
-    if (isSlim)
+    if (isDeckard)
     {
         // PS1 NTSC4.43 possible fix
         for (int i = 0; i < 16; i += 2)
             if (!WriteNVM(320 + i / 2, *(uint16_t *)&config[i]))
                 break;
+    }
 
+    if (isSlim)
+    {
         for (int i = 0; i < 12; i += 2)
             if (!WriteNVM(192 + i / 2, *(uint16_t *)&region_params[i]))
                 break;
@@ -304,9 +310,7 @@ void selectCexDex(char *isDex)
     uint8_t version[4];
     uint8_t isSlim = 0;
     getMechaVersion(version);
-    if (version[1] == 5)
-        isSlim = 0;
-    else if (version[1] == 6)
+    if (version[1] == 6)
         isSlim = 1;
 
     struct MENU menu;
@@ -777,18 +781,21 @@ uint8_t *getPowerTexture()
     if (version[1] == 6)
     {
         if (ModelId < 0xd475)
-            return &pwr70k;
+            return &pwr70k; // for all slims before 90k: 70k, 75k, 77k, 79k
         else if (ModelId == 0xd48f)
             return &pwrtvcombo;
         else
             return &pwr90k;
     }
-    else if ((ModelId >= 0xd380) && (ModelId <= 0xd384))
-        return &pwrpsx1;
-    else if ((ModelId >= 0xd385) && (ModelId < 0xd400))
-        return &pwrpsx2;
-    else
-        return &pwr50k;
+    else if (version[1] == 5)
+    {
+        if (version[2] == 10)
+            return &pwrpsx1;
+        else if (version[2] == 14)
+            return &pwrpsx2;
+    }
+
+    return &pwr50k;
 }
 
 char isPatchKnown()
@@ -834,9 +841,7 @@ void checkFMCB()
     uint8_t version[4];
     uint8_t isSlim = 0;
     getMechaVersion(version);
-    if (version[1] == 5)
-        isSlim = 0;
-    else if (version[1] == 6)
+    if (version[1] == 6)
         isSlim = 1;
     if (isSlim)
     {
