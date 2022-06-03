@@ -1075,7 +1075,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd42d)
         sprintf(RealModelName, "SCPH-70006");
     else if (ModelId == 0xd42e)
-        sprintf(RealModelName, "SCPH-70007 ??");
+        sprintf(RealModelName, "SCPH-70007");
     /* else if (ModelId == 0xd42f)
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd430)
@@ -1236,10 +1236,10 @@ void checkUnsupportedVersion()
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd47e)
         sprintf(RealModelName, "SCPH-90007 ??");
-    /* else if (ModelId == 0xd47f)
-           sprintf(RealModelName, "???");
-       else if (ModelId == 0xd480)
-           sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd47f)
+        sprintf(RealModelName, "SCPH-90007 CW");
+    /* else if (ModelId == 0xd480)
+        sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd481)
         sprintf(RealModelName, "SCPH-90001");
     else if (ModelId == 0xd482)
@@ -1295,7 +1295,7 @@ void checkUnsupportedVersion()
         (ModelId == 0xd414) || (ModelId == 0xd418) || (ModelId == 0xd41e) ||
         (ModelId == 0xd437) || (ModelId == 0xd444) || (ModelId == 0xd452) ||
         (ModelId == 0xd456) || (ModelId == 0xd474) || (ModelId == 0xd476) ||
-        (ModelId == 0xd479))
+        (ModelId == 0xd479) || (ModelId == 0xd47f))
         sprintf(color, "White");
     else if ((ModelId == 0xd408) || (ModelId == 0xd40a) || (ModelId == 0xd415) ||
              (ModelId == 0xd41a) || (ModelId == 0xd41c) || (ModelId == 0xd420) ||
@@ -1314,11 +1314,10 @@ void checkUnsupportedVersion()
         sprintf(color, "Aqua Blue");
     else if (ModelId == 0xd48b)
         sprintf(color, "Cinnabar Red");
-    else if ((ModelId == 0xd42b) || (ModelId == 0xd42c) || (ModelId == 0xd42e) ||
-             (ModelId == 0xd430) || (ModelId == 0xd43a) || (ModelId == 0xd441) ||
-             (ModelId == 0xd44c) || (ModelId == 0xd459) || (ModelId == 0xd45e) ||
-             (ModelId == 0xd465) || (ModelId == 0xd46b) || (ModelId == 0xd46e) ||
-             (ModelId == 0xd47e))
+    else if ((ModelId == 0xd42b) || (ModelId == 0xd42c) || (ModelId == 0xd430) ||
+             (ModelId == 0xd43a) || (ModelId == 0xd441) || (ModelId == 0xd44c) ||
+             (ModelId == 0xd459) || (ModelId == 0xd45e) || (ModelId == 0xd465) ||
+             (ModelId == 0xd46b) || (ModelId == 0xd46e) || (ModelId == 0xd47e))
         sprintf(color, "Unknown");
 
     colorTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Console color: %s\n", color);
