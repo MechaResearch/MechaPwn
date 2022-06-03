@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          apk add build-base git zip python2 python2-dev
+          apk add build-base git zip python python-dev
           apk add tiff-dev jpeg-dev openjpeg-dev zlib-dev freetype-dev lcms2-dev libwebp-dev tcl-dev tk-dev harfbuzz-dev fribidi-dev libimagequant-dev libxcb-dev libpng-dev
           python -m ensurepip
           pip install --upgrade pip setuptools wheel

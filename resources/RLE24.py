@@ -78,7 +78,7 @@ def encode(line):
 
 def encodeRLE24(img):
     width, height = img.size
-    output = ''
+    output = b''
 
     for h in range(height):
         line = []

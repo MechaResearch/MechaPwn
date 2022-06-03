@@ -52,7 +52,7 @@ IndieFlower.s: resources/IndieFlower-Regular.ttf
 	$(BIN2S) $^ $@ $(^F)
 
 resources/%: resources/%.png
-	python2 resources/conv.py $^ $@
+	python3 resources/conv.py $^ $@
 
 include $(PS2SDK)/samples/Makefile.pref
 include $(PS2SDK)/samples/Makefile.eeglobal
