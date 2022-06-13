@@ -1,0 +1,38 @@
+name: 🐛 Bug report
+description: Create a report to help us improve
+title: "[ISSUE]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### __Disclaimer:__
+        In order to provide you the help we need your console data: nvram backup file and sticker photo.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checks
+      description: "Check before posting"
+      options:
+        - label: I provided nvram backup file
+        - label: I provided sticker photo
+
+  - type: input
+    id: console
+    attributes:
+      label: Console model
+      description: you can see it on the console sticker or inside OSDSYS (press triangle on main menú)
+      placeholder: SCPH-?????
+    validations:
+      required: true
+
+  - type: textarea
+    id: explanation
+    attributes:
+      label: Describe the issue
+      description: Drag and drop your nvram backup and sticker photo here, in text area. And add a clear and concise description of what the issue is.
+      placeholder: My issue is...
+    validations:
+      required: true
+
