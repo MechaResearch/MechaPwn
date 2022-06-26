@@ -1260,9 +1260,9 @@ void checkUnsupportedVersion()
        else if (ModelId == 0xd487)
            sprintf(RealModelName, "???");
        else if (ModelId == 0xd488)
-           sprintf(RealModelName, "???");
-       else if (ModelId == 0xd489)
            sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd489)
+        sprintf(RealModelName, "SCPH-90007 CR");
     else if (ModelId == 0xd48a)
         sprintf(RealModelName, "SCPH-90010");
     else if (ModelId == 0xd48b)
@@ -1317,7 +1317,7 @@ void checkUnsupportedVersion()
         sprintf(color, "Midnight Blue");
     else if (ModelId == 0xd41b)
         sprintf(color, "Aqua Blue");
-    else if (ModelId == 0xd48b)
+    else if ((ModelId == 0xd489) || (ModelId == 0xd48b))
         sprintf(color, "Cinnabar Red");
     else if ((ModelId == 0xd42b) || (ModelId == 0xd42c) || (ModelId == 0xd430) ||
              (ModelId == 0xd43a) || (ModelId == 0xd441) || (ModelId == 0xd44c) ||
