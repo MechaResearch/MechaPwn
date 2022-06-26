@@ -103,7 +103,7 @@ We don't know. This depends on what modchip you are using, it has been reported 
 The DVD Player KELF inside the BootROM (BIOS) is region locked on non-deckard (pre SCPH-750XX). Since you changed the region of the console it can't run that file.
 To fix that you need to install a DVD Player update to your memory card.
 
-### Why did FreeMCBoot stopped working?
+### Why did FreeMCBoot stop working?
 
 Version 1.8 is piggybacking a DVD Player KELF and faces the same issue as DVD Player players.
 
