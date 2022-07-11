@@ -56,6 +56,15 @@ extern u32 size_pwr70k;
 extern uint8_t pwr90k;
 extern u32 size_pwr90k;
 
+extern uint8_t pwrpsx1;
+extern u32 size_pwrpsx1;
+
+extern uint8_t pwrpsx2;
+extern u32 size_pwrpsx2;
+
+extern uint8_t pwrtvcombo;
+extern u32 size_pwrtvcombo;
+
 extern uint8_t frame_001;
 extern u32 size_frame_001;
 

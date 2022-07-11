@@ -25,3 +25,4 @@ char CloseConfig();
 char ReadNVM(uint16_t offset, uint16_t *data);
 char WriteNVM(uint16_t offset, uint16_t data);
 char IsNVMUnlocked();
+char getSerial(uint32_t *serial);

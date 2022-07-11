@@ -9,6 +9,11 @@
 IOP_BIN  = mechaproxy.irx
 IOP_OBJS = mechaproxy.o imports.o exports.o
 
+IOP_SRC_DIR = src/
+IOP_OPTFLAGS = -O2
+IOP_INCS += -I$(IOP_SRC_DIR)
+
 include $(PS2SDK)/Defs.make
 include ../Rules.bin.make
-include ../Rules.make
+include $(PS2SDK)/samples/Makefile.pref
+include $(PS2SDK)/samples/Makefile.iopglobal
