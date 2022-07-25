@@ -970,6 +970,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd326)
         sprintf(RealModelName, "DTL-H90000(a)");
     // d327-d37f
+    // X-chassis
     else if (ModelId == 0xd380)
         sprintf(RealModelName, "DESR-7000");
     else if (ModelId == 0xd381)
@@ -989,6 +990,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd388)
         sprintf(RealModelName, "DESR-5700");
     // d389 - d400 ??
+    // H, I, J -chassis
     else if (ModelId == 0xd401)
         sprintf(RealModelName, "SCPH-50001/N");
     else if (ModelId == 0xd402)
@@ -1006,7 +1008,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd408)
         sprintf(RealModelName, "SCPH-50002 SS");
     else if (ModelId == 0xd409)
-        sprintf(RealModelName, "SCPH-50003");
+        sprintf(RealModelName, "SCPH-50003 SS");
     else if (ModelId == 0xd40a)
         sprintf(RealModelName, "SCPH-50004 SS");
     else if (ModelId == 0xd40b)
@@ -1032,21 +1034,21 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd415)
         sprintf(RealModelName, "SCPH-50009 SS");
     /* else if (ModelId == 0xd416)
-        sprintf(RealModelName, "???");
+        sprintf(RealModelName, "??? SCPH-50003 AQ");
     else if (ModelId == 0xd417)
-        sprintf(RealModelName, "???"); */
+        sprintf(RealModelName, "??? SCPH-55005 GT/N"); */
     else if (ModelId == 0xd418)
         sprintf(RealModelName, "SCPH-55006 GT");
     /* else if (ModelId == 0xd419)
-        sprintf(RealModelName, "???"); */
+        sprintf(RealModelName, "??? SCPH-55007 GT"); */
     else if (ModelId == 0xd41a)
         sprintf(RealModelName, "SCPH-50008 SS");
     else if (ModelId == 0xd41b)
         sprintf(RealModelName, "SCPH-50004 AQ");
     else if (ModelId == 0xd41c)
         sprintf(RealModelName, "SCPH-50005 SS/N");
-    /* else if (ModelId == 0xd41d)
-           sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd41d)
+        sprintf(RealModelName, "SCPH-50005 AQ/N");
     else if (ModelId == 0xd41e)
         sprintf(RealModelName, "SCPH-50000 CW");
     else if (ModelId == 0xd41f)
@@ -1063,6 +1065,7 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-50000 PW");
     else if (ModelId == 0xd425)
         sprintf(RealModelName, "SCPH-50011");
+    // K-chassis
     else if (ModelId == 0xd426)
         sprintf(RealModelName, "SCPH-70004");
     else if (ModelId == 0xd427)
@@ -1074,19 +1077,19 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd42a)
         sprintf(RealModelName, "SCPH-70012");
     else if (ModelId == 0xd42b)
-        sprintf(RealModelName, "SCPH-70000 ??");
+        sprintf(RealModelName, "SCPH-70000 CB ??");
     else if (ModelId == 0xd42c)
-        sprintf(RealModelName, "SCPH-70005 ??");
+        sprintf(RealModelName, "SCPH-70005 CB ??");
     else if (ModelId == 0xd42d)
         sprintf(RealModelName, "SCPH-70006");
     else if (ModelId == 0xd42e)
         sprintf(RealModelName, "SCPH-70007");
     /* else if (ModelId == 0xd42f)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-70010"); */
     else if (ModelId == 0xd430)
-        sprintf(RealModelName, "SCPH-70008 ??");
+        sprintf(RealModelName, "SCPH-70008");
     /* else if (ModelId == 0xd431)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-70002 SS"); */
     else if (ModelId == 0xd432)
         sprintf(RealModelName, "SCPH-70003 SS");
     else if (ModelId == 0xd433)
@@ -1096,15 +1099,16 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd435)
         sprintf(RealModelName, "SCPH-70001");
     /* else if (ModelId == 0xd436)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-70000 GT"); */
     else if (ModelId == 0xd437)
         sprintf(RealModelName, "SCPH-70000 CW");
     /* else if (ModelId == 0xd438)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "??? SCPH-70000 SS");
     else if (ModelId == 0xd439)
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd43a)
-        sprintf(RealModelName, "SCPH-70008 ??");
+        sprintf(RealModelName, "SCPH-70008 SS");
+    // L-chassis
     else if (ModelId == 0xd43b)
         sprintf(RealModelName, "SCPH-75001");
     else if (ModelId == 0xd43c)
@@ -1116,9 +1120,9 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd43f)
         sprintf(RealModelName, "SCPH-75000 SSS");
     /* else if (ModelId == 0xd440)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "SCPH-75002 SS ???"); */
     else if (ModelId == 0xd441)
-        sprintf(RealModelName, "SCPH-75003 ??");
+        sprintf(RealModelName, "SCPH-75003 SS ??");
     else if (ModelId == 0xd442)
         sprintf(RealModelName, "SCPH-75004 SS");
     else if (ModelId == 0xd443)
@@ -1128,33 +1132,34 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd445)
         sprintf(RealModelName, "SCPH-75006");
     /* else if (ModelId == 0xd446)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "??? SCPH-75005");
        else if (ModelId == 0xd447)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "??? SCPH-75007");
        else if (ModelId == 0xd448)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-75010"); */
     else if (ModelId == 0xd449)
         sprintf(RealModelName, "SCPH-75000 FF");
     /* else if (ModelId == 0xd44a)
          sprintf(RealModelName, "???");
        else if (ModelId == 0xd44b)
-         sprintf(RealModelName, "???"); */
+         sprintf(RealModelName, "??? SCPH-75008 CB"); */
     else if (ModelId == 0xd44c)
-        sprintf(RealModelName, "SCPH-75008 ??");
+        sprintf(RealModelName, "SCPH-75008 SS ??");
+    // M-chassis
     /* else if (ModelId == 0xd44d)
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd44e)
         sprintf(RealModelName, "SCPH-77001");
-    /* else if (ModelId == 0xd44f)
-           sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd44f)
+        sprintf(RealModelName, "SCPH-77002");
     else if (ModelId == 0xd450)
         sprintf(RealModelName, "SCPH-77003");
     else if (ModelId == 0xd451)
         sprintf(RealModelName, "SCPH-77004");
     else if (ModelId == 0xd452)
-        sprintf(RealModelName, "SCPH-77002 CW");
+        sprintf(RealModelName, "SCPH-77002 SS");
     /* else if (ModelId == 0xd453)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-77003 SS"); */
     else if (ModelId == 0xd454)
         sprintf(RealModelName, "SCPH-77004 SS");
     else if (ModelId == 0xd455)
@@ -1166,17 +1171,17 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd458)
         sprintf(RealModelName, "SCPH-77006");
     else if (ModelId == 0xd459)
-        sprintf(RealModelName, "SCPH-77007 ??");
+        sprintf(RealModelName, "SCPH-77007 CB ??");
     else if (ModelId == 0xd45a)
         sprintf(RealModelName, "SCPH-77008");
     /* else if (ModelId == 0xd45b)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "??? SCPH-77010");
        else if (ModelId == 0xd45c)
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd45d)
         sprintf(RealModelName, "SCPH-77001 SS");
     else if (ModelId == 0xd45e)
-        sprintf(RealModelName, "SCPH-77003 ??");
+        sprintf(RealModelName, "SCPH-77003 PK ??");
     else if (ModelId == 0xd45f)
         sprintf(RealModelName, "SCPH-77004 PK");
     /* else if (ModelId == 0xd460)
@@ -1186,13 +1191,14 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd462)
         sprintf(RealModelName, "SCPH-77000 PK");
     /* else if (ModelId == 0xd463)
-           sprintf(RealModelName, "???");
-       else if (ModelId == 0xd464)
-           sprintf(RealModelName, "??? SCPH-79000"); */
+           sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd464)
+        sprintf(RealModelName, "SCPH-77002 PK");
+    // N-chassis
     else if (ModelId == 0xd465)
-        sprintf(RealModelName, "SCPH-79001 ??");
+        sprintf(RealModelName, "SCPH-79001");
     /* else if (ModelId == 0xd466)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "??? SCPH-79000");
        else if (ModelId == 0xd467)
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd468)
@@ -1200,27 +1206,28 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd469)
         sprintf(RealModelName, "SCPH-79001 SS");
     /* else if (ModelId == 0xd46a)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-79005 CB"); */
     else if (ModelId == 0xd46b)
-        sprintf(RealModelName, "SCPH-79006 ??");
+        sprintf(RealModelName, "SCPH-79006 CB ??");
     /* else if (ModelId == 0xd46c)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-79000 CW"); */
     else if (ModelId == 0xd46d)
         sprintf(RealModelName, "SCPH-79000 SS");
     else if (ModelId == 0xd46e)
-        sprintf(RealModelName, "SCPH-79003 ??");
+        sprintf(RealModelName, "SCPH-79003");
     /* else if (ModelId == 0xd46f)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-79004"); */
     else if (ModelId == 0xd470)
         sprintf(RealModelName, "SCPH-79010");
     /* else if (ModelId == 0xd471)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "??? SCPH-79007");
        else if (ModelId == 0xd472)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-79004 SS"); */
     else if (ModelId == 0xd473)
         sprintf(RealModelName, "SCPH-79008");
     else if (ModelId == 0xd474)
         sprintf(RealModelName, "SCPH-79001 CW");
+    // P/R-chassis
     else if (ModelId == 0xd475)
         sprintf(RealModelName, "SCPH-90000");
     else if (ModelId == 0xd476)
@@ -1236,15 +1243,15 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd47b)
         sprintf(RealModelName, "SCPH-90005");
     /* else if (ModelId == 0xd47c)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "??? SCPH-90005 CW");
     else if (ModelId == 0xd47d)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-90005 SS"); */
     else if (ModelId == 0xd47e)
-        sprintf(RealModelName, "SCPH-90007 ??");
+        sprintf(RealModelName, "SCPH-90007 CB ??");
     else if (ModelId == 0xd47f)
         sprintf(RealModelName, "SCPH-90007 CW");
     /* else if (ModelId == 0xd480)
-        sprintf(RealModelName, "???"); */
+        sprintf(RealModelName, "??? SCPH-90007 SS"); */
     else if (ModelId == 0xd481)
         sprintf(RealModelName, "SCPH-90001");
     else if (ModelId == 0xd482)
@@ -1256,11 +1263,11 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd485)
         sprintf(RealModelName, "SCPH-90002");
     /* else if (ModelId == 0xd486)
-           sprintf(RealModelName, "SCPH-90002 ??");
+           sprintf(RealModelName, "??? SCPH-90002 SS");
        else if (ModelId == 0xd487)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "??? SCPH-90003 CB");
        else if (ModelId == 0xd488)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-90005 CR"); */
     else if (ModelId == 0xd489)
         sprintf(RealModelName, "SCPH-90007 CR");
     else if (ModelId == 0xd48a)
@@ -1295,21 +1302,23 @@ void checkUnsupportedVersion()
     if ((ModelId >= 0xd380 && ModelId <= 0xd388 && ModelId != 0xd384) ||
         (ModelId == 0xd414) || (ModelId == 0xd418) || (ModelId == 0xd41e) ||
         (ModelId == 0xd424) || (ModelId == 0xd437) || (ModelId == 0xd444) ||
-        (ModelId == 0xd452) || (ModelId == 0xd456) || (ModelId == 0xd474) ||
-        (ModelId == 0xd476) || (ModelId == 0xd479) || (ModelId == 0xd47f))
+        (ModelId == 0xd456) || (ModelId == 0xd474) || (ModelId == 0xd476) ||
+        (ModelId == 0xd479) || (ModelId == 0xd47f))
         sprintf(color, "White");
-    else if ((ModelId == 0xd408) || (ModelId == 0xd40a) || (ModelId == 0xd412) ||
-             (ModelId == 0xd415) || (ModelId == 0xd41a) || (ModelId == 0xd41c) ||
-             (ModelId == 0xd420) || (ModelId == 0xd422) || (ModelId == 0xd423) ||
-             (ModelId == 0xd432) || (ModelId == 0xd433) || (ModelId == 0xd43f) ||
-             (ModelId == 0xd442) || (ModelId == 0xd454) || (ModelId == 0xd45d) ||
+    else if ((ModelId == 0xd408) || (ModelId == 0xd409) || (ModelId == 0xd40a) ||
+             (ModelId == 0xd412) || (ModelId == 0xd415) || (ModelId == 0xd41a) ||
+             (ModelId == 0xd41c) || (ModelId == 0xd420) || (ModelId == 0xd422) ||
+             (ModelId == 0xd423) || (ModelId == 0xd432) || (ModelId == 0xd433) ||
+             (ModelId == 0xd43a) || (ModelId == 0xd43f) || (ModelId == 0xd442) ||
+             (ModelId == 0xd452) || (ModelId == 0xd454) || (ModelId == 0xd45d) ||
              (ModelId == 0xd461) || (ModelId == 0xd469) || (ModelId == 0xd46d) ||
              (ModelId == 0xd477) || (ModelId == 0xd47a) || (ModelId == 0xd482) ||
              (ModelId == 0xd484) || (ModelId == 0xd384) || (ModelId == 0xd304))
         sprintf(color, "Satin Silver");
-    else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462))
+    else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462) ||
+             (ModelId == 0xd464))
         sprintf(color, "Pink");
-    else if ((ModelId == 0xd404) || (ModelId == 0xd41b))
+    else if ((ModelId == 0xd404) || (ModelId == 0xd41b) || (ModelId == 0xd41d))
         sprintf(color, "Blue");
     else if (ModelId == 0xd413)
         sprintf(color, "Gold");
@@ -1317,8 +1326,8 @@ void checkUnsupportedVersion()
         sprintf(color, "Cinnabar Red");
     else if ((ModelId == 0xd42b) || (ModelId == 0xd42c) || (ModelId == 0xd430) ||
              (ModelId == 0xd43a) || (ModelId == 0xd441) || (ModelId == 0xd44c) ||
-             (ModelId == 0xd459) || (ModelId == 0xd45e) || (ModelId == 0xd465) ||
-             (ModelId == 0xd46b) || (ModelId == 0xd46e) || (ModelId == 0xd47e))
+             (ModelId == 0xd459) || (ModelId == 0xd45e) || (ModelId == 0xd46b) ||
+             (ModelId == 0xd47e))
         sprintf(color, "Unknown");
 
     colorTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Console color: %s\n", color);
