@@ -1142,9 +1142,9 @@ void checkUnsupportedVersion()
     /* else if (ModelId == 0xd44a)
          sprintf(RealModelName, "???");
        else if (ModelId == 0xd44b)
-         sprintf(RealModelName, "??? SCPH-75008 CB"); */
+         sprintf(RealModelName, "??? SCPH-75008 SS"); */
     else if (ModelId == 0xd44c)
-        sprintf(RealModelName, "SCPH-75008 SS ??");
+        sprintf(RealModelName, "SCPH-75008");
     // M-chassis
     /* else if (ModelId == 0xd44d)
            sprintf(RealModelName, "???"); */
@@ -1177,7 +1177,7 @@ void checkUnsupportedVersion()
     /* else if (ModelId == 0xd45b)
            sprintf(RealModelName, "??? SCPH-77010");
        else if (ModelId == 0xd45c)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-77008 SS"); */
     else if (ModelId == 0xd45d)
         sprintf(RealModelName, "SCPH-77001 SS");
     else if (ModelId == 0xd45e)
@@ -1185,7 +1185,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd45f)
         sprintf(RealModelName, "SCPH-77004 PK");
     /* else if (ModelId == 0xd460)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-77008 PK"); */
     else if (ModelId == 0xd461)
         sprintf(RealModelName, "SCPH-77000 SS");
     else if (ModelId == 0xd462)
@@ -1263,7 +1263,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd485)
         sprintf(RealModelName, "SCPH-90002");
     /* else if (ModelId == 0xd486)
-           sprintf(RealModelName, "??? SCPH-90002 SS");
+           sprintf(RealModelName, "???");
        else if (ModelId == 0xd487)
            sprintf(RealModelName, "??? SCPH-90003 CB");
        else if (ModelId == 0xd488)
@@ -1277,9 +1277,9 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd48c)
         sprintf(RealModelName, "SCPH-90008");
     /* else if (ModelId == 0xd48d)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "??? SCPH-90008 SS");
        else if (ModelId == 0xd48e)
-           sprintf(RealModelName, "???"); */
+           sprintf(RealModelName, "??? SCPH-90006 CR"); */
     else if (ModelId == 0xd48f)
         sprintf(RealModelName, "PX300-1");
     else
