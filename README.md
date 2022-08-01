@@ -132,6 +132,18 @@ Master patch creation isnt covered by this FAQ. Try to search for *PSX/PS2 Disc 
 
 PSX DVR units mostly have the same limitations as Japan FAT[^5] consoles, but the DEX option in MechaPwn will allow PSX DVR to play PS2 disks from any region directly from XMB. PS1 titles still require the Japanese sector on the disk. Note, that you need a functional burning laser even if you do not plan to record disks to play PS2/PS1 titles.
 
+## TODO / Known bugs and limitations / Planned work
+
+70k[^7] consoles with mechacon 6.0 and 6.2 will break DVD Player support (so exploits like FreeDVDPlayer will stop working). 70k[^7] consoles with mechacon 6.4 are not affected by this behavior.
+FMCB will bootloop with Force Unlock and burned PS2DVD.
+Check NVRAM lens area, for better laser calibration.
+Collect all possible Model IDs + sticker photo.
+Develop an app for restoring nvram based on sticker photos.
+
+## How does it work
+
+More info about mechacon flags [here](https://playstationdev.wiki/ps2devwiki/index.php/MechaCon#Region_code). Currently, Mechacon Region Code is set to 0x00130000 (bit 16, 17, 20). Patch area, that allows to play with mechacon, described [here](https://playstationdev.wiki/ps2devwiki/index.php/MechaCon#Rom_patch). Region parameters, that are changed on slims, are described [here](https://playstationdev.wiki/ps2devwiki/index.php/MechaCon#Region_params).
+
 ## Credits
 
 [Contributors](CONTRIBUTORS.md)
