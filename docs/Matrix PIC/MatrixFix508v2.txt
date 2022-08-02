@@ -1,0 +1,102 @@
+The Matrix Team - V12 Dead Syndrome Fix V2.0
+--------------------------------------------
+
+
+UPDATE : November 24, 2004
+--------------------------
+
+Added hex file in INHEX8 for those programmers that don't support INHEX16.
+
+Settings are included in the .hex file but can be set manually as
+follows : IntRC oscillator, Internal MCLR, Watchdog timer ON.
+
+Note : If you want to make sure that your pic was programmed correctly and
+that the resistor value is low enough to turn off your pstwo you can do so
+in the following way : Install the 12c508 as from the schematics but connect
+pin 4 to GND instead of point K. The pstwo should turn on when pressing reset
+and turn itself off after three seconds. If this happens you can be sure that
+the 12c508 is working and that the resistor value chosen is correct.
+Disconnect pin 4 from GND and connect it to point K on the diagrams and you
+are set to go.
+
+
+November 22, 2004
+-----------------
+
+Just a quick follow-up to our previous reports. A more in depth explanation
+will follow later on but at this point we believe it's more important to
+offer a quick fix for all those poor pstwos out there ;-)
+
+Further analysis on several V12 has shown that in certain situations the
+mechanics controller can fail while communicating with the dvd controller.
+You can notice when this happens since the reset button, which is connected
+to the mechanics controller, will stop responding and the only way to turn
+off the machine is to unplug the power jack.
+
+When the mechanics controller crashes, the dvd controller keeps sending
+a pulse train to the tracking and focus drivers which results in a steady
+voltage increase on both the tracking and the focus coils.
+With the proposed diode fix, this increase is initially limited but if the
+user leaves the crashed pstwo on for several seconds the output drivers
+will eventually reach saturation and, if the RS2004FS thermal protection
+doesn't kick in, the coils can burn from the increased current flowing.
+
+As promised on our latest news, our proposed solution to this problem
+consists in a simple 12c508 plus an additional resistor.
+
+There are certainly other solutions to this problems (some of which are
+currently being tested) which can offer a more general protection
+to the coils by constantly monitoring the voltage applied to them.
+However we felt that it was much more important to offer a cheap,
+easy and fast fix instead of a more general one which would be outside
+the reach of the general hobbyist.
+In a few words : programming a 12c508 pic is something most people
+with interest in electronics can easily do. The blank component is
+very cheap (around 1 USD) and a programmer can be built or bought for
+a few bucks if needed.
+
+Further more, this simple fix has been proven to work an all occasions
+during our tests, so it should already offer a very high protection.
+
+We are releasing the pic hex file free (as in speech and as in beer ;)
+for all to use and experiment on. We are also releasing the gerber
+files for two small PCBs : one can be used with only the pic and the
+resistor, while the other has also space for 8 1n4148 smd diodes.
+Do with those as you wish :  make a few of them for you own use, or
+build some more and offer them for sale (hopefully for a low price,
+since all the research and development cost has been already done ;-).
+
+
+The simple program to be burned inside the 12c508 will constantly
+monitor the communication between the mechanics controller and
+the dvd controller. As soon as it detects a crash in the communication
+it will turn off the pstwo to avoid any possibile damage to the coils.
+
+Important note : the resistor value (1500 Ohm) has been chosen as the
+best value according to our tests.
+If the value is less than 1000ohm the pstwo will stay in a permanent
+reset state and not even the red led will turn on.
+On the other end if the value is higher than 3300 ohms the pic will not
+be able to turn off the pstwo when needed. This has been tested on
+several machines with consistent behaviour.
+However there might be other board revisions which might behave in
+a different way (maybe because of a different reset controller IC used).
+
+So if you experience problems with the 1500 Ohm resistor, you can probably
+safely increase it to 2000/2200 ohms. Please, only experiment with
+different values if you understand what has been said (or if you don't
+care about running your pstwo without being sure that the coils protection
+is working).
+
+The usual installation care should be used when installing this fix.
+Preferred position for placing the pic or the PCB is in the lower left
+corner of the ps2 motherboard. Make sure that both a J and K wires run
+parallel to the board and make them as short as possible.
+
+
+Last words : this fix can be used with or without the diode fix.
+The diode fix can certainly increase the life span of your lens, and
+should provide you with more time to realize that your ps2 crashed and
+turn off the main power, should the pic chip fail to work. This has
+not happened once so far in our test, but as usual the real results
+will come from the thousands of pstwos out there.

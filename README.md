@@ -65,8 +65,8 @@ However, an exploitable bug was found in the WriteConfig function that allows wr
 
 ### DSP limitations
 
-1. Burning coils. It is NOT MECHAPWN fault!!! It is a hardware bug, you are risking every time you put the burned disk into FAT[^5] and 70k[^7]. Affects any FAT[^5] and 70k[^7] consoles. If a disc has bad ECC (error correction) data on the error correction area of each sector, there's a chance it may crash the DSP during a read, given that the coils are driven using PWM (pulse width modulation) there's a 50% chance it may crash while the coil is energized. The coil is not designed to receive constant current so it can be damaged. It doesn't crash with silver discs (without scrapes), it **may** crash with burnt discs, it only depends if the ECC data is bogus or not. While this problem is not caused by MechaPwn, our team understands that after MechaPwn you will have more reasons to put burned disks inside. You are warned! The only working fix for preventing this - is `Matrix PIC fix` that shut down the system in case of ECC error. All other passive fixes are not working. The other way for fixing this: replace the DSP chip with some DTL DSP chip (that is marked -1).
-2. DSP does not store disk key (16 bytes) inside its registers. This only affects retail units, real DTL units do not have this `bug?/feature?` cause DTL units have another DSP chip revision. The mechacon copies disc ID data from the masterdisc sector into the DSP registers and later in CDVDMAN on DTL units. Retail DSP always read back from the disc. This will block MasterPatched disks from running directly from OSD.
+1. Burning coils. It is NOT MECHAPWN fault!!! It is a hardware bug, you are risking every time you put the burned disk into FAT[^5] and 70k[^7]. Affects any FAT[^5] and 70k[^7] consoles. If a disc has bad ECC (error correction) data on the error correction area of each sector, there's a chance it may crash the DSP during a read, given that the coils are driven using PWM (pulse width modulation) there's a 50% chance it may crash while the coil is energized. The coil is not designed to receive constant current so it can be damaged. It doesn't crash with silver discs (without scrapes), it **may** crash with burnt discs, it only depends if the ECC data is bogus or not. While this problem is not caused by MechaPwn, our team understands that after MechaPwn you will have more reasons to put burned disks inside. You are warned! The only working fix for preventing this - is `Matrix PIC fix` that shut down the system in case of ECC error. All other passive fixes are not working. The other way for fixing this: replace the DSP chip with some DTL DSP chip (that is marked -1). [More details about Matrix PIC fix](docs/PICfix.md).
+2. DSP does not store disk keys (16 bytes) inside its registers. This only affects retail units, real DTL units do not have this `bug?/feature?` cause DTL units have another DSP chip revision. The mechacon copies disc ID data from the masterdisc sector into the DSP registers and later in CDVDMAN on DTL units. Retail DSP always read back from the disc. This will block MasterPatched disks from running directly from OSD.
 
 ## Program Advantages
 
@@ -89,16 +89,16 @@ On all-region Deckard[^3] units, FAT[^5]/70k[^7] units from regions North Americ
 
 #### How to update from MechaPwn 2.0 to MechaPwn 3.0?
 
-Dont use *Restore Backup* option with MechaPwn 2.0 until you are sure that nvram backup is not corrupted.
-MechaPwn 3.0 cannot fix your model name, so you need to restore it with MechaPwn 2.0. With MechaPwn 2.0 install *CEX* option for your model.  With MechaPwn 3.0 install whatever you want. If you want to get rid of *Force Unlock*, choose *Restore Factory Defaults* in Patches menu.
+Do not use the *Restore Backup* option with MechaPwn 2.0 until you are sure that the NVRAM backup is not corrupted.
+MechaPwn 3.0 cannot fix your model name, so you need to restore it with MechaPwn 2.0. With MechaPwn 2.0 install *CEX* option for your model.  With MechaPwn 3.0 install whatever you want. If you want to get rid of *Force Unlock*, choose *Restore Factory _Defaults_ in the Patches menu.
 
 #### I have a message "Unknown ***, please report"?
 
-That means that your console setup was untested. Please provide nvram backup and sticker photo for further research.
+That means that your console setup was untested. Please provide an NVRAM backup and sticker photo for further research.
 
 #### Why does my screen get noisy and blurry?
 
-Your TV doesnt support NTSC or PAL signal. MechaPwn can change the default video mode, for example, DEX on Deckard[^3] units will force NTSC video mode. Choose the CEX option or use different TV.
+Your TV doesn't support NTSC or PAL signal. MechaPwn can change the default video mode, for example, DEX on Deckard[^3] units will force NTSC video mode. Choose the CEX option or use different TV.
 
 #### Why do PAL/NTSC-J consoles not play NTSC/PAL discs (on FAT[^5] and 70k[^7])?
 
