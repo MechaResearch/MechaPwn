@@ -13,8 +13,7 @@ Historically, hackers use board naming based on versioning, like v10, while sony
 | v9    | H-chassis, 50k  | GH-023  |
 | v10   | I-chassis, 50k  | GH-026  |
 | v11   | J-chassis, 50k  | GH-029  |
-| v12.1 | K-chassis, 70k  | GH-032/GH-035  |
-| v12.2 | K-chassis, 70k  | GH-032/GH-035  |
+| v12   | K-chassis, 70k  | GH-032/GH-035  |
 | v13   | K-chassis, 70k  | GH-032/GH-035  |
 
 ### FAT 50k
@@ -37,13 +36,9 @@ Below 2 diagrams for v9 and v10. The v11 diagram is missing but it should be the
 
 ### Slim 70k
 
-70k is much harder to differentiate. There exist 3 board revisions and all 3 can be of any mainboard, any mechacon revision and share the same K-chassis. v13 doesn't need the fix (Sony started to apply their fix since this model), while v12.1 and v12.2 share the same fix. v12.1 uses separate EE and GS chips, while v12.2 and v13 use combined EE+GS chip. Probably the only way to differentiate these boards (without disassembling): check their GS chip revision with PS2Ident for example;
+70k is much harder to differentiate. It has 2 major board revisions: GH-035-xx (for combined EE+GS chip) and GH-032-xx (for separate EE and GS). Both boards can be with and without Sony fix. Looks like the easiest way to check this without an opening console, check your mechacon version. Version 6.04 have the fix on the board, while 6.00 and 6.02 doesnt have the fix.
 
-- 1.11 - v12.1
-- 1.12 - v12.2
-- 1.13 - v13
-
-However, it can be that v12.2 and v13 detection cannot be done via software. Below diagram for v12.1 and v12.2.
+Below diagram for 70k.
 ![v12_picfix_diagram](v12_picfix_diagram.jpg)
 
 ## Credits
