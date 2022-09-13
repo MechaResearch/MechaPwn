@@ -264,26 +264,18 @@ void sum_buffer2(uint8_t *buffer, int length)
 char write_region(uint8_t *region_params, uint8_t *region_ciphertext, uint8_t *config)
 {
     uint8_t version[4];
-    uint8_t isSlim    = 0;
-    uint8_t isDeckard = 0;
+    uint8_t isSlim = 0;
     getMechaVersion(version);
     if (version[1] == 6)
-    {
         isSlim = 1;
-        if (version[2] >= 6)
-            isDeckard = 1;
-    }
 
-    if (isDeckard)
+    if (isSlim && config)
     {
-        // PS1 NTSC4.43 possible fix
+        // PAL/NTSC selector
         for (int i = 0; i < 16; i += 2)
             if (!WriteNVM(320 + i / 2, *(uint16_t *)&config[i]))
                 break;
-    }
 
-    if (isSlim)
-    {
         for (int i = 0; i < 12; i += 2)
             if (!WriteNVM(192 + i / 2, *(uint16_t *)&region_params[i]))
                 break;
@@ -318,15 +310,14 @@ void selectCexDex(char *isDex)
     menu.x_text       = "X Select";
     menu.o_text       = "O Exit";
     menu.option_count = 1;
-    menu.options[0]   = "Retail-DEX";
     if (isSlim)
     {
         menu.option_count = 2;
-        menu.options[0]   = "DEX (PS2/PS1 region NTSC-U)";
         menu.options[1]   = "CEX (retail)";
     }
+    menu.options[0] = "Retail-DEX";
 
-    int selected = drawMenu(&menu);
+    int selected    = drawMenu(&menu);
 
     gsKit_clear(gsGlobal, Black);
 
@@ -350,9 +341,7 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
     uint8_t version[4];
     uint8_t isSlim = 0;
     getMechaVersion(version);
-    if (version[1] == 5)
-        isSlim = 0;
-    else if (version[1] == 6)
+    if (version[1] == 6)
         isSlim = 1;
 
     if (isSlim)
@@ -448,7 +437,6 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
         if (isDex)
         {
             *region_ciphertext  = region_ciphertext_dex;
-            *config             = ntsc_defaults;
             region_params[0][0] = 0x41; // A - PS2 disable checks
             region_params[0][5] = 0x41; // A - PS1 disable checks
         }
