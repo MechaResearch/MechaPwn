@@ -1077,7 +1077,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd42a)
         sprintf(RealModelName, "SCPH-70012");
     else if (ModelId == 0xd42b)
-        sprintf(RealModelName, "SCPH-70000 CB ??");
+        sprintf(RealModelName, "SCPH-70000");
     else if (ModelId == 0xd42c)
         sprintf(RealModelName, "SCPH-70005 CB ??");
     else if (ModelId == 0xd42d)
@@ -1171,7 +1171,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd458)
         sprintf(RealModelName, "SCPH-77006");
     else if (ModelId == 0xd459)
-        sprintf(RealModelName, "SCPH-77007 CB ??");
+        sprintf(RealModelName, "SCPH-77007");
     else if (ModelId == 0xd45a)
         sprintf(RealModelName, "SCPH-77008");
     /* else if (ModelId == 0xd45b)
@@ -1324,10 +1324,8 @@ void checkUnsupportedVersion()
         sprintf(color, "Gold");
     else if ((ModelId == 0xd489) || (ModelId == 0xd48b))
         sprintf(color, "Cinnabar Red");
-    else if ((ModelId == 0xd42b) || (ModelId == 0xd42c) || (ModelId == 0xd430) ||
-             (ModelId == 0xd43a) || (ModelId == 0xd441) || (ModelId == 0xd44c) ||
-             (ModelId == 0xd459) || (ModelId == 0xd45e) || (ModelId == 0xd46b) ||
-             (ModelId == 0xd47e))
+    else if ((ModelId == 0xd42c) || (ModelId == 0xd441) || (ModelId == 0xd45e) ||
+             (ModelId == 0xd46b))
         sprintf(color, "Unknown");
 
     colorTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Console color: %s\n", color);
