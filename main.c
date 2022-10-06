@@ -97,7 +97,8 @@ char unlockNVM()
         drawFrame();
 
         freeGSTEXTURE_holder(versionTextures);
-        freeGSTEXTURE_holder(buildTextures);
+        if (getMechaBuildDate(build_date))
+            freeGSTEXTURE_holder(buildTextures);
         freeGSTEXTURE_holder(exploitTextures);
         freeGSTEXTURE_holder(exitTextures);
         freeGSTEXTURE_holder(errorTextures);
@@ -106,7 +107,8 @@ char unlockNVM()
     }
 
     freeGSTEXTURE_holder(versionTextures);
-    freeGSTEXTURE_holder(buildTextures);
+    if (getMechaBuildDate(build_date))
+        freeGSTEXTURE_holder(buildTextures);
     freeGSTEXTURE_holder(exploitTextures);
     freeGSTEXTURE_holder(exitTextures);
 
@@ -874,13 +876,13 @@ char isPatchKnown()
 void checkFMCB()
 {
     uint8_t version[4];
-    uint8_t isSlim = 0;
+    uint8_t isDeckard = 0;
     getMechaVersion(version);
-    if (version[1] == 6)
-        isSlim = 1;
-    if (isSlim)
+    if ((version[1] == 6) && (version[2] >= 6))
+        isDeckard = 1;
+    if (isDeckard)
     {
-        // Check for NA FMCB folder on slims, this is minimal check
+        // Check for NA FMCB folder on Deckard, this is minimal check
         FILE *f = fopen("mc0:/BAEXEC-SYSTEM/osdmain.elf", "rb");
         if (f) // FMCB mc0 is ok, skipping
             fclose(f);
@@ -899,12 +901,14 @@ void checkFMCB()
 
                 struct GSTEXTURE_holder *errorTextures1   = draw_text(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "FMCB Cross-region not found!!!\n");
                 struct GSTEXTURE_holder *errorTextures2   = draw_text(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "FMCB may stop to work after installation.\n");
+                struct GSTEXTURE_holder *errorTextures3   = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "*Tuna FMCB will keep working.\n");
                 struct GSTEXTURE_holder *continueTextures = draw_text(8, 8 + big_size + big_size / 2 + 6 * (reg_size + 4), reg_size, 0xFFFFFF, "Press O to continue.\n");
                 struct GSTEXTURE_holder *exitTextures     = draw_text(8, 8 + big_size + big_size / 2 + 7 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to exit.\n");
                 drawFrame();
 
                 freeGSTEXTURE_holder(exitTextures);
                 freeGSTEXTURE_holder(continueTextures);
+                freeGSTEXTURE_holder(errorTextures3);
                 freeGSTEXTURE_holder(errorTextures2);
                 freeGSTEXTURE_holder(errorTextures1);
                 freeGSTEXTURE_holder(TitleTexture);
@@ -973,7 +977,10 @@ void checkUnsupportedVersion()
     serialTextures = ui_printf(8, 8 + big_size + big_size / 2 - 1 * (reg_size + 4), reg_size, 0xFFFFFF, "S/N: %07d\n", serial[0]);
 
     uint16_t ModelId;
-    ReadNVM(0xF8, &ModelId);
+    if (version[1] < 4)
+        ReadNVM(0xE4, &ModelId);
+    else
+        ReadNVM(0xF8, &ModelId);
     ModelIDTextures = ui_printf(8, 8 + big_size + big_size / 2 - 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID: 0x%X\n", ModelId);
 
     // ModelID whitelist
@@ -1456,23 +1463,30 @@ void checkUnsupportedVersion()
 
     colorTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Console color: %s\n", color);
 
-    if (!getMechaBuildDate(build_date))
+    if (getMechaBuildDate(build_date))
     {
-        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "This MechaCon isn't supported!\n");
-        drawFrame();
+        buildTextures = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
-        freeGSTEXTURE_holder(romverTextures);
-        freeGSTEXTURE_holder(colorTextures);
-        freeGSTEXTURE_holder(modelnameTextures);
-        freeGSTEXTURE_holder(ModelIDTextures);
-        freeGSTEXTURE_holder(serialTextures);
-        freeGSTEXTURE_holder(versionTextures);
-        freeGSTEXTURE_holder(errorTextures);
+        if (!getPatch(build_date))
+        {
+            errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "MechaCon unknown, please report!\n");
 
-        SleepThread();
-        return;
+            drawFrame();
+
+            freeGSTEXTURE_holder(romverTextures);
+            freeGSTEXTURE_holder(colorTextures);
+            freeGSTEXTURE_holder(modelnameTextures);
+            freeGSTEXTURE_holder(ModelIDTextures);
+            freeGSTEXTURE_holder(serialTextures);
+            if (getMechaBuildDate(build_date))
+                freeGSTEXTURE_holder(buildTextures);
+            freeGSTEXTURE_holder(versionTextures);
+            freeGSTEXTURE_holder(errorTextures);
+
+            SleepThread();
+            return;
+        }
     }
-    buildTextures = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
     if ((ModelId >= 0xd300) && (ModelId < 0xd380))
     {
@@ -1484,25 +1498,8 @@ void checkUnsupportedVersion()
         freeGSTEXTURE_holder(modelnameTextures);
         freeGSTEXTURE_holder(ModelIDTextures);
         freeGSTEXTURE_holder(serialTextures);
-        freeGSTEXTURE_holder(buildTextures);
-        freeGSTEXTURE_holder(versionTextures);
-        freeGSTEXTURE_holder(errorTextures);
-
-        SleepThread();
-        return;
-    }
-
-    if (!getPatch(build_date))
-    {
-        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "MechaCon unknown, please report!\n");
-        drawFrame();
-
-        freeGSTEXTURE_holder(romverTextures);
-        freeGSTEXTURE_holder(colorTextures);
-        freeGSTEXTURE_holder(modelnameTextures);
-        freeGSTEXTURE_holder(ModelIDTextures);
-        freeGSTEXTURE_holder(serialTextures);
-        freeGSTEXTURE_holder(buildTextures);
+        if (getMechaBuildDate(build_date))
+            freeGSTEXTURE_holder(buildTextures);
         freeGSTEXTURE_holder(versionTextures);
         freeGSTEXTURE_holder(errorTextures);
 
@@ -1538,7 +1535,8 @@ void checkUnsupportedVersion()
     freeGSTEXTURE_holder(modelnameTextures);
     freeGSTEXTURE_holder(ModelIDTextures);
     freeGSTEXTURE_holder(serialTextures);
-    freeGSTEXTURE_holder(buildTextures);
+    if (getMechaBuildDate(build_date))
+        freeGSTEXTURE_holder(buildTextures);
     freeGSTEXTURE_holder(versionTextures);
     freeGSTEXTURE_holder(romverTextures);
     // freeGSTEXTURE_holder(warnTextures2);
@@ -1711,34 +1709,56 @@ int main()
     }
     else
     {
+        uint8_t build_date[5];
         gsKit_clear(gsGlobal, Black);
 
         struct MENU menu;
-        menu.title        = "MechaPwn";
-        menu.x_text       = "X Select";
-        menu.o_text       = "O Exit";
-        menu.option_count = 2;
+        menu.title  = "MechaPwn";
+        menu.x_text = "X Select";
+        menu.o_text = "O Exit";
 
-        menu.options[0]   = "Change region";
-        menu.options[1]   = "Restore NVRAM backup";
-
-        selected          = drawMenu(&menu);
-
-        if (selected == -1)
+        if (getMechaBuildDate(build_date))
         {
-            ResetIOP();
-            LoadExecPS2("rom0:OSDSYS", 0, NULL);
-            SleepThread();
+            menu.option_count = 2;
+            menu.options[0]   = "Change region";
+            menu.options[1]   = "Restore NVRAM backup";
+
+            selected          = drawMenu(&menu);
+
+            if (selected == -1)
+            {
+                ResetIOP();
+                LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                SleepThread();
+            }
+            else if (selected == 0)
+            {
+                char isDex = 0;
+                setRegion(&isDex);
+                applyPatches(isDex);
+            }
+            else if (selected == 1)
+            {
+                restoreBackup();
+            }
         }
-        else if (selected == 0)
+        else
         {
-            char isDex = 0;
-            setRegion(&isDex);
-            applyPatches(isDex);
-        }
-        else if (selected == 1)
-        {
-            restoreBackup();
+            menu.option_count = 1;
+            menu.options[0]   = "Restore NVRAM backup";
+
+            selected          = drawMenu(&menu);
+
+            if (selected == -1)
+            {
+                ResetIOP();
+                LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                SleepThread();
+            }
+            else if (selected == 0)
+            {
+                restoreBackup();
+            }
         }
     }
 

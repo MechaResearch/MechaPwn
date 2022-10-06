@@ -231,10 +231,23 @@ char getSerial(uint32_t *serial)
 {
     uint16_t part1;
     uint16_t part2;
+    uint8_t version[4];
     if (!ReadNVM(0xFA, &part1))
         return 0;
     if (!ReadNVM(0xFB, &part2))
         return 0;
+
+    if (getMechaVersion(version))
+    {
+        if (version[1] < 4)
+        {
+            if (!ReadNVM(0xE6, &part1))
+                return 0;
+            if (!ReadNVM(0xE7, &part2))
+                return 0;
+        }
+    }
+
     *serial = ((part2 & 0xff) << 16) | part1;
     return 1;
 }
