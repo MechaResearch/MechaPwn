@@ -196,34 +196,42 @@ uint8_t ntsc_defaults[]                 = {0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0
 // |Kkor    - rom0:OSDVER (5-8th byte) ("0190Csch"), allows to change console language set, possible values: Jjpn, Aeng, Eeng, Heng, Reng, Csch, Kkor, Htch, Aspa
 // H        - rom0:ROMVER (4th byte 0220HD20060905) (possible values: "JAEHC") ps2 games, best region - A (no restrictions)
 uint8_t region_keyseed[]                = {0x4d, 0x65, 0x63, 0x68, 0x61, 0x50, 0x77, 0x6e, 0x00, 0xec}; // MechaPwn +00 EC
-uint8_t region_ciphertext_dex[]         = {0x05, 0x0D, 0x36, 0x04, 0x6F, 0x69, 0xB6, 0x76, 0x00, 0xAF}; // Region 00130000
+// below will work on any unit, however will be about 7 seconds slower than matching region
+// uint8_t region_ciphertext_dex[]         = {0x05, 0x0D, 0x36, 0x04, 0x6F, 0x69, 0xB6, 0x76, 0x00, 0xAF}; // Region 00130000
 
 // 0 - Japan
 uint8_t region_params_japan[]           = {0x4a, 0x4a, 0x6a, 0x70, 0x6e, 0x4a, 0x4a, 0x00, 0x00, 0x00, 0x00, 0x00}; // JJjpnJJ
-uint8_t region_ciphertext_japan_cex[]   = {0xf1, 0xef, 0x50, 0xec, 0x1c, 0x2e, 0xc5, 0x69, 0x00, 0x6b};
+uint8_t region_ciphertext_japan_cex[]   = {0xf1, 0xef, 0x50, 0xec, 0x1c, 0x2e, 0xc5, 0x69, 0x00, 0x6b};             // Region 00020001
+uint8_t region_ciphertext_japan_dex[]   = {0x8C, 0x28, 0x16, 0x47, 0x22, 0x45, 0x77, 0x9C, 0x00, 0x74};             // Region 00130001
 
 // 1 - USA
 uint8_t region_params_usa[]             = {0x41, 0x41, 0x65, 0x6e, 0x67, 0x41, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00}; // AAengAU
-uint8_t region_ciphertext_usa_cex[]     = {0xb8, 0x42, 0xd5, 0xbc, 0x53, 0xa1, 0x96, 0xe6, 0x00, 0x04};
+uint8_t region_ciphertext_usa_cex[]     = {0xb8, 0x42, 0xd5, 0xbc, 0x53, 0xa1, 0x96, 0xe6, 0x00, 0x04};             // Region 00020002
+uint8_t region_ciphertext_usa_dex[]     = {0x63, 0xA8, 0x35, 0x2F, 0xDA, 0x53, 0xB8, 0x25, 0x00, 0x86};             // Region 00130002
 
 // 2 - Oceania
 uint8_t region_params_oceania[]         = {0x45, 0x45, 0x65, 0x6e, 0x67, 0x45, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00}; // EEengEO
-uint8_t region_ciphertext_oceania_cex[] = {0x64, 0xaa, 0x23, 0x25, 0x28, 0x5c, 0x14, 0xf3, 0x00, 0x1e};
+uint8_t region_ciphertext_oceania_cex[] = {0x64, 0xaa, 0x23, 0x25, 0x28, 0x5c, 0x14, 0xf3, 0x00, 0x1e};             // Region 00020008
+uint8_t region_ciphertext_oceania_dex[] = {0x9F, 0x1F, 0x8A, 0x15, 0x7D, 0x7C, 0x47, 0xF8, 0x00, 0x6A};             // Region 00130008
+
 
 // 3 - UK
 // same as europe
 
 // 4 - Europe
 uint8_t region_params_europe[]          = {0x45, 0x45, 0x65, 0x6e, 0x67, 0x45, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00}; // EEengEE
-uint8_t region_ciphertext_europe_cex[]  = {0x54, 0x88, 0x4f, 0x90, 0x76, 0x4d, 0xcb, 0xeb, 0x00, 0xcb};
+uint8_t region_ciphertext_europe_cex[]  = {0x54, 0x88, 0x4f, 0x90, 0x76, 0x4d, 0xcb, 0xeb, 0x00, 0xcb};             // Region 00020004
+uint8_t region_ciphertext_europe_dex[]  = {0x1D, 0xF2, 0xB6, 0x31, 0x21, 0xCE, 0x9C, 0x2F, 0x00, 0x4F};             // Region 00130004
 
 // 5 - Korea
 uint8_t region_params_korea[]           = {0x48, 0x4b, 0x6b, 0x6f, 0x72, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00}; // HKkorJA
-uint8_t region_ciphertext_korea_cex[]   = {0x2a, 0xf0, 0x38, 0x2d, 0xef, 0xe5, 0x48, 0xa4, 0x00, 0xc0};
+// region_ciphertext is same as asia
+
 
 // 6 - Asia
 uint8_t region_params_asia[]            = {0x48, 0x48, 0x65, 0x6e, 0x67, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00}; // HHengJA
-uint8_t region_ciphertext_asia_cex[]    = {0x2a, 0xf0, 0x38, 0x2d, 0xef, 0xe5, 0x48, 0xa4, 0x00, 0xc0};
+uint8_t region_ciphertext_asia_cex[]    = {0x2a, 0xf0, 0x38, 0x2d, 0xef, 0xe5, 0x48, 0xa4, 0x00, 0xc0};             // Region 00020010
+uint8_t region_ciphertext_asia_dex[]    = {0xEE, 0x92, 0xCC, 0x9E, 0xEA, 0x1A, 0xA9, 0x12, 0x00, 0x56};             // Region 00130010
 
 // 7 - Taiwan
 uint8_t region_params_taiwan[]          = {0x48, 0x48, 0x74, 0x63, 0x68, 0x4a, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00}; // HHtchJA
@@ -231,16 +239,18 @@ uint8_t region_params_taiwan[]          = {0x48, 0x48, 0x74, 0x63, 0x68, 0x4a, 0
 
 // 8 - Russia
 uint8_t region_params_russia[]          = {0x45, 0x52, 0x65, 0x6e, 0x67, 0x45, 0x52, 0x00, 0x00, 0x00, 0x00, 0x00}; // ERengER
-uint8_t region_ciphertext_russia_cex[]  = {0x3e, 0x11, 0xc1, 0xbb, 0xfb, 0x26, 0x2b, 0x4c, 0x00, 0x9c};
-
+uint8_t region_ciphertext_russia_cex[]  = {0x3e, 0x11, 0xc1, 0xbb, 0xfb, 0x26, 0x2b, 0x4c, 0x00, 0x9c};             // Region 00020020
+uint8_t region_ciphertext_russia_dex[]  = {0xA1, 0x9D, 0xC3, 0x55, 0x8A, 0x71, 0x4D, 0xED, 0x00, 0x74};             // Region 00130020
 
 // 9 - China
 uint8_t region_params_china[]           = {0x43, 0x43, 0x73, 0x63, 0x68, 0x4A, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00}; // CCschJC
-uint8_t region_ciphertext_china_cex[]   = {0x0f, 0x5d, 0xb8, 0xa2, 0x9d, 0x85, 0xcc, 0x76, 0x00, 0xd5};
+uint8_t region_ciphertext_china_cex[]   = {0x0f, 0x5d, 0xb8, 0xa2, 0x9d, 0x85, 0xcc, 0x76, 0x00, 0xd5};             // Region 00020040
+uint8_t region_ciphertext_china_dex[]   = {0x94, 0x05, 0x23, 0xFE, 0xB3, 0xD1, 0x9E, 0x9B, 0x00, 0x88};             // Region 00130040
 
 // 11 - Mexico / ???
 uint8_t region_params_mexico[]          = {0x41, 0x41, 0x73, 0x70, 0x61, 0x41, 0x4D, 0x00, 0x00, 0x00, 0x00, 0x00}; // AAspaAM
-uint8_t region_ciphertext_mexico_cex[]  = {0x35, 0x1a, 0x92, 0x9a, 0x05, 0x5b, 0xdc, 0x40, 0x00, 0x08};
+uint8_t region_ciphertext_mexico_cex[]  = {0x35, 0x1a, 0x92, 0x9a, 0x05, 0x5b, 0xdc, 0x40, 0x00, 0x08};             // Region 00020080
+uint8_t region_ciphertext_mexico_dex[]  = {0x75, 0xED, 0x46, 0x5D, 0x9E, 0xC9, 0xD9, 0x1E, 0x00, 0x9C};             // Region 00130080
 
 // 12 - ???
 
@@ -261,7 +271,7 @@ void sum_buffer2(uint8_t *buffer, int length)
     buffer[length - 1] = sum;
 }
 
-char write_region(uint8_t *region_params, uint8_t *region_ciphertext, uint8_t *config)
+char write_region(uint8_t *region_params, uint8_t *region_ciphertext, uint8_t *video_config)
 {
     uint8_t version[4];
     uint8_t isSlim = 0;
@@ -269,11 +279,11 @@ char write_region(uint8_t *region_params, uint8_t *region_ciphertext, uint8_t *c
     if (version[1] == 6)
         isSlim = 1;
 
-    if (isSlim && config)
+    if (isSlim && video_config)
     {
         // PAL/NTSC selector
         for (int i = 0; i < 16; i += 2)
-            if (!WriteNVM(320 + i / 2, *(uint16_t *)&config[i]))
+            if (!WriteNVM(320 + i / 2, *(uint16_t *)&video_config[i]))
                 break;
 
         for (int i = 0; i < 12; i += 2)
@@ -333,16 +343,19 @@ void selectCexDex(char *isDex)
     *isDex = selected == 0;
 }
 
-void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_ciphertext, uint8_t **config)
+void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_ciphertext, uint8_t **video_config)
 {
     gsKit_clear(gsGlobal, Black);
 
     int selected = 0;
     uint8_t version[4];
-    uint8_t isSlim = 0;
+    uint8_t isSlim    = 0;
+    uint8_t isDeckard = 0;
     getMechaVersion(version);
     if (version[1] == 6)
         isSlim = 1;
+    if ((version[1] == 6) && (version[2] >= 6))
+        isDeckard = 1;
 
     if (isSlim)
     {
@@ -352,16 +365,16 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
         menu.o_text       = "O Exit";
 
         menu.option_count = 9;
-        menu.options[0]   = "USA (Multi-7)"; // Aeng*U
-        menu.options[1]   = "Japan";         // Jjpn*J
-        menu.options[2]   = "Russia";        // Reng*R
-        menu.options[3]   = "Korea";         // Kkor*A
-        menu.options[4]   = "Taiwan";        // Htch*A
-        // menu.options[5]   = "China";             // Csch*C // slim OSD will crash
-        menu.options[5]   = "Asia (Multi-7)";    // Heng*A
-        menu.options[6]   = "Mexico (Multi-7)";  // Aspa*M
-        menu.options[7]   = "Europe (Multi-7)";  // Eeng*E
-        menu.options[8]   = "Oceania (Multi-7)"; // Eeng*O
+        menu.options[0]   = "USA (Multi-7)";     // Aeng*U
+        menu.options[1]   = "Asia (Multi-7)";    // Heng*A
+        menu.options[2]   = "Korea";             // Kkor*A
+        menu.options[3]   = "Taiwan";            // Htch*A
+        menu.options[4]   = "Japan";             // Jjpn*J
+        menu.options[5]   = "Mexico (Multi-7)";  // Aspa*M
+        menu.options[6]   = "Europe (Multi-7)";  // Eeng*E
+        menu.options[7]   = "Oceania (Multi-7)"; // Eeng*O
+        menu.options[8]   = "Russia";            // Reng*R
+        // menu.options[9]   = "China";             // Csch*C // slim OSD will crash
 
         selected          = drawMenu(&menu);
     }
@@ -377,68 +390,102 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
         if (selected == 0)
         {
             *region_params     = region_params_usa;
-            *region_ciphertext = region_ciphertext_usa_cex;
-            *config            = ntsc_defaults;
+            *region_ciphertext = isDex ? region_ciphertext_usa_dex : region_ciphertext_usa_cex;
+            *video_config      = ntsc_defaults;
         }
         else if (selected == 1)
         {
             *region_params     = region_params_japan;
-            *region_ciphertext = region_ciphertext_japan_cex;
-            *config            = ntsc_defaults;
+            *region_ciphertext = isDex ? region_ciphertext_asia_dex : region_ciphertext_asia_cex;
+            *video_config      = ntsc_defaults;
         }
         else if (selected == 2)
         {
-            *region_params     = region_params_russia;
-            *region_ciphertext = region_ciphertext_russia_cex;
-            *config            = pal_defaults;
+            *region_params     = region_params_korea;
+            *region_ciphertext = isDex ? region_ciphertext_asia_dex : region_ciphertext_asia_cex;
+            *video_config      = ntsc_defaults;
         }
         else if (selected == 3)
         {
-            *region_params     = region_params_korea;
-            *region_ciphertext = region_ciphertext_korea_cex;
-            *config            = ntsc_defaults;
+            *region_params     = region_params_taiwan;
+            *region_ciphertext = isDex ? region_ciphertext_asia_dex : region_ciphertext_asia_cex;
+            *video_config      = ntsc_defaults;
         }
         else if (selected == 4)
         {
-            *region_params     = region_params_taiwan;
-            *region_ciphertext = region_ciphertext_asia_cex;
-            *config            = ntsc_defaults;
+            *region_params     = region_params_asia;
+            *region_ciphertext = isDex ? region_ciphertext_japan_dex : region_ciphertext_japan_cex;
+            *video_config      = ntsc_defaults;
         }
-        /* else if (selected == 5)
-        {
-            *region_params     = region_params_china;
-            *region_ciphertext = region_ciphertext_china_cex;
-            *config            = ntsc_defaults;
-        } */
         else if (selected == 5)
         {
-            *region_params     = region_params_asia;
-            *region_ciphertext = region_ciphertext_asia_cex;
-            *config            = ntsc_defaults;
+            *region_params     = region_params_mexico;
+            *region_ciphertext = isDex ? region_ciphertext_mexico_dex : region_ciphertext_mexico_cex;
+            *video_config      = ntsc_defaults;
         }
         else if (selected == 6)
         {
-            *region_params     = region_params_mexico;
-            *region_ciphertext = region_ciphertext_mexico_cex;
-            *config            = ntsc_defaults;
+            *region_params     = region_params_europe;
+            *region_ciphertext = isDex ? region_ciphertext_europe_dex : region_ciphertext_europe_cex;
+            *video_config      = pal_defaults;
         }
         else if (selected == 7)
         {
-            *region_params     = region_params_europe;
-            *region_ciphertext = region_ciphertext_europe_cex;
-            *config            = pal_defaults;
+            *region_params     = region_params_oceania;
+            *region_ciphertext = isDex ? region_ciphertext_oceania_dex : region_ciphertext_oceania_cex;
+            *video_config      = pal_defaults;
         }
         else if (selected == 8)
         {
-            *region_params     = region_params_oceania;
-            *region_ciphertext = region_ciphertext_oceania_cex;
-            *config            = pal_defaults;
+            *region_params     = region_params_russia;
+            *region_ciphertext = isDex ? region_ciphertext_russia_dex : region_ciphertext_russia_cex;
+            *video_config      = pal_defaults;
         }
+        else if (selected == 9)
+        {
+            *region_params     = region_params_china;
+            *region_ciphertext = isDex ? region_ciphertext_china_dex : region_ciphertext_china_cex;
+            *video_config      = ntsc_defaults;
+        }
+
         if (isDex)
         {
-            *region_ciphertext  = region_ciphertext_dex;
             region_params[0][0] = 0x41; // A - PS2 disable checks
             region_params[0][5] = 0x41; // A - PS1 disable checks
+        }
+
+        if (!(isDeckard))
+        {
+            int fd;
+            if ((fd = open("rom0:ROMVER", O_RDONLY)) >= 0)
+            {
+                char romver[16];
+                read(fd, romver, sizeof(romver));
+                close(fd);
+
+                // ckeck romver 5th letter: JAEHC, compare with version[0] & 7
+                // J - 0
+                // A - 1, 7
+                // E - 2, 3, 5
+                // H - 4
+                // C - 6
+                if (romver[4] == 'J')
+                    *region_ciphertext = isDex ? region_ciphertext_japan_dex : region_ciphertext_japan_cex;
+                else if (romver[4] == 'C')
+                    *region_ciphertext = isDex ? region_ciphertext_china_dex : region_ciphertext_china_cex;
+                else if ((romver[4] == 'E') && ((version[0] & 7) == 3))
+                    *region_ciphertext = isDex ? region_ciphertext_oceania_dex : region_ciphertext_oceania_cex;
+                else if ((romver[4] == 'E') && ((version[0] & 7) == 5))
+                    *region_ciphertext = isDex ? region_ciphertext_russia_dex : region_ciphertext_russia_cex;
+                else if (romver[4] == 'E')
+                    *region_ciphertext = isDex ? region_ciphertext_europe_dex : region_ciphertext_europe_cex;
+                else if ((romver[4] == 'A') && ((version[0] & 7) == 7))
+                    *region_ciphertext = isDex ? region_ciphertext_mexico_dex : region_ciphertext_mexico_cex;
+                else if (romver[4] == 'A')
+                    *region_ciphertext = isDex ? region_ciphertext_usa_dex : region_ciphertext_usa_cex;
+                else if (romver[4] == 'H')
+                    *region_ciphertext = isDex ? region_ciphertext_asia_dex : region_ciphertext_asia_cex;
+            }
         }
     }
 }
@@ -449,10 +496,10 @@ void setRegion(char *isDex)
 
     uint8_t *region_params     = 0;
     uint8_t *region_ciphertext = 0;
-    uint8_t *config            = 0;
-    selectRegion(*isDex, &region_params, &region_ciphertext, &config);
+    uint8_t *video_config      = 0;
+    selectRegion(*isDex, &region_params, &region_ciphertext, &video_config);
 
-    write_region(region_params, region_ciphertext, config);
+    write_region(region_params, region_ciphertext, video_config);
 }
 
 uint8_t *frames[] = {
@@ -882,11 +929,13 @@ void checkFMCB()
 
 void checkUnsupportedVersion()
 {
+    int fd;
     uint8_t version[4];
     uint8_t build_date[5];
     char RealModelName[20];
     char color[20];
     struct GSTEXTURE_holder *versionTextures;
+    struct GSTEXTURE_holder *romverTextures;
     struct GSTEXTURE_holder *buildTextures;
     struct GSTEXTURE_holder *serialTextures;
     struct GSTEXTURE_holder *ModelIDTextures;
@@ -910,16 +959,14 @@ void checkUnsupportedVersion()
     }
     versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], (version[2] | 1) - 1);
 
-    if (!getMechaBuildDate(build_date))
+    if ((fd = open("rom0:ROMVER", O_RDONLY)) >= 0)
     {
-        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "This MechaCon isn't supported!\n");
-        drawFrame();
-        freeGSTEXTURE_holder(errorTextures);
-        freeGSTEXTURE_holder(versionTextures);
-        SleepThread();
-        return;
+        char romver[16];
+        read(fd, romver, sizeof(romver));
+        close(fd);
+
+        romverTextures = ui_printf(8, 8 + big_size + big_size / 2 + 4 * (reg_size + 4), reg_size, 0xFFFFFF, "Romver: %s\n", romver);
     }
-    buildTextures = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
     uint32_t serial[1];
     getSerial(serial);
@@ -930,7 +977,100 @@ void checkUnsupportedVersion()
     ModelIDTextures = ui_printf(8, 8 + big_size + big_size / 2 - 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID: 0x%X\n", ModelId);
 
     // ModelID whitelist
-    if (ModelId == 0xd301)
+    if (ModelId == 0xd200)
+        sprintf(RealModelName, "DTL-H10000");
+    else if (ModelId == 0xd201)
+        sprintf(RealModelName, "SCPH-10000");
+    else if (ModelId == 0xd202)
+        sprintf(RealModelName, "SCPH-15000/18000");
+    else if (ModelId == 0xd203)
+        sprintf(RealModelName, "SCPH-30001");
+    else if (ModelId == 0xd204)
+        sprintf(RealModelName, "SCPH-30002/R");
+    else if (ModelId == 0xd205)
+        sprintf(RealModelName, "SCPH-30003/R");
+    else if (ModelId == 0xd206)
+        sprintf(RealModelName, "SCPH-30004/R");
+    else if (ModelId == 0xd207)
+        sprintf(RealModelName, "DTL-H30001");
+    else if (ModelId == 0xd208)
+        sprintf(RealModelName, "DTL-H30002");
+    else if (ModelId == 0xd209)
+        sprintf(RealModelName, "COH-H30000");
+    else if (ModelId == 0xd20a)
+        sprintf(RealModelName, "SCPH-18000");
+    else if (ModelId == 0xd20b)
+        sprintf(RealModelName, "COH-H31000");
+    else if (ModelId == 0xd20c)
+        sprintf(RealModelName, "SCPH-30000");
+    else if (ModelId == 0xd20d)
+        sprintf(RealModelName, "DTL-H30000");
+    else if (ModelId == 0xd20e)
+        sprintf(RealModelName, "COH-H31100");
+    else if (ModelId == 0xd20f)
+        sprintf(RealModelName, "SCPH-35001 GT");
+    else if (ModelId == 0xd210)
+        sprintf(RealModelName, "SCPH-35002 GT");
+    else if (ModelId == 0xd211)
+        sprintf(RealModelName, "SCPH-35003 GT");
+    else if (ModelId == 0xd212)
+        sprintf(RealModelName, "SCPH-35004 GT");
+    else if (ModelId == 0xd213)
+        sprintf(RealModelName, "SCPH-35000 GT");
+    else if (ModelId == 0xd214)
+        sprintf(RealModelName, "SCPH-30001/R");
+    /* else if (ModelId == 0xd215)
+        sprintf(RealModelName, "SCPH-30007 R"); */
+    else if (ModelId == 0xd216)
+        sprintf(RealModelName, "SCPH-30006 R");
+    else if (ModelId == 0xd217)
+        sprintf(RealModelName, "SCPH-39000");
+    else if (ModelId == 0xd218)
+        sprintf(RealModelName, "SCPH-39001");
+    else if (ModelId == 0xd219)
+        sprintf(RealModelName, "SCPH-39002");
+    else if (ModelId == 0xd21a)
+        sprintf(RealModelName, "SCPH-39003");
+    else if (ModelId == 0xd21b)
+        sprintf(RealModelName, "SCPH-39004");
+    else if (ModelId == 0xd21c)
+        sprintf(RealModelName, "SCPH-30005 R");
+    else if (ModelId == 0xd21d)
+        sprintf(RealModelName, "SCPH-37000 L");
+    else if (ModelId == 0xd21e)
+        sprintf(RealModelName, "SCPH-37000 B");
+    else if (ModelId == 0xd21f)
+        sprintf(RealModelName, "SCPH-39008");
+    else if (ModelId == 0xd220)
+        sprintf(RealModelName, "SCPH-39000 TB");
+    /* else if (ModelId == 0xd221)
+        sprintf(RealModelName, "SCPH-39000 RC"); */
+    else if (ModelId == 0xd222)
+        sprintf(RealModelName, "SCPH-39006");
+    /* else if (ModelId == 0xd223)
+        sprintf(RealModelName, "SCPH-39005");
+    else if (ModelId == 0xd224)
+        sprintf(RealModelName, "SCPH-39007"); */
+    else if (ModelId == 0xd225)
+        sprintf(RealModelName, "DTL-H10100");
+    else if (ModelId == 0xd226)
+        sprintf(RealModelName, "DTL-H30100");
+    else if (ModelId == 0xd227)
+        sprintf(RealModelName, "DTL-H30101");
+    else if (ModelId == 0xd228)
+        sprintf(RealModelName, "DTL-H30102");
+    else if (ModelId == 0xd229)
+        sprintf(RealModelName, "DTL-H30105");
+    else if (ModelId == 0xd22a)
+        sprintf(RealModelName, "SCPH-39000 S");
+    /* else if (ModelId == 0xd22b)
+        sprintf(RealModelName, "SCPH-39000 AQ"); */
+    else if (ModelId == 0xd22c)
+        sprintf(RealModelName, "SCPH-39000 SA");
+    else if (ModelId == 0xd22d)
+        sprintf(RealModelName, "SCPH-39010/N");
+    // Deckard
+    else if (ModelId == 0xd301)
         sprintf(RealModelName, "DTL-H50000");
     else if (ModelId == 0xd302)
         sprintf(RealModelName, "DTL-H50001");
@@ -1005,8 +1145,8 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-50005/N");
     else if (ModelId == 0xd40d)
         sprintf(RealModelName, "SCPH-50006");
-    /* else if (ModelId == 0xd40e)
-           sprintf(RealModelName, "??? SCPH-50007"); */
+    else if (ModelId == 0xd40e)
+        sprintf(RealModelName, "SCPH-50007");
     else if (ModelId == 0xd40f)
         sprintf(RealModelName, "SCPH-50008");
     /* else if (ModelId == 0xd410)
@@ -1067,7 +1207,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd42b)
         sprintf(RealModelName, "SCPH-70000");
     else if (ModelId == 0xd42c)
-        sprintf(RealModelName, "SCPH-70005 CB ??");
+        sprintf(RealModelName, "SCPH-70005");
     else if (ModelId == 0xd42d)
         sprintf(RealModelName, "SCPH-70006");
     else if (ModelId == 0xd42e)
@@ -1108,9 +1248,9 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd43f)
         sprintf(RealModelName, "SCPH-75000 SSS");
     /* else if (ModelId == 0xd440)
-           sprintf(RealModelName, "SCPH-75002 SS ???"); */
+        sprintf(RealModelName, "SCPH-75002 SS ???");
     else if (ModelId == 0xd441)
-        sprintf(RealModelName, "SCPH-75003 SS ??");
+        sprintf(RealModelName, "SCPH-75003 SS ??"); */
     else if (ModelId == 0xd442)
         sprintf(RealModelName, "SCPH-75004 SS");
     else if (ModelId == 0xd443)
@@ -1168,8 +1308,8 @@ void checkUnsupportedVersion()
            sprintf(RealModelName, "??? SCPH-77008 SS"); */
     else if (ModelId == 0xd45d)
         sprintf(RealModelName, "SCPH-77001 SS");
-    else if (ModelId == 0xd45e)
-        sprintf(RealModelName, "SCPH-77003 PK ??");
+    /* else if (ModelId == 0xd45e)
+           sprintf(RealModelName, "SCPH-77003 PK ??"); */
     else if (ModelId == 0xd45f)
         sprintf(RealModelName, "SCPH-77004 PK");
     /* else if (ModelId == 0xd460)
@@ -1196,7 +1336,7 @@ void checkUnsupportedVersion()
     /* else if (ModelId == 0xd46a)
            sprintf(RealModelName, "??? SCPH-79005 CB"); */
     else if (ModelId == 0xd46b)
-        sprintf(RealModelName, "SCPH-79006 CB ??");
+        sprintf(RealModelName, "SCPH-79006");
     /* else if (ModelId == 0xd46c)
            sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd46d)
@@ -1275,9 +1415,9 @@ void checkUnsupportedVersion()
         errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unknown, please report!\n");
         drawFrame();
 
+        freeGSTEXTURE_holder(romverTextures);
         freeGSTEXTURE_holder(ModelIDTextures);
         freeGSTEXTURE_holder(serialTextures);
-        freeGSTEXTURE_holder(buildTextures);
         freeGSTEXTURE_holder(versionTextures);
         freeGSTEXTURE_holder(errorTextures);
 
@@ -1304,25 +1444,42 @@ void checkUnsupportedVersion()
              (ModelId == 0xd484) || (ModelId == 0xd384) || (ModelId == 0xd304))
         sprintf(color, "Satin Silver");
     else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462) ||
-             (ModelId == 0xd464))
+             (ModelId == 0xd464) || (ModelId == 0xd22a))
         sprintf(color, "Pink");
-    else if ((ModelId == 0xd404) || (ModelId == 0xd41b) || (ModelId == 0xd41d))
+    else if ((ModelId == 0xd404) || (ModelId == 0xd41b) || (ModelId == 0xd41d) ||
+             (ModelId == 0xd21d) || (ModelId == 0xd220) || (ModelId == 0xd22c))
         sprintf(color, "Blue");
-    else if (ModelId == 0xd413)
-        sprintf(color, "Gold");
     else if ((ModelId == 0xd489) || (ModelId == 0xd48b))
         sprintf(color, "Cinnabar Red");
-    else if ((ModelId == 0xd42c) || (ModelId == 0xd441) || (ModelId == 0xd45e) ||
-             (ModelId == 0xd46b))
-        sprintf(color, "Unknown");
+    else if (ModelId == 0xd413)
+        sprintf(color, "Gold");
 
     colorTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Console color: %s\n", color);
 
-    if ((ModelId >= 0xd300) && (ModelId < 0xd380))
+    if (!getMechaBuildDate(build_date))
     {
-        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Real TEST/DTL units not supported!\n");
+        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "This MechaCon isn't supported!\n");
         drawFrame();
 
+        freeGSTEXTURE_holder(romverTextures);
+        freeGSTEXTURE_holder(colorTextures);
+        freeGSTEXTURE_holder(modelnameTextures);
+        freeGSTEXTURE_holder(ModelIDTextures);
+        freeGSTEXTURE_holder(serialTextures);
+        freeGSTEXTURE_holder(versionTextures);
+        freeGSTEXTURE_holder(errorTextures);
+
+        SleepThread();
+        return;
+    }
+    buildTextures = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
+
+    if ((ModelId >= 0xd300) && (ModelId < 0xd380))
+    {
+        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Dragon TEST support is blocked!\n");
+        drawFrame();
+
+        freeGSTEXTURE_holder(romverTextures);
         freeGSTEXTURE_holder(colorTextures);
         freeGSTEXTURE_holder(modelnameTextures);
         freeGSTEXTURE_holder(ModelIDTextures);
@@ -1339,6 +1496,8 @@ void checkUnsupportedVersion()
     {
         errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "MechaCon unknown, please report!\n");
         drawFrame();
+
+        freeGSTEXTURE_holder(romverTextures);
         freeGSTEXTURE_holder(colorTextures);
         freeGSTEXTURE_holder(modelnameTextures);
         freeGSTEXTURE_holder(ModelIDTextures);
@@ -1346,6 +1505,7 @@ void checkUnsupportedVersion()
         freeGSTEXTURE_holder(buildTextures);
         freeGSTEXTURE_holder(versionTextures);
         freeGSTEXTURE_holder(errorTextures);
+
         SleepThread();
         return;
     }
@@ -1380,6 +1540,7 @@ void checkUnsupportedVersion()
     freeGSTEXTURE_holder(serialTextures);
     freeGSTEXTURE_holder(buildTextures);
     freeGSTEXTURE_holder(versionTextures);
+    freeGSTEXTURE_holder(romverTextures);
     // freeGSTEXTURE_holder(warnTextures2);
     // freeGSTEXTURE_holder(warnTextures1);
 
@@ -1412,7 +1573,6 @@ char isPatchAlreadyInstalled()
 
 char restoreBackup()
 {
-    // TODO: maybe we can keep mechapwn setting in ciphertext?
     uint32_t serial[1];
     getSerial(serial);
     uint8_t version[4];
