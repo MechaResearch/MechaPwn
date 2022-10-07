@@ -82,7 +82,7 @@ char unlockNVM()
         {
             gsKit_clear(gsGlobal, Black);
             ResetIOP();
-            LoadExecPS2("rom0:OSDSYS", 0, NULL);
+            Exit(0);
 
             return 0;
         }
@@ -338,7 +338,7 @@ void selectCexDex(char *isDex)
     if (selected == -1)
     {
         ResetIOP();
-        LoadExecPS2("rom0:OSDSYS", 0, NULL);
+        Exit(0);
         SleepThread();
     }
 
@@ -384,7 +384,7 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
     if (selected == -1)
     {
         ResetIOP();
-        LoadExecPS2("rom0:OSDSYS", 0, NULL);
+        Exit(0);
         SleepThread();
     }
     else
@@ -606,7 +606,7 @@ char backupNVM()
                 if (new_pad & PAD_CROSS)
                 {
                     ResetIOP();
-                    LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                    Exit(0);
                     SleepThread();
                 }
             }
@@ -668,7 +668,7 @@ char applyPatches(char isDex)
     if (selected == -1)
     {
         ResetIOP();
-        LoadExecPS2("rom0:OSDSYS", 0, NULL);
+        Exit(0);
         SleepThread();
     }
     else if (selected == 1)
@@ -742,7 +742,7 @@ char applyPatches(char isDex)
                 if (new_pad & PAD_CROSS)
                 {
                     ResetIOP();
-                    LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                    Exit(0);
                     SleepThread();
                 }
             }
@@ -775,7 +775,7 @@ char applyPatches(char isDex)
                     if (new_pad & PAD_CROSS)
                     {
                         ResetIOP();
-                        LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                        Exit(0);
                         SleepThread();
                     }
                 }
@@ -923,7 +923,7 @@ void checkFMCB()
                     {
                         gsKit_clear(gsGlobal, Black);
                         ResetIOP();
-                        LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                        Exit(0);
                     }
                 }
             }
@@ -1089,7 +1089,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd31e)
         sprintf(RealModelName, "DTL-H70002");
     /* else if (ModelId == 0xd31f)
-           sprintf(RealModelName, "???");
+           sprintf(RealModelName, "DTL-H70011S ???");
        else if (ModelId == 0xd320)
            sprintf(RealModelName, "???");
        else if (ModelId == 0xd321)
@@ -1601,7 +1601,7 @@ char restoreBackup()
             if (new_pad & PAD_CROSS)
             {
                 ResetIOP();
-                LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                Exit(0);
                 SleepThread();
             }
         }
@@ -1728,7 +1728,7 @@ int main()
             if (selected == -1)
             {
                 ResetIOP();
-                LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                Exit(0);
                 SleepThread();
             }
             else if (selected == 0)
@@ -1752,7 +1752,7 @@ int main()
             if (selected == -1)
             {
                 ResetIOP();
-                LoadExecPS2("rom0:OSDSYS", 0, NULL);
+                Exit(0);
                 SleepThread();
             }
             else if (selected == 0)
