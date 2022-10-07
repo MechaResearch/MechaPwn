@@ -39,9 +39,9 @@ _You will need to reinstall the exploit patch to change your region again_
 
 MechaPwn logo will wait until the USB device is ready.
 
-Backup nvram. MechaPwn will backup your console NVRAM data into USB. This will work on any console, so the app can be used for dumping NVRAM.
+Backup nvram. MechaPwn will backup your console NVRAM data to the USB device. This will work on any console, so the app can be used for dumping NVRAM.
 
-Information scren. Will show data about your console: Serial number, model ID, real model name, mechacon firmware version and timestamp. If your console is untested or unsupported, MechaPwn will block itself. If you see a message "please report ..." feel free to open an issue and your console data will be tested for compatibility with MechaPwn.
+Information screen. Will show data about your console: Serial number, model ID, real model name, mechacon firmware version and timestamp. If your console is untested or unsupported, MechaPwn will block itself. If you see a message "please report ..." feel free to open an issue and your console data will be tested for compatibility with MechaPwn.
 
 FMCB check. For slim consoles, MechaPwn will check that FMCB is installed for the US region. Again, please use FMCB cross-region install. If you have a compatible FMCB, this screen will be skipped.
 
@@ -57,7 +57,7 @@ Patch menu. This menu will allow you to keep the current patch, install factory 
 
 The Dragon[^2]-based MechaCon store configuration flags and patches were encrypted in their EEPROM, and the patch DES key was eventually brute-forced, thus allowing code execution on those units and for the full keystore to be dumped.
 
-Normally, the patch area is write-protected and cannot be written to at runtime except while using PMAP in TEST mode (this requires soldering). Furthermore, the configuration area can only be written to when it is empty.
+Normally, the patch area is write-protected and cannot be written to at runtime except while using PMAP in TEST mode (this requires soldering). Furthermore, the configuration area can only be written when it is empty.
 
 This is done to prevent an attacker or anyone outside of Sony's factory from overwriting the mechacon configuration.
 
@@ -65,7 +65,7 @@ However, an exploitable bug was found in the WriteConfig function that allows wr
 
 ### DSP limitations
 
-1. Burning coils. It is NOT MECHAPWN fault!!! It is a hardware bug, you are risking every time you put the burned disk into FAT[^5] and 70k[^7]. Affects any FAT[^5] and 70k[^7] consoles. If a disc has bad ECC (error correction) data on the error correction area of each sector, there's a chance it may crash the DSP during a read, given that the coils are driven using PWM (pulse width modulation) there's a 50% chance it may crash while the coil is energized. The coil is not designed to receive constant current so it can be damaged. It doesn't crash with silver discs (without scrapes), it **may** crash with burnt discs, it only depends if the ECC data is bogus or not. While this problem is not caused by MechaPwn, our team understands that after MechaPwn you will have more reasons to put burned disks inside. You are warned! The only working fix for preventing this - is `Matrix PIC fix` that shut down the system in case of ECC error. All other passive fixes are not working. The other way for fixing this: replace the DSP chip with some DTL DSP chip (that is marked -1). [More details about Matrix PIC fix](docs/PICfix.md).
+1. Burning coils. It is NOT MECHAPWN fault!!! It is a hardware bug, you are risking every time you put the burned disk into FAT[^5] and 70k[^7]. Affects any FAT[^5] and 70k[^7] consoles. If a disc has bad ECC (error correction) data on the error correction area of each sector, there's a chance it may crash the DSP during a read, given that the coils are driven using PWM (pulse width modulation) there's a 50% chance it may crash while the coil is energized. The coil is not designed to receive constant current so it can be damaged. It doesn't crash with silver discs (without scrapes), it **may** crash with burnt discs, it only depends if the ECC data is bogus or not. While this problem is not caused by MechaPwn, our team understands that after MechaPwn you will have more reasons to put burned disks inside. You are warned! The only working fix for preventing this - is `Matrix PIC fix` that shut down the system in case of an ECC error. All other passive fixes are not working. The other way for fixing this: replace the DSP chip with some DTL DSP chip (that is marked -1). [More details about Matrix PIC fix](docs/PICfix.md).
 2. DSP does not store disk keys (16 bytes) inside its registers. This only affects retail units, real DTL units do not have this `bug?/feature?` cause DTL units have another DSP chip revision. The mechacon copies disc ID data from the masterdisc sector into the DSP registers and later in CDVDMAN on DTL units. Retail DSP always read back from the disc. This will block MasterPatched disks from running directly from OSD.
 
 ## Program Advantages
@@ -77,6 +77,7 @@ On all units
 - Disable disc region checks (ps1 and ps2 discs from all-region as well as masterdiscs mount with data accessible)
 - Change the region the console reports as, as well as change the disc/KELF region that mechacon allows
 - Boot burned PS1 backups from the console's original region directly from OSD
+- Boot burned PS2 CD disks from the console's original region directly from OSD (without masterpatch)
 - Boot masterpatched PS2 backups and original PS2 disks from all-region by skipping the logo check (for example, by loading a disc using [wlaunchELF](https://github.com/ps2homebrew/wLaunchELF))
 - 70k[^7] and Deckard[^3] only: Change OSD and DVD region
 - Deckard[^3] only: force NTSC-U region and video mode for PS2/PS1 titles
@@ -126,7 +127,7 @@ What it's meant to do is unlock the disk drive for access.
 
 #### How to create a master patched disk?
 
-Master patch creation isnt covered by this FAQ. Try to search for *PSX/PS2 Disc Patcher v3.0* or official SONY utilites.
+Master patch creation isnt covered by this FAQ. Try to search for *PSX/PS2 Disc Patcher v3.0* or official SONY utilities.
 
 #### What are the advantages of use on PSX[^6] DVR units?
 
@@ -135,14 +136,17 @@ PSX DVR units mostly have the same limitations as Japan FAT[^5] consoles, but th
 ## TODO / Known bugs and limitations / Planned work
 
 70k[^7] consoles with mechacon 6.0 and 6.2 will break DVD Player support (so exploits like FreeDVDPlayer will stop working). 70k[^7] consoles with mechacon 6.4 are not affected by this behavior.
-FMCB will bootloop with Force Unlock and burned PS2DVD.
+FMCB will bootloop with Force Unlock and PS2DVD.
 Check NVRAM lens area, for better laser calibration.
 Collect all possible Model IDs + sticker photo.
 Develop an app for restoring nvram based on sticker photos.
+Improve Force Unlock or implement other patch exploits.
 
 ## How does it work
 
-More info about mechacon flags [here](https://playstationdev.wiki/ps2devwiki/index.php/MechaCon#Region_code). Currently, Mechacon Region Code is set to 0x00130000 (bit 16, 17, 20). Patch area, that allows to play with mechacon, described [here](https://playstationdev.wiki/ps2devwiki/index.php/MechaCon#Rom_patch). Region parameters, that are changed on slims, are described [here](https://playstationdev.wiki/ps2devwiki/index.php/MechaCon#Region_params).
+More info about mechacon flags [here](https://playstationdev.wiki/ps2devwiki/index.php/MechaCon#Region_code). Currently, Mechacon Region Code is set to 0x00130000 (bit 16, 17, 20) + region bit that matches the console or selected settings.
+Patch area, that allows to play with mechacon, described [here](https://playstationdev.wiki/ps2devwiki/index.php/MechaCon#Rom_patch). This area contains sets of encrypted assembler instructions that mechacon applies to itself on console boot.
+Region parameters, that are changed on slims, are described [here](https://playstationdev.wiki/ps2devwiki/index.php/MechaCon#Region_params).
 
 ## Credits
 
