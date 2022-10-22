@@ -105,9 +105,13 @@ Your TV doesn't support NTSC or PAL signal. MechaPwn can change the default vide
 
 The IOP ROM on those consoles has enforced strict logo decryption checks both in the PS1 and PS2 BOOTROM that the NTSC-U (also used in ASIA consoles) BOOTROM does not have.
 
+#### PS1 game has issues, stretched screen, abnormal behavior, etc.
+
+If PS1 games are acting incorrectly, we advise using [DKWDRV](https://github.com/wisi-w/DKWDRV) which has many fixes for the PS1 mode.
+
 #### How to play PS1 games from the different regions on PAL/NTSC-J FAT[^5] and 70k[^7] (original and backups)?
 
-You can do this only via the swap trick: you should burn *ImportPlayer _Lite 2.1_ for either PAL or Japan (according to your console's original region) and follow the instructions for disk swap in the program. Keep in mind that game compatibility will not apply and video mode should be set with *ImportPlayer _Lite 2.1_.
+You can do this only via the swap trick. For example, you can burn *ImportPlayer _Lite 2.1_ for either PAL or Japan (according to your console's original region) and follow the instructions for disk swap in the program. Keep in mind that game compatibility will not apply and video mode should be set with *ImportPlayer _Lite 2.1_.
 
 #### Why do consoles not run masterdiscs directly from the OSD?
 
