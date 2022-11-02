@@ -398,7 +398,7 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
         }
         else if (selected == 1)
         {
-            *region_params     = region_params_japan;
+            *region_params     = region_params_asia;
             *region_ciphertext = isDex ? region_ciphertext_asia_dex : region_ciphertext_asia_cex;
             *video_config      = ntsc_defaults;
         }
@@ -416,7 +416,7 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
         }
         else if (selected == 4)
         {
-            *region_params     = region_params_asia;
+            *region_params     = region_params_japan;
             *region_ciphertext = isDex ? region_ciphertext_japan_dex : region_ciphertext_japan_cex;
             *video_config      = ntsc_defaults;
         }
@@ -1131,8 +1131,8 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-50001/N");
     else if (ModelId == 0xd402)
         sprintf(RealModelName, "SCPH-50010/N");
-    /* else if (ModelId == 0xd403)
-           sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd403)
+        sprintf(RealModelName, "SCPH-50000");
     else if (ModelId == 0xd404)
         sprintf(RealModelName, "SCPH-50000 MB/NH");
     else if (ModelId == 0xd405)
