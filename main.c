@@ -40,6 +40,7 @@
 
 static unsigned int big_size = 50, reg_size = 36;
 // TODO: store existing areas on nvram on boot
+static unsigned int IsKnownconsole = 0;
 
 static void ResetIOP()
 {
@@ -985,6 +986,8 @@ void checkUnsupportedVersion()
     ModelIDTextures = ui_printf(8, 8 + big_size + big_size / 2 - 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID: 0x%X\n", ModelId);
 
     // ModelID whitelist
+    IsKnownconsole  = 1;
+    sprintf(RealModelName, "???");
     if (ModelId == 0xd200)
         sprintf(RealModelName, "DTL-H10000");
     else if (ModelId == 0xd201)
@@ -1420,17 +1423,8 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "PX300-1");
     else
     {
-        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unknown, please report!\n");
-        drawFrame();
-
-        freeGSTEXTURE_holder(romverTextures);
-        freeGSTEXTURE_holder(ModelIDTextures);
-        freeGSTEXTURE_holder(serialTextures);
-        freeGSTEXTURE_holder(versionTextures);
-        freeGSTEXTURE_holder(errorTextures);
-
-        SleepThread();
-        return;
+        errorTextures  = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unknown, please report!\n");
+        IsKnownconsole = 0;
     }
     modelnameTextures = ui_printf(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Real Model Name: %s\n", RealModelName);
 
@@ -1474,6 +1468,8 @@ void checkUnsupportedVersion()
 
             drawFrame();
 
+            if (!(IsKnownconsole))
+                freeGSTEXTURE_holder(errorTextures);
             freeGSTEXTURE_holder(romverTextures);
             freeGSTEXTURE_holder(colorTextures);
             freeGSTEXTURE_holder(modelnameTextures);
@@ -1491,21 +1487,8 @@ void checkUnsupportedVersion()
 
     if ((ModelId >= 0xd300) && (ModelId < 0xd380))
     {
-        errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Dragon TEST support is blocked!\n");
-        drawFrame();
-
-        freeGSTEXTURE_holder(romverTextures);
-        freeGSTEXTURE_holder(colorTextures);
-        freeGSTEXTURE_holder(modelnameTextures);
-        freeGSTEXTURE_holder(ModelIDTextures);
-        freeGSTEXTURE_holder(serialTextures);
-        if (getMechaBuildDate(build_date))
-            freeGSTEXTURE_holder(buildTextures);
-        freeGSTEXTURE_holder(versionTextures);
-        freeGSTEXTURE_holder(errorTextures);
-
-        SleepThread();
-        return;
+        errorTextures  = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Dragon TEST support is blocked!\n");
+        IsKnownconsole = 0;
     }
 
     // todo: fixme: find out why isPatchKnown is crashing
@@ -1531,6 +1514,8 @@ void checkUnsupportedVersion()
     struct GSTEXTURE_holder *exitTextures = draw_text(8, 8 + big_size + big_size / 2 + 7 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to continue.\n");
     drawFrame();
 
+    if (!(IsKnownconsole))
+        freeGSTEXTURE_holder(errorTextures);
     freeGSTEXTURE_holder(exitTextures);
     freeGSTEXTURE_holder(colorTextures);
     freeGSTEXTURE_holder(modelnameTextures);
@@ -1718,7 +1703,7 @@ int main()
         menu.x_text = "X Select";
         menu.o_text = "O Exit";
 
-        if (getMechaBuildDate(build_date))
+        if ((getMechaBuildDate(build_date)) && IsKnownconsole)
         {
             menu.option_count = 2;
             menu.options[0]   = "Change region";
