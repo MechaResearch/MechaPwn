@@ -1421,6 +1421,10 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "??? SCPH-90006 CR"); */
     else if (ModelId == 0xd48f)
         sprintf(RealModelName, "PX300-1");
+    /* else if (ModelId == 0xd490)
+        sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd491)
+        sprintf(RealModelName, "SCPH-90010 CR");
     else
     {
         errorTextures  = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unknown, please report!\n");
