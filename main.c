@@ -1074,8 +1074,8 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "DTL-H30105");
     else if (ModelId == 0xd22a)
         sprintf(RealModelName, "SCPH-39000 S");
-    /* else if (ModelId == 0xd22b)
-        sprintf(RealModelName, "SCPH-39000 AQ"); */
+    else if (ModelId == 0xd22b)
+        sprintf(RealModelName, "SCPH-39000 AQ");
     else if (ModelId == 0xd22c)
         sprintf(RealModelName, "SCPH-39000 SA");
     else if (ModelId == 0xd22d)
@@ -1415,9 +1415,9 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-90000 CR");
     else if (ModelId == 0xd48c)
         sprintf(RealModelName, "SCPH-90008");
-    /* else if (ModelId == 0xd48d)
-        sprintf(RealModelName, "??? SCPH-90008 SS");
-    else if (ModelId == 0xd48e)
+    else if (ModelId == 0xd48d)
+        sprintf(RealModelName, "SCPH-90008 SS");
+    /* else if (ModelId == 0xd48e)
         sprintf(RealModelName, "??? SCPH-90006 CR"); */
     else if (ModelId == 0xd48f)
         sprintf(RealModelName, "PX300-1");
@@ -1448,13 +1448,14 @@ void checkUnsupportedVersion()
              (ModelId == 0xd454) || (ModelId == 0xd45d) || (ModelId == 0xd461) ||
              (ModelId == 0xd469) || (ModelId == 0xd46d) || (ModelId == 0xd477) ||
              (ModelId == 0xd47a) || (ModelId == 0xd482) || (ModelId == 0xd484) ||
-             (ModelId == 0xd384) || (ModelId == 0xd304))
+             (ModelId == 0xd48d) || (ModelId == 0xd384) || (ModelId == 0xd304) ||
+             (ModelId == 0xd22a))
         sprintf(color, "Satin Silver");
     else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462) ||
-             (ModelId == 0xd464) || (ModelId == 0xd22a))
+             (ModelId == 0xd464) || (ModelId == 0xd22c))
         sprintf(color, "Pink");
     else if ((ModelId == 0xd404) || (ModelId == 0xd41b) || (ModelId == 0xd41d) ||
-             (ModelId == 0xd21d) || (ModelId == 0xd220) || (ModelId == 0xd22c))
+             (ModelId == 0xd21d) || (ModelId == 0xd220) || (ModelId == 0xd22b))
         sprintf(color, "Blue");
     else if ((ModelId == 0xd489) || (ModelId == 0xd48b) || (ModelId == 0xd491))
         sprintf(color, "Cinnabar Red");
