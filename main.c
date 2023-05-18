@@ -1345,11 +1345,11 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd469)
         sprintf(RealModelName, "SCPH-79001 SS");
     /* else if (ModelId == 0xd46a)
-        sprintf(RealModelName, "??? SCPH-79005 CB"); */
+        sprintf(RealModelName, "??? SCPH-79005"); */
     else if (ModelId == 0xd46b)
         sprintf(RealModelName, "SCPH-79006");
     /* else if (ModelId == 0xd46c)
-        sprintf(RealModelName, "???"); */
+        sprintf(RealModelName, "??? SCPH-79007"); */
     else if (ModelId == 0xd46d)
         sprintf(RealModelName, "SCPH-79000 SS");
     else if (ModelId == 0xd46e)
@@ -1358,9 +1358,9 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "??? SCPH-79004"); */
     else if (ModelId == 0xd470)
         sprintf(RealModelName, "SCPH-79010");
-    /* else if (ModelId == 0xd471)
-        sprintf(RealModelName, "??? SCPH-79007");
-    else if (ModelId == 0xd472)
+    else if (ModelId == 0xd471)
+        sprintf(RealModelName, "SCPH-79003 SS");
+    /* else if (ModelId == 0xd472)
         sprintf(RealModelName, "??? SCPH-79004 SS"); */
     else if (ModelId == 0xd473)
         sprintf(RealModelName, "SCPH-79008");
@@ -1446,10 +1446,10 @@ void checkUnsupportedVersion()
              (ModelId == 0xd434) || (ModelId == 0xd438) || (ModelId == 0xd43f) ||
              (ModelId == 0xd441) || (ModelId == 0xd442) || (ModelId == 0xd452) ||
              (ModelId == 0xd454) || (ModelId == 0xd45d) || (ModelId == 0xd461) ||
-             (ModelId == 0xd469) || (ModelId == 0xd46d) || (ModelId == 0xd477) ||
-             (ModelId == 0xd47a) || (ModelId == 0xd482) || (ModelId == 0xd484) ||
-             (ModelId == 0xd48d) || (ModelId == 0xd384) || (ModelId == 0xd304) ||
-             (ModelId == 0xd22a))
+             (ModelId == 0xd469) || (ModelId == 0xd46d) || (ModelId == 0xd471) ||
+             (ModelId == 0xd477) || (ModelId == 0xd47a) || (ModelId == 0xd482) ||
+             (ModelId == 0xd484) || (ModelId == 0xd48d) || (ModelId == 0xd384) ||
+             (ModelId == 0xd304) || (ModelId == 0xd22a))
         sprintf(color, "Satin Silver");
     else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462) ||
              (ModelId == 0xd464) || (ModelId == 0xd22c))
