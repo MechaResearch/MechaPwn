@@ -1244,9 +1244,9 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd438)
         sprintf(RealModelName, "SCPH-70003 SS");
     /* else if (ModelId == 0xd439)
-        sprintf(RealModelName, "??? SCPH-70000 GT");
+        sprintf(RealModelName, "??? SCPH-70000 GT"); */
     else if (ModelId == 0xd43a)
-        sprintf(RealModelName, "SCPH-70008 GT"); */
+        sprintf(RealModelName, "SCPH-70008 SS");
     // L-chassis
     else if (ModelId == 0xd43b)
         sprintf(RealModelName, "SCPH-75001");
@@ -1281,12 +1281,12 @@ void checkUnsupportedVersion()
     /* else if (ModelId == 0xd44a)
         sprintf(RealModelName, "???");
     else if (ModelId == 0xd44b)
-        sprintf(RealModelName, "??? SCPH-75008 SS"); */
+        sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd44c)
         sprintf(RealModelName, "SCPH-75008");
+    else if (ModelId == 0xd44d)
+        sprintf(RealModelName, "SCPH-75008 SS");
     // M-chassis
-    /* else if (ModelId == 0xd44d)
-        sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd44e)
         sprintf(RealModelName, "SCPH-77001");
     else if (ModelId == 0xd44f)
@@ -1443,12 +1443,13 @@ void checkUnsupportedVersion()
              (ModelId == 0xd412) || (ModelId == 0xd415) || (ModelId == 0xd41a) ||
              (ModelId == 0xd41c) || (ModelId == 0xd420) || (ModelId == 0xd422) ||
              (ModelId == 0xd423) || (ModelId == 0xd432) || (ModelId == 0xd433) ||
-             (ModelId == 0xd434) || (ModelId == 0xd438) || (ModelId == 0xd43f) ||
-             (ModelId == 0xd441) || (ModelId == 0xd442) || (ModelId == 0xd452) ||
-             (ModelId == 0xd454) || (ModelId == 0xd45d) || (ModelId == 0xd461) ||
-             (ModelId == 0xd469) || (ModelId == 0xd46d) || (ModelId == 0xd471) ||
-             (ModelId == 0xd477) || (ModelId == 0xd47a) || (ModelId == 0xd482) ||
-             (ModelId == 0xd484) || (ModelId == 0xd48d) || (ModelId == 0xd384) ||
+             (ModelId == 0xd434) || (ModelId == 0xd438) || (ModelId == 0xd43a) ||
+             (ModelId == 0xd43f) || (ModelId == 0xd441) || (ModelId == 0xd442) ||
+             (ModelId == 0xd44d) || (ModelId == 0xd452) || (ModelId == 0xd454) ||
+             (ModelId == 0xd45d) || (ModelId == 0xd461) || (ModelId == 0xd469) ||
+             (ModelId == 0xd46d) || (ModelId == 0xd471) || (ModelId == 0xd477) ||
+             (ModelId == 0xd47a) || (ModelId == 0xd482) || (ModelId == 0xd484) ||
+             (ModelId == 0xd48d) || (ModelId == 0xd384) ||
              (ModelId == 0xd304) || (ModelId == 0xd22a))
         sprintf(color, "Satin Silver");
     else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462) ||
