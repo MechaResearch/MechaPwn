@@ -1258,8 +1258,8 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-75004");
     else if (ModelId == 0xd43f)
         sprintf(RealModelName, "SCPH-75000 SSS");
-    /* else if (ModelId == 0xd440)
-        sprintf(RealModelName, "SCPH-75002 SS ???"); */
+    else if (ModelId == 0xd440)
+        sprintf(RealModelName, "SCPH-75002 SS");
     else if (ModelId == 0xd441)
         sprintf(RealModelName, "SCPH-75003 SS");
     else if (ModelId == 0xd442)
@@ -1444,13 +1444,13 @@ void checkUnsupportedVersion()
              (ModelId == 0xd41c) || (ModelId == 0xd420) || (ModelId == 0xd422) ||
              (ModelId == 0xd423) || (ModelId == 0xd432) || (ModelId == 0xd433) ||
              (ModelId == 0xd434) || (ModelId == 0xd438) || (ModelId == 0xd43a) ||
-             (ModelId == 0xd43f) || (ModelId == 0xd441) || (ModelId == 0xd442) ||
-             (ModelId == 0xd44d) || (ModelId == 0xd452) || (ModelId == 0xd453) ||
-             (ModelId == 0xd454) || (ModelId == 0xd45d) || (ModelId == 0xd461) ||
-             (ModelId == 0xd469) || (ModelId == 0xd46d) || (ModelId == 0xd471) ||
-             (ModelId == 0xd477) || (ModelId == 0xd47a) || (ModelId == 0xd482) ||
-             (ModelId == 0xd484) || (ModelId == 0xd48d) || (ModelId == 0xd384) ||
-             (ModelId == 0xd304) || (ModelId == 0xd22a))
+             (ModelId == 0xd43f) || (ModelId == 0xd440) || (ModelId == 0xd441) ||
+             (ModelId == 0xd442) || (ModelId == 0xd44d) || (ModelId == 0xd452) ||
+             (ModelId == 0xd453) || (ModelId == 0xd454) || (ModelId == 0xd45d) ||
+             (ModelId == 0xd461) || (ModelId == 0xd469) || (ModelId == 0xd46d) ||
+             (ModelId == 0xd471) || (ModelId == 0xd477) || (ModelId == 0xd47a) ||
+             (ModelId == 0xd482) || (ModelId == 0xd484) || (ModelId == 0xd48d) ||
+             (ModelId == 0xd384) || (ModelId == 0xd304) || (ModelId == 0xd22a))
         sprintf(color, "Satin Silver");
     else if ((ModelId == 0xd41f) || (ModelId == 0xd45f) || (ModelId == 0xd462) ||
              (ModelId == 0xd464) || (ModelId == 0xd22c))
