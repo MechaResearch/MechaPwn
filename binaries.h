@@ -14,6 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdint.h>
+
 extern uint8_t iomanX;
 extern u32 size_iomanX;
 

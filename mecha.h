@@ -14,6 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdint.h>
+
 int MechaInit();
 void MechaDeinit();
 char getMechaVersion(uint8_t *data);

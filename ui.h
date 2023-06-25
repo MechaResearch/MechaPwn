@@ -17,6 +17,7 @@
 #include <gsKit.h>
 #include <dmaKit.h>
 #include <malloc.h>
+#include <stdint.h>
 
 #define White      GS_SETREG_RGBAQ(0xFF, 0xFF, 0xFF, 0x00, 0x00)
 #define Black      GS_SETREG_RGBAQ(0x00, 0x00, 0x00, 0x00, 0x00)
