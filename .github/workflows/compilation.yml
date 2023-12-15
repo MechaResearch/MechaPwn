@@ -8,15 +8,12 @@ jobs:
   build:
     name: MechaPwn compilation
     runs-on: ubuntu-latest
-    container: ps2dev/ps2dev:latest
+    container: ghcr.io/ps2homebrew/ps2homebrew:main
     # instead of "ps2dev/ps2dev:latest" you can use different tags, for example for old projects you can use "ps2dev/ps2dev:v1.0"
     steps:
       - name: Install dependencies
         run: |
-          apk add build-base git zip python3 py3-pip
-          apk add tiff-dev jpeg-dev openjpeg-dev zlib-dev freetype-dev lcms2-dev libwebp-dev tcl-dev tk-dev harfbuzz-dev fribidi-dev libimagequant-dev libxcb-dev libpng-dev
-          pip3 install --upgrade pip setuptools wheel
-          pip3 install Pillow
+          apk add py3-pillow
 
       - uses: actions/checkout@v3
         with:
