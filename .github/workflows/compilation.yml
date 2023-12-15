@@ -41,7 +41,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
+    if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/LangPwn'
     steps:
       - uses: actions/checkout@v3
 
@@ -59,7 +59,7 @@ jobs:
         run: 7z a MechaPwn-${{ steps.slug.outputs.sha8 }}.7z MechaPwn/*
 
       - name: Create pre-release
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/LangPwn'
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
