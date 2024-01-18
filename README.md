@@ -19,7 +19,7 @@ Older Playstation 2 units do NOT use a Dragon based mechacon and therefore are n
 
 ### How to use?
 
-0) Make sure if you are using FMCB **you have v1.966 "multi install" installed**.
+0) Make sure if you are using FMCB **you have v1.966 "cross-region" installed**.
 
 1) Run Mechapwn once to install the exploit patch/payload an initial backup of your mechacon eeprom will be made to the usb mass storage device (keep it safe!),then power off the console by disconnecting it from the mains when asked (mechacon is on even when the ps2 cpu is off, so you really need to disconnect the power chord!) 
 2) Run Mechapwn again to choose which region you want.
@@ -107,7 +107,7 @@ To fix that you need to install a DVD Player update to your memory card.
 
 Version 1.8 is piggybacking a DVD Player KELF and faces the same issue as DVD Player players.
 
-Version 1.9 is supported, but you have to make sure you have the multi-region ("multi install") version installed.
+Version 1.9 is supported, but you have to make sure you have the **cross-region** version installed.
 
 ### What is force unlock?
 
