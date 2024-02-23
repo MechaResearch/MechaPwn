@@ -1224,8 +1224,8 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-70006");
     else if (ModelId == 0xd42e)
         sprintf(RealModelName, "SCPH-70007");
-    /* else if (ModelId == 0xd42f)
-        sprintf(RealModelName, "??? SCPH-70000 SS"); */
+    else if (ModelId == 0xd42f)
+        sprintf(RealModelName, "SCPH-70000 GT");
     else if (ModelId == 0xd430)
         sprintf(RealModelName, "SCPH-70008");
     else if (ModelId == 0xd431)
@@ -1245,7 +1245,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd438)
         sprintf(RealModelName, "SCPH-70003 SS");
     /* else if (ModelId == 0xd439)
-        sprintf(RealModelName, "??? SCPH-70000 GT"); */
+        sprintf(RealModelName, "??? SCPH-70000 SS"); */
     else if (ModelId == 0xd43a)
         sprintf(RealModelName, "SCPH-70008 SS");
     // L-chassis
