@@ -1055,8 +1055,8 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-39008");
     else if (ModelId == 0xd220)
         sprintf(RealModelName, "SCPH-39000 TB");
-    /* else if (ModelId == 0xd221)
-        sprintf(RealModelName, "SCPH-39000 RC"); */
+    else if (ModelId == 0xd221)
+        sprintf(RealModelName, "SCPH-39000 RC");
     else if (ModelId == 0xd222)
         sprintf(RealModelName, "SCPH-39006");
     /* else if (ModelId == 0xd223)
