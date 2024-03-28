@@ -1,0 +1,50 @@
+Dragon NVRAM has 2 encrypted areas:
+region area at offset 0x1C6
+patch area at offset 0x320
+
+region area consists of 2 10-byte blocks. Last 2 bytes in each block - checksum. 1st checksum byte is useless and skipped during decryption.
+First 8byte block - random value used for encrypting the second block. Can be anything.
+The second block consists of 2 parts - a random 2-byte block, and a 6-byte block containing region falgs. A random 2-byte block can be of anything.
+6-byte block bit flags are described on PSX dev wiki. In short - the highest byte contains 8 possible classic regions (from Japan to Mexico).
+On all models is set only exactly one bitflag is in the highest byte, so only one region is assigned (with the only exception - Review Kit).
+2nd byte purpose is unknown - always all bits are cleared (except Review Kit: all bits are set).
+3rd byte contains ps2 types and the main mechapwn flag allowing you to change console type to the arcade, prototype, dtl, semi-dtl, etc.
+4-6 byte purpose unknown - always all bits cleared.
+
+The Patch area contains 2 blocks 112 bytes long. Last 2 bytes in each block - checksum. 1st checksum byte is useless and skipped during decryption.
+After decryption these 2 blocks combined in one block: 216 bytes long (2 x 108)
+This block structure:
+struct rom_patch
+{
+	uint32_t address[4];
+	uint32_t value[4];
+	uint32_t svc_address[4];
+	uint8_t payload[168];
+	uint32_t crc;
+};
+
+First 16 bytes - 4 addresses inside mechacon rom that should be patched, next 16 bytes - 4 values that are written over at those addresses.
+If the address is zero, then the patch is skipped.
+Next 16 bytes - 4 svc_addresses (TODO: describe what that means)
+The rest is for payload (168 bytes) and checksum (TODO: provide more information about payload)
+
+The current Force Unlock implementation uses 2 patches. All Sony retail patches (except PSX1 5.10 and 6.02 ver b used in 70k) use a maximum 2 patches, so there is space for 2 patches:
+5.00    0000B4F0 48492701        0000B630 484B2701
+5.02    0000B6CC 250E2701        0000B82C F0002701
+5.04    0000B6E0 250E2701        0000B840 F0002701
+5.06    0000B6E0 250E2701        0000B840 F0002701
+5.06MX  0000B6B4 250E2701        0000B814 F0002701
+5.12    0000B6FC 250E2701        0000B85C F0002701
+6.00    0000B280 250E2701        0000B3E0 F0002701
+6.02    0000B3C8 250E2700        0000B53C F0002700
+6.04    0000B6C0 250E2700        0000B834 F0002700
+6.06    0000B804 250E2700        0000B978 F0002700
+6.10    0000B868 250E2700        0000B9DC F0002700
+6.12    0000B7F8 250E2700        0000B96C F0002700
+TODO: explain what exactly Force Unlock is patching.
+
+PSX doesn't need force unlock.
+For 6.02 original ver b patch gets rewritten to free up patch addresses. The original 4-patch set is lowered to a 1-patch set.
+TODO: provide source code for 6.02 rewritten payload.
+
+6.00 and 6.02 mechacon firmware contains a bug: DVDVideo disk stop working if the DTL flag is set.

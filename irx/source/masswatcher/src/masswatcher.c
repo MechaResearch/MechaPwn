@@ -28,64 +28,65 @@ static int SifMassThreadID;
 
 static unsigned char SifServerBuffer[0x1000];
 
-static char massState[2] = { 0, 0 };
+static char massState[2] = {0, 0};
 
 static void *MassHeader(int function, void *buffer, int nbytes)
 {
-	char *params = (char *) buffer;
+    char *params = (char *)buffer;
 
-	*params = massState[0] || massState[1];
+    *params      = massState[0] || massState[1];
 
-	return buffer;
+    return buffer;
 }
 
 static void SifMassThread(void *parameters)
 {
-	if(!sceSifCheckInit()){
-		printf("yet sif hasn't been init\n");
-		sceSifInit();
-	}
+    if (!sceSifCheckInit())
+    {
+        printf("yet sif hasn't been init\n");
+        sceSifInit();
+    }
 
-	sceSifInitRpc(0);
-	sceSifSetRpcQueue(&SifMassQD, GetThreadId());
-	sceSifRegisterRpc(&SifMassData, MASSWATCHER_HEADER, &MassHeader, SifServerBuffer, NULL, NULL, &SifMassQD);
-	sceSifRpcLoop(&SifMassQD);
+    sceSifInitRpc(0);
+    sceSifSetRpcQueue(&SifMassQD, GetThreadId());
+    sceSifRegisterRpc(&SifMassData, MASSWATCHER_HEADER, &MassHeader, SifServerBuffer, NULL, NULL, &SifMassQD);
+    sceSifRpcLoop(&SifMassQD);
 }
 
 static void usbmass_cb0(int cause)
 {
-	if (cause == USBMASS_DEV_EV_CONN)
-		massState[0] = 1;
-	else if (cause == USBMASS_DEV_EV_DISCONN)
-		massState[0] = 0;
+    if (cause == USBMASS_DEV_EV_CONN)
+        massState[0] = 1;
+    else if (cause == USBMASS_DEV_EV_DISCONN)
+        massState[0] = 0;
 }
 
 static void usbmass_cb1(int cause)
 {
-	if (cause == USBMASS_DEV_EV_CONN)
-		massState[1] = 1;
-	else if (cause == USBMASS_DEV_EV_DISCONN)
-		massState[1] = 0;
+    if (cause == USBMASS_DEV_EV_CONN)
+        massState[1] = 1;
+    else if (cause == USBMASS_DEV_EV_DISCONN)
+        massState[1] = 0;
 }
 
 int _start(int argc, char *argv[])
 {
-	if(RegisterLibraryEntries(&_exp_masswatcher) != 0)
-		return MODULE_NO_RESIDENT_END;
-	
-	UsbMassRegisterCallback(0, usbmass_cb0);
-	UsbMassRegisterCallback(1, usbmass_cb1);
+    if (RegisterLibraryEntries(&_exp_masswatcher) != 0)
+        return MODULE_NO_RESIDENT_END;
 
-	iop_thread_t thread;
-	thread.attr = TH_C;
-	thread.priority = 0x28;
-	thread.stacksize = 0x800;
+    UsbMassRegisterCallback(0, usbmass_cb0);
+    UsbMassRegisterCallback(1, usbmass_cb1);
 
-	thread.thread=&SifMassThread;
-	SifMassThreadID = CreateThread(&thread);
-	if(SifMassThreadID == 0)
-		return MODULE_NO_RESIDENT_END;
-	StartThread(SifMassThreadID, NULL);
+    iop_thread_t thread;
+    thread.attr      = TH_C;
+    thread.priority  = 0x28;
+    thread.stacksize = 0x800;
 
-	return MODULE_RESIDENT_END;
+    thread.thread    = &SifMassThread;
+    SifMassThreadID  = CreateThread(&thread);
+    if (SifMassThreadID == 0)
+        return MODULE_NO_RESIDENT_END;
+    StartThread(SifMassThreadID, NULL);
+
+    return MODULE_RESIDENT_END;
 }

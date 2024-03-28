@@ -14,6 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdint.h>
+
 int MechaInit();
 void MechaDeinit();
 char getMechaVersion(uint8_t *data);
@@ -25,3 +27,4 @@ char CloseConfig();
 char ReadNVM(uint16_t offset, uint16_t *data);
 char WriteNVM(uint16_t offset, uint16_t data);
 char IsNVMUnlocked();
+char getSerial(uint32_t *serial);

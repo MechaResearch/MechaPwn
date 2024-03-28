@@ -14,28 +14,29 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os
+import sys
+import os
 from PIL import Image
-from RLE24 import encodeRLE24, decodeRLE24
+from RLE24 import encodeRLE24
 
 img = Image.open(sys.argv[1])
 
 bgcolor = (0x00, 0x00, 0x00, 0x00)
 
 if img.mode == "RGB" or img.mode == "P" or img.mode == "L":
-	background = Image.new("RGB", img.size, bgcolor)
-	img.load()
-	background.paste(img)
+    background = Image.new("RGB", img.size, bgcolor)
+    img.load()
+    background.paste(img)
 elif img.mode == "RGBA":
-	background = Image.new("RGB", img.size, bgcolor)
-	img.load()
-	background.paste(img, mask = img.split()[3]) # alpha channel
+    background = Image.new("RGB", img.size, bgcolor)
+    img.load()
+    background.paste(img, mask=img.split()[3])  # alpha channel
 else:
-	print ("sorry, can't support this format")
-	sys.exit()
-	
-#r, g, b = background.split()
-#data = Image.merge("RGB", (r, g, b)).tobytes()
+    print("sorry, can't support this format")
+    sys.exit()
+
+# r, g, b = background.split()
+# data = Image.merge("RGB", (r, g, b)).tobytes()
 
 data = encodeRLE24(background)
 
