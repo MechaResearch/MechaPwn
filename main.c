@@ -1325,13 +1325,13 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd45f)
         sprintf(RealModelName, "SCPH-77004 PK");
     /* else if (ModelId == 0xd460)
-        sprintf(RealModelName, "??? SCPH-77008 PK"); */
+        sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd461)
         sprintf(RealModelName, "SCPH-77000 SS");
     else if (ModelId == 0xd462)
         sprintf(RealModelName, "SCPH-77000 PK");
-    /* else if (ModelId == 0xd463)
-        sprintf(RealModelName, "???"); */
+    else if (ModelId == 0xd463)
+        sprintf(RealModelName, "SCPH-77008 PK");
     else if (ModelId == 0xd464)
         sprintf(RealModelName, "SCPH-77002 PK");
     // N-chassis
@@ -1457,7 +1457,8 @@ void checkUnsupportedVersion()
              (ModelId == 0xd462) || (ModelId == 0xd464) || (ModelId == 0xd22c))
         sprintf(color, "Pink");
     else if ((ModelId == 0xd404) || (ModelId == 0xd41b) || (ModelId == 0xd41d) ||
-             (ModelId == 0xd21d) || (ModelId == 0xd220) || (ModelId == 0xd22b))
+             (ModelId == 0xd21d) || (ModelId == 0xd220) || (ModelId == 0xd22b) ||
+             (ModelId == 0xd463))
         sprintf(color, "Blue");
     else if ((ModelId == 0xd488) || (ModelId == 0xd489) || (ModelId == 0xd48b) ||
              (ModelId == 0xd491))
