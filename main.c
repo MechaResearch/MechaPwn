@@ -68,7 +68,7 @@ char unlockNVM()
 
     struct GSTEXTURE_holder *versionTextures = ui_printf(8, 8 + big_size + big_size / 2 + 0 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha version: %d.%02d\n", version[1], (version[2] | 1) - 1);
     struct GSTEXTURE_holder *buildTextures   = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
-    struct GSTEXTURE_holder *exploitTextures = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Press O to install exploit.\n");
+    struct GSTEXTURE_holder *exploitTextures = draw_text(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Press O to unlock nvram.\n");
     struct GSTEXTURE_holder *exitTextures    = draw_text(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Press X to exit.\n");
 
     drawFrame();
@@ -95,7 +95,7 @@ char unlockNVM()
     const uint8_t *patch = getPatch(build_date);
     if (!installPatch(patch))
     {
-        struct GSTEXTURE_holder *errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 4 * (reg_size + 4), reg_size, 0xFFFFFF, "Failed to install the patch.\n");
+        struct GSTEXTURE_holder *errorTextures = draw_text(8, 8 + big_size + big_size / 2 + 4 * (reg_size + 4), reg_size, 0xFFFFFF, "Failed to install unlock patch.\n");
 
         drawFrame();
 
@@ -1428,7 +1428,7 @@ void checkUnsupportedVersion()
         sprintf(RealModelName, "SCPH-90010 CR");
     else
     {
-        errorTextures  = draw_text(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unknown, please report!\n");
+        errorTextures  = ui_printf(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unknown, please report!\n");
         IsKnownconsole = 0;
     }
     modelnameTextures = ui_printf(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Real Model Name: %s\n", RealModelName);
@@ -1697,11 +1697,6 @@ int main()
     if (!IsNVMUnlocked())
     {
         rerun = 1;
-        if (!isPatchAlreadyInstalled())
-        {
-            if (backupNVM())
-                unlockNVM();
-        }
     }
     else
     {
@@ -1709,52 +1704,54 @@ int main()
         gsKit_clear(gsGlobal, Black);
 
         struct MENU menu;
-        menu.title  = "MechaPwn";
-        menu.x_text = "X Select";
-        menu.o_text = "O Exit";
+        menu.title        = "MechaPwn";
+        menu.x_text       = "X Select";
+        menu.o_text       = "O Exit";
 
-        if ((getMechaBuildDate(build_date)) && IsKnownconsole)
+
+        menu.option_count = 2;
+        if (getMechaBuildDate(build_date) && IsKnownconsole)
+            menu.options[0] = "Change region";
+        else
+            menu.options[0] = "Exit";
+        menu.options[1] = "Restore NVRAM backup";
+
+        selected        = drawMenu(&menu);
+
+        if (selected == -1)
         {
-            menu.option_count = 2;
-            menu.options[0]   = "Change region";
-            menu.options[1]   = "Restore NVRAM backup";
-
-            selected          = drawMenu(&menu);
-
-            if (selected == -1)
+            ResetIOP();
+            Exit(0);
+            SleepThread();
+        }
+        else if (selected == 0)
+        {
+            if (getMechaBuildDate(build_date) && IsKnownconsole)
             {
-                ResetIOP();
-                Exit(0);
-                SleepThread();
-            }
-            else if (selected == 0)
-            {
+                if (!isPatchAlreadyInstalled())
+                {
+                    if (backupNVM())
+                        unlockNVM();
+                }
                 char isDex = 0;
                 setRegion(&isDex);
                 applyPatches(isDex);
             }
-            else if (selected == 1)
-            {
-                restoreBackup();
-            }
-        }
-        else
-        {
-            menu.option_count = 1;
-            menu.options[0]   = "Restore NVRAM backup";
-
-            selected          = drawMenu(&menu);
-
-            if (selected == -1)
+            else
             {
                 ResetIOP();
                 Exit(0);
                 SleepThread();
             }
-            else if (selected == 0)
+        }
+        else if (selected == 1)
+        {
+            if (!isPatchAlreadyInstalled())
             {
-                restoreBackup();
+                if (backupNVM())
+                    unlockNVM();
             }
+            restoreBackup();
         }
     }
 
