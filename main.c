@@ -1687,6 +1687,7 @@ int main()
 
     drawLogo();
 
+    backupNVM();
     checkUnsupportedVersion();
     checkFMCB();
 
@@ -1697,6 +1698,7 @@ int main()
     if (!IsNVMUnlocked())
     {
         rerun = 1;
+        unlockNVM();
     }
     else
     {
@@ -1728,11 +1730,6 @@ int main()
         {
             if (getMechaBuildDate(build_date) && IsKnownconsole)
             {
-                if (!isPatchAlreadyInstalled())
-                {
-                    if (backupNVM())
-                        unlockNVM();
-                }
                 char isDex = 0;
                 setRegion(&isDex);
                 applyPatches(isDex);
@@ -1746,11 +1743,6 @@ int main()
         }
         else if (selected == 1)
         {
-            if (!isPatchAlreadyInstalled())
-            {
-                if (backupNVM())
-                    unlockNVM();
-            }
             restoreBackup();
         }
     }
