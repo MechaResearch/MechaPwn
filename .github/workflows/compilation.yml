@@ -8,14 +8,15 @@ jobs:
   build:
     name: MechaPwn compilation
     runs-on: ubuntu-latest
-    container: ghcr.io/ps2homebrew/ps2homebrew@sha256:9cf3f8497e5a49e3a08cdf96aa9a5b97f119d554e21e3925b3cc84485846b3ce
+    container: ghcr.io/ps2homebrew/ps2homebrew:main
+    # ghcr.io/ps2homebrew/ps2homebrew@sha256:9cf3f8497e5a49e3a08cdf96aa9a5b97f119d554e21e3925b3cc84485846b3ce
     # instead of "ps2dev/ps2dev:latest" you can use different tags, for example for old projects you can use "ps2dev/ps2dev:v1.0"
     steps:
       - name: Install dependencies
         run: |
           apk add py3-pillow
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -30,7 +31,7 @@ jobs:
 
       - name: Upload artifacts
         if: ${{ success() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MechaPwn-${{ steps.slug.outputs.sha8 }}
           path: MechaPwn_pck.elf
@@ -43,14 +44,14 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/LangPwn'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get short SHA
         id: slug
         run: echo "sha8=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
 
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MechaPwn-${{ steps.slug.outputs.sha8 }}
           path: MechaPwn
@@ -60,7 +61,7 @@ jobs:
 
       - name: Create pre-release
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/LangPwn'
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: mathieucarbou/marvinpinto-action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
@@ -70,7 +71,7 @@ jobs:
 
       - name: Create Tagged Release Draft
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: mathieucarbou/marvinpinto-action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: false
