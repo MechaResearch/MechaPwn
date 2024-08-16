@@ -1,5 +1,7 @@
 # PIC fix
 
+Note: seems subzero mode also can save from DSP crash.
+
 All FAT and some 70k models are affected by the DSP bug and need hardware fix to avoid frying.
 
 In 2004 the Matrix team developed the so-called "PIC fix". It consists of PIC12C508 (SOIC chips, it's important, dont use MSOP chips) and a resistor 1.5kOhm or 2.2kOhm (resistance depends on your system). PIC12C508 should be programmed with shipped `MFIX_H8.HEX` or `MFIX_H16.HEX` firmware file. Details on how to program this chip aren't covered here. Optionally, you can use Gerber developed board. Also, you can use a [PCB board](https://oshpark.com/shared_projects/3D5p1xeY) developed for Comsoft fix but also suitable for Matrix PIC fix. For experiments, there is also a Comsoft v4 firmware file, however, it is not tested. Note, that the Matrix team Readme is kept there for reference. There is no need to apply the so-called "diode fix" - per our investigations it is useless.

@@ -20,7 +20,7 @@ all: $(EE_BIN)
 clean:
 	make clean -C irx/source/mechaproxy
 	make clean -C irx/source/masswatcher
-	rm -f *.elf *.o *_irx.c resources/*.bin resources/*.pyc *.pyc
+	rm -f *.elf *.o *_irx.c *.s resources/*.bin resources/*.pyc *.pyc
 
 #IRX Modules
 iomanX_irx.c:
