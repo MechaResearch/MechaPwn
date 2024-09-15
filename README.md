@@ -4,8 +4,11 @@
 
 Any issue opened that is not an actual issue, but a question will be closed.
 
-> :warning: Deckard[^3] users: Disclaimer: if you use FMCB, ensure that you have installed the **cross-region** version. :warning:
-> :warning: non-Deckard (FAT[^5] and 70k[^7]) users: Disclaimer: bad quality disks can damage your laser (with or without MechaPwn, doesn't matter). More info [here](#dsp-limitations). :warning:
+> [!WARNING]
+> Deckard[^3] users: Disclaimer: if you use FMCB, ensure that you have installed the **cross-region** version.
+
+> [!WARNING] 
+> non-Deckard (FAT[^5] and 70k[^7]) users: Disclaimer: bad quality disks can damage your laser (with or without MechaPwn, doesn't matter). More info [here](#dsp-limitations). :warning:
 
 Real DEX (non-QA) flags have not been added to the public version of MechaPwn for your safety.
 
@@ -19,7 +22,7 @@ Older[^1] consoles do NOT use a Dragon-based mechacon and therefore are not supp
 
 ## FMCB and DVD player
 
-- Deckard[^3]-only: FMCB uses `systemupdate exploit` depending `rom0:ROMVER` region letter. On Deckard[^3] units, MechaPwn can change the region letter: the DEX option will install `A` region for any selected region, CEX option will use a region-specific letter. To avoid broken FMCB, install the FMCB cross-region before using MechaPwn.
+- Deckard[^3]-only: FMCB uses `system update exploit` depending on `rom0:ROMVER` region letter. On Deckard[^3] units, MechaPwn can change the region letter: the DEX option will install `A` region for any selected region, CEX option will use a region-specific letter. To avoid broken FMCB, install the FMCB cross-region before using MechaPwn.
 - CEX option only: FMCB 1.8 and older are region locked. It will stop working if you change the region under the CEX option. To avoid this - use only the DEX option or upgrade to FMCB 1.9
 - CEX option only: DVD player on Pre-Deckard[^4] models is region locked. It (and DVD player-based exploits like FreeDVDBoot) will stop working if you change the region under the CEX option. To avoid this - use only the DEX option or install a DVD player update to the memory card.
 - Force Unlock will disable the DVD player
