@@ -1102,120 +1102,120 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd422) sprintf(RealModelName, "SCPH-50002 ESS");       // 62: 27206291 Satin Silver
     else if (ModelId == 0xd423) sprintf(RealModelName, "SCPH-50003 ESS");       // 66: 27206661 Satin Silver
     else if (ModelId == 0xd424) sprintf(RealModelName, "SCPH-50000 PW");        // 65: 27206501
-    else if (ModelId == 0xd425) sprintf(RealModelName, "SCPH-50011");           // ??: SM1
+    else if (ModelId == 0xd425) sprintf(RealModelName, "SCPH-50011");           // ??: SM1 (box not found)
     // K-chassis
-    else if (ModelId == 0xd426) sprintf(RealModelName, "SCPH-70004");
-    else if (ModelId == 0xd427) sprintf(RealModelName, "SCPH-70003");
-    else if (ModelId == 0xd428) sprintf(RealModelName, "SCPH-70002");
-    else if (ModelId == 0xd429) sprintf(RealModelName, "SCPH-70011");
-    else if (ModelId == 0xd42a) sprintf(RealModelName, "SCPH-70012");
-    else if (ModelId == 0xd42b) sprintf(RealModelName, "SCPH-70000");
-    else if (ModelId == 0xd42c) sprintf(RealModelName, "SCPH-70005");
-    else if (ModelId == 0xd42d) sprintf(RealModelName, "SCPH-70006");
-    else if (ModelId == 0xd42e) sprintf(RealModelName, "SCPH-70007");
-    else if (ModelId == 0xd42f) sprintf(RealModelName, "SCPH-70000 GT");
-    else if (ModelId == 0xd430) sprintf(RealModelName, "SCPH-70008");
-    else if (ModelId == 0xd431) sprintf(RealModelName, "SCPH-70002 SS");
-    else if (ModelId == 0xd432) sprintf(RealModelName, "SCPH-70003 SS");
-    else if (ModelId == 0xd433) sprintf(RealModelName, "SCPH-70004 SS");
-    else if (ModelId == 0xd434) sprintf(RealModelName, "SCPH-70008 SS");
-    else if (ModelId == 0xd435) sprintf(RealModelName, "SCPH-70001");
-    else if (ModelId == 0xd436) sprintf(RealModelName, "SCPH-70010");
-    else if (ModelId == 0xd437) sprintf(RealModelName, "SCPH-70000 CW");
-    else if (ModelId == 0xd438) sprintf(RealModelName, "SCPH-70003 SS");
-    else if (ModelId == 0xd439) sprintf(RealModelName, "SCPH-70004 SS");
-    else if (ModelId == 0xd43a) sprintf(RealModelName, "SCPH-70008 SS");
+    else if (ModelId == 0xd426) sprintf(RealModelName, "SCPH-70004");           // 63, 70: 27207051, 27207052, 27206351, 27206352
+    else if (ModelId == 0xd427) sprintf(RealModelName, "SCPH-70003");           // 63, 70: 27207061, 27207062, ????????, 27206362
+    else if (ModelId == 0xd428) sprintf(RealModelName, "SCPH-70002");           // 63, 70: 27207091, 27206392
+    else if (ModelId == 0xd429) sprintf(RealModelName, "SCPH-70011");           // 63: PK1, 27206331
+    else if (ModelId == 0xd42a) sprintf(RealModelName, "SCPH-70012");           // 63: PK2, 27206341
+    else if (ModelId == 0xd42b) sprintf(RealModelName, "SCPH-70000");           // 63, 78: 27206301, 27206302, 27207802
+    else if (ModelId == 0xd42c) sprintf(RealModelName, "SCPH-70005");           // 63: 27206325
+    else if (ModelId == 0xd42d) sprintf(RealModelName, "SCPH-70006");           // 63: 27206318
+    else if (ModelId == 0xd42e) sprintf(RealModelName, "SCPH-70007");           // 63: 27206316
+    else if (ModelId == 0xd42f) sprintf(RealModelName, "SCPH-70000 GT");        // 72: 27207202
+    else if (ModelId == 0xd430) sprintf(RealModelName, "SCPH-70008");           // 63: 27206381
+    else if (ModelId == 0xd431) sprintf(RealModelName, "SCPH-70002 SS");        // 69: 27206991
+    else if (ModelId == 0xd432) sprintf(RealModelName, "SCPH-70003 SS");        // 69: 27206961
+    else if (ModelId == 0xd433) sprintf(RealModelName, "SCPH-70004 SS");        // 69: 27206951
+    else if (ModelId == 0xd434) sprintf(RealModelName, "SCPH-70008 SS");        // 69: 27206981
+    else if (ModelId == 0xd435) sprintf(RealModelName, "SCPH-70001");           // 77: PK3, 27207731
+    else if (ModelId == 0xd436) sprintf(RealModelName, "SCPH-70010");           // sticker and box not found
+    else if (ModelId == 0xd437) sprintf(RealModelName, "SCPH-70000 CW");        // 79: 27207902
+    else if (ModelId == 0xd438) sprintf(RealModelName, "SCPH-70003 SS");        // 80: 27208063
+    else if (ModelId == 0xd439) sprintf(RealModelName, "SCPH-70004 SS");        // 80: 27208053
+    else if (ModelId == 0xd43a) sprintf(RealModelName, "SCPH-70008 SS");        // 80: 27208081
     // L-chassis
-    else if (ModelId == 0xd43b) sprintf(RealModelName, "SCPH-75001");
-    else if (ModelId == 0xd43c) sprintf(RealModelName, "SCPH-75002");
-    else if (ModelId == 0xd43d) sprintf(RealModelName, "SCPH-75003");
-    else if (ModelId == 0xd43e) sprintf(RealModelName, "SCPH-75004");
-    else if (ModelId == 0xd43f) sprintf(RealModelName, "SCPH-75000 SSS");
-    else if (ModelId == 0xd440) sprintf(RealModelName, "SCPH-75002 SS");
-    else if (ModelId == 0xd441) sprintf(RealModelName, "SCPH-75003 SS");
-    else if (ModelId == 0xd442) sprintf(RealModelName, "SCPH-75004 SS");
-    else if (ModelId == 0xd443) sprintf(RealModelName, "SCPH-75000");
-    else if (ModelId == 0xd444) sprintf(RealModelName, "SCPH-75000 CW");
-    else if (ModelId == 0xd445) sprintf(RealModelName, "SCPH-75006");
-    else if (ModelId == 0xd446) sprintf(RealModelName, "SCPH-75007");
-    else if (ModelId == 0xd447) sprintf(RealModelName, "SCPH-75005");
-    else if (ModelId == 0xd448) sprintf(RealModelName, "SCPH-75010");
-    else if (ModelId == 0xd449) sprintf(RealModelName, "SCPH-75000 FF");
+    else if (ModelId == 0xd43b) sprintf(RealModelName, "SCPH-75001");           // 81, 82: PK4, PK5, 27208131, 27208232
+    else if (ModelId == 0xd43c) sprintf(RealModelName, "SCPH-75002");           // 81: 27208191, ????????
+    else if (ModelId == 0xd43d) sprintf(RealModelName, "SCPH-75003");           // 81, 82: 27208161, 27208262
+    else if (ModelId == 0xd43e) sprintf(RealModelName, "SCPH-75004");           // 81, 82: 27208151, 27208252
+    else if (ModelId == 0xd43f) sprintf(RealModelName, "SCPH-75000 SSS");       // 85: 27208501
+    else if (ModelId == 0xd440) sprintf(RealModelName, "SCPH-75002 SS");        // 87: 27208791
+    else if (ModelId == 0xd441) sprintf(RealModelName, "SCPH-75003 SS");        // 87: 27208761
+    else if (ModelId == 0xd442) sprintf(RealModelName, "SCPH-75004 SS");        // 87: 27208751
+    else if (ModelId == 0xd443) sprintf(RealModelName, "SCPH-75000");           // 82: 27208202
+    else if (ModelId == 0xd444) sprintf(RealModelName, "SCPH-75000 CW");        // 83: 27208302
+    else if (ModelId == 0xd445) sprintf(RealModelName, "SCPH-75006");           // 82: 27208218
+    else if (ModelId == 0xd446) sprintf(RealModelName, "SCPH-75007");           // 82: 27208216
+    else if (ModelId == 0xd447) sprintf(RealModelName, "SCPH-75005");           // 82: 27208225
+    else if (ModelId == 0xd448) sprintf(RealModelName, "SCPH-75010");           // PK6
+    else if (ModelId == 0xd449) sprintf(RealModelName, "SCPH-75000 FF");        // 89: 27208901
  /* else if (ModelId == 0xd44a) sprintf(RealModelName, "???");
     else if (ModelId == 0xd44b) sprintf(RealModelName, "???"); */
-    else if (ModelId == 0xd44c) sprintf(RealModelName, "SCPH-75008");
-    else if (ModelId == 0xd44d) sprintf(RealModelName, "SCPH-75008 SS");
+    else if (ModelId == 0xd44c) sprintf(RealModelName, "SCPH-75008");           // 82: 27208281
+    else if (ModelId == 0xd44d) sprintf(RealModelName, "SCPH-75008 SS");        // 88: 27208881
     // M-chassis
-    else if (ModelId == 0xd44e) sprintf(RealModelName, "SCPH-77001");
-    else if (ModelId == 0xd44f) sprintf(RealModelName, "SCPH-77002");
-    else if (ModelId == 0xd450) sprintf(RealModelName, "SCPH-77003");
-    else if (ModelId == 0xd451) sprintf(RealModelName, "SCPH-77004");
-    else if (ModelId == 0xd452) sprintf(RealModelName, "SCPH-77002 SS");
-    else if (ModelId == 0xd453) sprintf(RealModelName, "SCPH-77003 SS");
-    else if (ModelId == 0xd454) sprintf(RealModelName, "SCPH-77004 SS");
-    else if (ModelId == 0xd455) sprintf(RealModelName, "SCPH-77000");
-    else if (ModelId == 0xd456) sprintf(RealModelName, "SCPH-77000 CW");
-    else if (ModelId == 0xd457) sprintf(RealModelName, "SCPH-77005");
-    else if (ModelId == 0xd458) sprintf(RealModelName, "SCPH-77006");
-    else if (ModelId == 0xd459) sprintf(RealModelName, "SCPH-77007");
-    else if (ModelId == 0xd45a) sprintf(RealModelName, "SCPH-77008");
- /* else if (ModelId == 0xd45b) sprintf(RealModelName, "??? SCPH-77010");
-    else if (ModelId == 0xd45c) sprintf(RealModelName, "??? SCPH-77010 SS"); */
-    else if (ModelId == 0xd45d) sprintf(RealModelName, "SCPH-77001 SS");
-    else if (ModelId == 0xd45e) sprintf(RealModelName, "SCPH-77003 PK");
-    else if (ModelId == 0xd45f) sprintf(RealModelName, "SCPH-77004 PK");
- /* else if (ModelId == 0xd460) sprintf(RealModelName, "??? SCPH-77008 SS"); */
-    else if (ModelId == 0xd461) sprintf(RealModelName, "SCPH-77000 SS");
-    else if (ModelId == 0xd462) sprintf(RealModelName, "SCPH-77000 PK");
-    else if (ModelId == 0xd463) sprintf(RealModelName, "SCPH-77008 PK");
-    else if (ModelId == 0xd464) sprintf(RealModelName, "SCPH-77002 PK");
+    else if (ModelId == 0xd44e) sprintf(RealModelName, "SCPH-77001");           // 91: PK7, PK8: 27209131
+    else if (ModelId == 0xd44f) sprintf(RealModelName, "SCPH-77002");           // 91: 27209191
+    else if (ModelId == 0xd450) sprintf(RealModelName, "SCPH-77003");           // 91: 27209161
+    else if (ModelId == 0xd451) sprintf(RealModelName, "SCPH-77004");           // 91: 27209151, 27209152
+    else if (ModelId == 0xd452) sprintf(RealModelName, "SCPH-77002 SS");        // 95: 27209591
+    else if (ModelId == 0xd453) sprintf(RealModelName, "SCPH-77003 SS");        // 95: 27209561
+    else if (ModelId == 0xd454) sprintf(RealModelName, "SCPH-77004 SS");        // 95, 16: 27209551, 27201651
+    else if (ModelId == 0xd455) sprintf(RealModelName, "SCPH-77000");           // 91: 27209102
+    else if (ModelId == 0xd456) sprintf(RealModelName, "SCPH-77000 CW");        // 93: 27209302
+    else if (ModelId == 0xd457) sprintf(RealModelName, "SCPH-77005");           // 91: 27209125
+    else if (ModelId == 0xd458) sprintf(RealModelName, "SCPH-77006");           // 91: 27209118
+    else if (ModelId == 0xd459) sprintf(RealModelName, "SCPH-77007");           // 91: 27209116
+    else if (ModelId == 0xd45a) sprintf(RealModelName, "SCPH-77008");           // 91: 27209181
+ /* else if (ModelId == 0xd45b) sprintf(RealModelName, "??? SCPH-77008 SS");    // 95: 27209581
+    else if (ModelId == 0xd45c) sprintf(RealModelName, "??? SCPH-77010");       // ??? PK9 not confirmed */
+    else if (ModelId == 0xd45d) sprintf(RealModelName, "SCPH-77001 SS");        // PL1
+    else if (ModelId == 0xd45e) sprintf(RealModelName, "SCPH-77003 PK");        // 97: 27209761
+    else if (ModelId == 0xd45f) sprintf(RealModelName, "SCPH-77004 PK");        // 97: 27209751
+ /* else if (ModelId == 0xd460) sprintf(RealModelName, "??? SCPH-77010 SS");    // PL2 */
+    else if (ModelId == 0xd461) sprintf(RealModelName, "SCPH-77000 SS");        // 96: 27209601
+    else if (ModelId == 0xd462) sprintf(RealModelName, "SCPH-77000 PK");        // 97: 27209701
+    else if (ModelId == 0xd463) sprintf(RealModelName, "SCPH-77008 PK");        // 97: 27209781
+    else if (ModelId == 0xd464) sprintf(RealModelName, "SCPH-77002 PK");        // 97: 27209791
     // N-chassis
-    else if (ModelId == 0xd465) sprintf(RealModelName, "SCPH-79001");
- /* else if (ModelId == 0xd466) sprintf(RealModelName, "??? SCPH-79000"); */
-    else if (ModelId == 0xd467) sprintf(RealModelName, "SCPH-79000 CW");
-    else if (ModelId == 0xd468) sprintf(RealModelName, "SCPH-79002");
-    else if (ModelId == 0xd469) sprintf(RealModelName, "SCPH-79001 SS");
- /* else if (ModelId == 0xd46a) sprintf(RealModelName, "??? SCPH-79005"); */
-    else if (ModelId == 0xd46b) sprintf(RealModelName, "SCPH-79006");
- /* else if (ModelId == 0xd46c) sprintf(RealModelName, "??? SCPH-79007"); */
-    else if (ModelId == 0xd46d) sprintf(RealModelName, "SCPH-79000 SS");
-    else if (ModelId == 0xd46e) sprintf(RealModelName, "SCPH-79003");
-    else if (ModelId == 0xd46f) sprintf(RealModelName, "SCPH-79004");
-    else if (ModelId == 0xd470) sprintf(RealModelName, "SCPH-79010");
-    else if (ModelId == 0xd471) sprintf(RealModelName, "SCPH-79003 SS");
- /* else if (ModelId == 0xd472) sprintf(RealModelName, "??? SCPH-79004 SS"); */
-    else if (ModelId == 0xd473) sprintf(RealModelName, "SCPH-79008");
-    else if (ModelId == 0xd474) sprintf(RealModelName, "SCPH-79001 CW");
+    else if (ModelId == 0xd465) sprintf(RealModelName, "SCPH-79001");           // 240, PA0, PA9: 27224031
+ /* else if (ModelId == 0xd466) sprintf(RealModelName, "??? SCPH-79000");       // 240: 27224001 */
+    else if (ModelId == 0xd467) sprintf(RealModelName, "SCPH-79000 CW");        // 242: 27224201
+    else if (ModelId == 0xd468) sprintf(RealModelName, "SCPH-79002");           // 240: 27224091
+    else if (ModelId == 0xd469) sprintf(RealModelName, "SCPH-79001 SS");        // 241: 27224131
+ /* else if (ModelId == 0xd46a) sprintf(RealModelName, "??? SCPH-79005");       // 240: 27224025 */
+    else if (ModelId == 0xd46b) sprintf(RealModelName, "SCPH-79006");           // 240: 27224018
+ /* else if (ModelId == 0xd46c) sprintf(RealModelName, "??? SCPH-79007");       // 240: 27224016 */
+    else if (ModelId == 0xd46d) sprintf(RealModelName, "SCPH-79000 SS");        // 241: 27224101
+    else if (ModelId == 0xd46e) sprintf(RealModelName, "SCPH-79003");           // 240: 27224061
+    else if (ModelId == 0xd46f) sprintf(RealModelName, "SCPH-79004");           // 240: 27224051, 27224052
+    else if (ModelId == 0xd470) sprintf(RealModelName, "SCPH-79010");           // 240: SN0, 27224035
+    else if (ModelId == 0xd471) sprintf(RealModelName, "SCPH-79003 SS");        // 241: 27224161
+ /* else if (ModelId == 0xd472) sprintf(RealModelName, "??? SCPH-79004 SS");    // 241: 27224151 */
+    else if (ModelId == 0xd473) sprintf(RealModelName, "SCPH-79008");           // 240: 27224081
+    else if (ModelId == 0xd474) sprintf(RealModelName, "SCPH-79001 CW");        // PW0
     // P/R-chassis
-    else if (ModelId == 0xd475) sprintf(RealModelName, "SCPH-90000");
-    else if (ModelId == 0xd476) sprintf(RealModelName, "SCPH-90000 CW");
-    else if (ModelId == 0xd477) sprintf(RealModelName, "SCPH-90000 SS");
-    else if (ModelId == 0xd478) sprintf(RealModelName, "SCPH-90006");
-    else if (ModelId == 0xd479) sprintf(RealModelName, "SCPH-90006 CW");
-    else if (ModelId == 0xd47a) sprintf(RealModelName, "SCPH-90006 SS"); // Needs confirmation
-    else if (ModelId == 0xd47b) sprintf(RealModelName, "SCPH-90005");
- /* else if (ModelId == 0xd47c) sprintf(RealModelName, "??? SCPH-90005 CW");
-    else if (ModelId == 0xd47d) sprintf(RealModelName, "??? SCPH-90005 SS"); */
-    else if (ModelId == 0xd47e) sprintf(RealModelName, "SCPH-90007");
-    else if (ModelId == 0xd47f) sprintf(RealModelName, "SCPH-90007 CW");
- /* else if (ModelId == 0xd480) sprintf(RealModelName, "??? SCPH-90007 SS"); */
-    else if (ModelId == 0xd481) sprintf(RealModelName, "SCPH-90001");
-    else if (ModelId == 0xd482) sprintf(RealModelName, "SCPH-90001 SS");
-    else if (ModelId == 0xd483) sprintf(RealModelName, "SCPH-90004");
-    else if (ModelId == 0xd484) sprintf(RealModelName, "SCPH-90004 SS");
-    else if (ModelId == 0xd485) sprintf(RealModelName, "SCPH-90002");
-    else if (ModelId == 0xd486) sprintf(RealModelName, "SCPH-90003");
- /* else if (ModelId == 0xd487) sprintf(RealModelName, "??? SCPH-90005 CR"); */
-    else if (ModelId == 0xd488) sprintf(RealModelName, "SCPH-90006 CR");
-    else if (ModelId == 0xd489) sprintf(RealModelName, "SCPH-90007 CR");
-    else if (ModelId == 0xd48a) sprintf(RealModelName, "SCPH-90010");
-    else if (ModelId == 0xd48b) sprintf(RealModelName, "SCPH-90000 CR");
-    else if (ModelId == 0xd48c) sprintf(RealModelName, "SCPH-90008");
-    else if (ModelId == 0xd48d) sprintf(RealModelName, "SCPH-90008 SS");
+    else if (ModelId == 0xd475) sprintf(RealModelName, "SCPH-90000");           // 244, 248: 27224401, 27224801
+    else if (ModelId == 0xd476) sprintf(RealModelName, "SCPH-90000 CW");        // 245, 249: 27224501, 27224901
+    else if (ModelId == 0xd477) sprintf(RealModelName, "SCPH-90000 SS");        // 246: 27224601        // 4990: 27499001
+    else if (ModelId == 0xd478) sprintf(RealModelName, "SCPH-90006");           // 244: 27224418
+    else if (ModelId == 0xd479) sprintf(RealModelName, "SCPH-90006 CW");        // 245: 27224518
+ /* else if (ModelId == 0xd47a) sprintf(RealModelName, "SCPH-90006 SS");        // 246: 27224618 // needs sticker confirmation */
+    else if (ModelId == 0xd47b) sprintf(RealModelName, "SCPH-90005");           // 244: 27224425        // 4994: 27499475
+ /* else if (ModelId == 0xd47c) sprintf(RealModelName, "??? SCPH-90005 CW");    // 245: 27224525
+    else if (ModelId == 0xd47d) sprintf(RealModelName, "??? SCPH-90005 SS");    // 246: 27224625 */
+    else if (ModelId == 0xd47e) sprintf(RealModelName, "SCPH-90007");           // 244: 27224416        // 4245: 27424581
+    else if (ModelId == 0xd47f) sprintf(RealModelName, "SCPH-90007 CW");        // 245: 27224516        // 4246: 27424681
+ /* else if (ModelId == 0xd480) sprintf(RealModelName, "??? SCPH-90007 SS");    // 246: 27224616        // 4247: 27424731 */
+    else if (ModelId == 0xd481) sprintf(RealModelName, "SCPH-90001");                                   // 4090: PA2, 27409054
+    else if (ModelId == 0xd482) sprintf(RealModelName, "SCPH-90001 SS");        // 246: PA7, 27224631   // 4090, 4991: PA7, 27499104, PA8, 27409054
+    else if (ModelId == 0xd483) sprintf(RealModelName, "SCPH-90004");           // 244: 27224451        // 4993: 27499372
+    else if (ModelId == 0xd484) sprintf(RealModelName, "SCPH-90004 SS");        // 246: 27224651
+    else if (ModelId == 0xd485) sprintf(RealModelName, "SCPH-90002");           // 244: 27224491        // 4091: 27409166
+    else if (ModelId == 0xd486) sprintf(RealModelName, "SCPH-90003");           // 244: 27224461
+ /* else if (ModelId == 0xd487) sprintf(RealModelName, "??? SCPH-90005 CR");    // 247: 27224725        // 4242: 27424225 */
+    else if (ModelId == 0xd488) sprintf(RealModelName, "SCPH-90006 CR");                                // 4244: 27424428
+    else if (ModelId == 0xd489) sprintf(RealModelName, "SCPH-90007 CR");                                // 4246: 27424631
+    else if (ModelId == 0xd48a) sprintf(RealModelName, "SCPH-90010");                                   // 4248: SP9, 27424810
+    else if (ModelId == 0xd48b) sprintf(RealModelName, "SCPH-90000 CR");                                // 4249: 27424901
+    else if (ModelId == 0xd48c) sprintf(RealModelName, "SCPH-90008");           // 244: 27224481        // 4247: 27424784
+    else if (ModelId == 0xd48d) sprintf(RealModelName, "SCPH-90008 SS");        // 246: 27224681
  /* else if (ModelId == 0xd48e) sprintf(RealModelName, "???"); */
     else if (ModelId == 0xd48f) sprintf(RealModelName, "PX300-1");
     else if (ModelId == 0xd490) sprintf(RealModelName, "PX300-2");
-    else if (ModelId == 0xd491) sprintf(RealModelName, "SCPH-90010 CR");
+    else if (ModelId == 0xd491) sprintf(RealModelName, "SCPH-90010 CR");        // SM3
     // clang-format on
     else
     {
