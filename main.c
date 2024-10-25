@@ -1090,7 +1090,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd416) sprintf(RealModelName, "SCPH-50003 AQ");        // 51: 27205161
  /* else if (ModelId == 0xd417) sprintf(RealModelName, "??? SCPH-55005 GT/N");  // 50: 27205025 */
     else if (ModelId == 0xd418) sprintf(RealModelName, "SCPH-55006 GT");        // 47: 27204718
- /* else if (ModelId == 0xd419) sprintf(RealModelName, "??? SCPH-55007 GT");    // 47: 27204716 */
+    else if (ModelId == 0xd419) sprintf(RealModelName, "SCPH-55007 GT");        // 47: 27204716
     else if (ModelId == 0xd41a) sprintf(RealModelName, "SCPH-50008 SS");        // 40: 27204081
     else if (ModelId == 0xd41b) sprintf(RealModelName, "SCPH-50004 AQ");        // 51: 27205151
     else if (ModelId == 0xd41c) sprintf(RealModelName, "SCPH-50005 SS/N");      // 55: 27205525
@@ -1226,10 +1226,10 @@ void checkUnsupportedVersion()
 
     sprintf(color, "Black");
     if ((ModelId >= 0xd380 && ModelId <= 0xd388 && ModelId != 0xd384) ||
-        (ModelId == 0xd414) || (ModelId == 0xd418) || (ModelId == 0xd41e) || /* (ModelId == 0xd419) || */
-        (ModelId == 0xd424) || (ModelId == 0xd437) || (ModelId == 0xd444) ||
-        (ModelId == 0xd456) || (ModelId == 0xd474) || (ModelId == 0xd476) || /* (ModelId == 0xd47c) || */
-        (ModelId == 0xd479) || (ModelId == 0xd47f))
+        (ModelId == 0xd414) || (ModelId == 0xd418) || (ModelId == 0xd419) ||
+        (ModelId == 0xd41e) || (ModelId == 0xd424) || (ModelId == 0xd437) ||
+        (ModelId == 0xd444) || (ModelId == 0xd456) || (ModelId == 0xd474) || /* (ModelId == 0xd47c) || */
+        (ModelId == 0xd476) || (ModelId == 0xd479) || (ModelId == 0xd47f))
         sprintf(color, "White");
     else if ((ModelId == 0xd408) || (ModelId == 0xd409) || (ModelId == 0xd40a) ||
              (ModelId == 0xd412) || (ModelId == 0xd415) || (ModelId == 0xd41a) || /* (ModelId == 0xd417) || */
