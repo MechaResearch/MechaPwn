@@ -1216,6 +1216,7 @@ void checkUnsupportedVersion()
     else if (ModelId == 0xd48f) sprintf(RealModelName, "PX300-1");
     else if (ModelId == 0xd490) sprintf(RealModelName, "PX300-2");
     else if (ModelId == 0xd491) sprintf(RealModelName, "SCPH-90010 CR");        // SM3
+    else if (ModelId == 0x9000) sprintf(RealModelName, "SYSTEM246 C");
     // clang-format on
     else
     {
