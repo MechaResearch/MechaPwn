@@ -8,3 +8,4 @@
 !.github
 !.editorconfig
 !.clang-format
+*_irx.c
