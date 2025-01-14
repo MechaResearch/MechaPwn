@@ -1,6 +1,6 @@
 name: 🐛 Bug report
 description: Create a report to help us improve
-title: "[ISSUE]: "
+title: "[ISSUE]: " Model ID UNKNOWN
 labels: [bug]
 body:
   - type: markdown
@@ -21,10 +21,10 @@ body:
   - type: input
     id: console
     attributes:
-      label: Console model
+      label: Console model PS2 Slim Pink
       description: you can see it on the console sticker or inside OSDSYS (press triangle on main menú)
-      placeholder: SCPH-?????
-    validations:
+      placeholder: SCPH-77003
+    validations: 
       required: true
 
   - type: textarea
@@ -32,7 +32,7 @@ body:
     attributes:
       label: Describe the issue
       description: Drag and drop your nvram backup and sticker photo here, in text area. And add a clear and concise description of what the issue is.
-      placeholder: My issue is...
+      placeholder: My issue is... when loading into mechapwn after pressing continue with the world map. I get model id unknown.
     validations:
       required: true
 
