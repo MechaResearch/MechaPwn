@@ -175,7 +175,7 @@ static const console_record_t DB[] = {
     {0xd458, "SCPH-77006", 0, BLACK},               // 91: 27209118
     {0xd459, "SCPH-77007", 0, BLACK},               // 91: 27209116
     {0xd45a, "SCPH-77008", 0, BLACK},               // 91: 27209181
-//  {0xd45b, "??? SCPH-77008 SS", 0, UNKNOWN},      // 95: 27209581
+    {0xd45b, "SCPH-77008 SS", 0, SATIN_SILVER},     // 95: 27209581
 //  {0xd45c, "??? SCPH-77010", 0, UNKNOWN},         // ??? PK9 not confirmed */
     {0xd45d, "SCPH-77001 SS", 0, SATIN_SILVER},     // PL1
     {0xd45e, "SCPH-77003 PK", 0, PINK},             // 97: 27209761
