@@ -97,7 +97,7 @@ static const console_record_t DB[] = {
     {0xd40d, "SCPH-50006", 0, BLACK},               // 35: 27203512, 27203518
     {0xd40e, "SCPH-50007", 0, BLACK},               // 35: 27203516
     {0xd40f, "SCPH-50008", 0, BLACK},               // 35: 27203581
- /* {0xd410, "SCPH-50009", 0, BLACK}, */
+/*  {0xd410, "SCPH-50009", 0, BLACK}, */
     {0xd411, "SCPH-50000 NB", 0, BLACK},            // 45, 46, 54: 27204501, 27204502, 27204604, 27205402
     {0xd412, "SCPH-50000 TSS", 0, SATIN_SILVER},    // 40: 27204004
     {0xd413, "SCPH-55000 GU", 0, GOLD},             // 67: 27206702
@@ -176,30 +176,30 @@ static const console_record_t DB[] = {
     {0xd459, "SCPH-77007", 0, BLACK},               // 91: 27209116
     {0xd45a, "SCPH-77008", 0, BLACK},               // 91: 27209181
     {0xd45b, "SCPH-77008 SS", 0, SATIN_SILVER},     // 95: 27209581
-//  {0xd45c, "??? SCPH-77010", 0, UNKNOWN},         // ??? PK9 not confirmed */
+//  {0xd45c, "??? SCPH-77010", 0, UNKNOWN},         // ??? PK9 not confirmed
     {0xd45d, "SCPH-77001 SS", 0, SATIN_SILVER},     // PL1
     {0xd45e, "SCPH-77003 PK", 0, PINK},             // 97: 27209761
     {0xd45f, "SCPH-77004 PK", 0, PINK},             // 97: 27209751
-//  {0xd460, "SCPH-77010 SS", 0, SATIN_SILVER},     // PL2 */
+//  {0xd460, "SCPH-77010 SS", 0, SATIN_SILVER},     // PL2
     {0xd461, "SCPH-77000 SS", 0, SATIN_SILVER},     // 96: 27209601
     {0xd462, "SCPH-77000 PK", 0, PINK},             // 97: 27209701
     {0xd463, "SCPH-77008 PK", 0, PINK},             // 97: 27209781
     {0xd464, "SCPH-77002 PK", 0, PINK},             // 97: 27209791
                                                     // N-chassis
     {0xd465, "SCPH-79001", 0, BLACK},               // 240, PA0, PA9: 27224031
-//  {0xd466, "SCPH-79000", 0, UNKNOWN},             // 240: 27224001 */
+    {0xd466, "SCPH-79000", 0, BLACK},               // 240: 27224001
     {0xd467, "SCPH-79000 CW", 0, WHITE},            // 242: 27224201
     {0xd468, "SCPH-79002", 0, BLACK},               // 240: 27224091
     {0xd469, "SCPH-79001 SS", 0, SATIN_SILVER},     // 241: 27224131
-//  {0xd46a, "??? SCPH-79005, 0, UNKNOWN},          // 240: 27224025 */
+//  {0xd46a, "??? SCPH-79005", 0, UNKNOWN},          // 240: 27224025
     {0xd46b, "SCPH-79006", 0, BLACK},               // 240: 27224018
-//  {0xd46c, "??? SCPH-79007, 0, UNKNOWN},          // 240: 27224016 */
+//  {0xd46c, "??? SCPH-79007", 0, UNKNOWN},          // 240: 27224016
     {0xd46d, "SCPH-79000 SS", 0, SATIN_SILVER},     // 241: 27224101
     {0xd46e, "SCPH-79003", 0, BLACK},               // 240: 27224061
     {0xd46f, "SCPH-79004", 0, BLACK},               // 240: 27224051, 27224052
     {0xd470, "SCPH-79010", 0, BLACK},               // 240: SN0, 27224035
     {0xd471, "SCPH-79003 SS", 0, SATIN_SILVER},     // 241: 27224161
-//  {0xd472, "SCPH-79004 SS", 0, SATIN_SILVER},     // 241: 27224151 */
+//  {0xd472, "SCPH-79004 SS", 0, SATIN_SILVER},     // 241: 27224151
     {0xd473, "SCPH-79008", 0, BLACK},               // 240: 27224081
     {0xd474, "SCPH-79001 CW", 0, WHITE},            // PW0
                                                     // P/R-chassis
@@ -211,10 +211,10 @@ static const console_record_t DB[] = {
 //  {0xd47a, "SCPH-90006 SS", 0, SATIN_SILVER},     // 246: 27224618 // needs sticker confirmation
     {0xd47b, "SCPH-90005", 0, BLACK},               // 244: 27224425        // 4994: 27499475
 //  {0xd47c, "SCPH-90005 CW", 0, WHITE},            // 245: 27224525
-//  {0xd47d, "SCPH-90005 SS, 0, SATIN_SILVER},      // 246: 27224625
+//  {0xd47d, "SCPH-90005 SS", 0, SATIN_SILVER},      // 246: 27224625
     {0xd47e, "SCPH-90007", 0, BLACK},               // 244: 27224416        // 4245: 27424581
     {0xd47f, "SCPH-90007 CW", 0, WHITE},            // 245: 27224516        // 4246: 27424681
-//  {0xd480, "SCPH-90007 SS, 0, SATIN_SILVER},      // 246: 27224616        // 4247: 27424731
+//  {0xd480, "SCPH-90007 SS", 0, SATIN_SILVER},      // 246: 27224616        // 4247: 27424731
     {0xd481, "SCPH-90001", 0, BLACK},               // 4090: PA2, 27409054
     {0xd482, "SCPH-90001 SS", 0, SATIN_SILVER},     // 246: PA7, 27224631   // 4090, 4991: PA7, 27499104, PA8, 27409054
     {0xd483, "SCPH-90004", 0, BLACK},               // 244: 27224451        // 4993: 27499372
