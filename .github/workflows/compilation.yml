@@ -8,7 +8,7 @@ jobs:
   build:
     name: MechaPwn compilation
     runs-on: ubuntu-latest
-    container: ghcr.io/ps2homebrew/ps2homebrew:main
+    container: ghcr.io/ps2homebrew/ps2homebrew@sha256:9cf3f8497e5a49e3a08cdf96aa9a5b97f119d554e21e3925b3cc84485846b3ce
     # ghcr.io/ps2homebrew/ps2homebrew@sha256:9cf3f8497e5a49e3a08cdf96aa9a5b97f119d554e21e3925b3cc84485846b3ce
     # instead of "ps2dev/ps2dev:latest" you can use different tags, for example for old projects you can use "ps2dev/ps2dev:v1.0"
     steps:
