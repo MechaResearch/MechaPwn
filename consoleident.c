@@ -104,7 +104,7 @@ static const console_record_t DB[] = {
     {0xd414, "SCPH-55000 GT", 0, WHITE},            // 47, 49: 27204704, 27204904
     {0xd415, "SCPH-50009 SS", 0, SATIN_SILVER},     // 37, 40: 27203720, 27204020
     {0xd416, "SCPH-50003 AQ", 0, AQUA_BLUE},        // 51: 27205161
-/*  {0xd417, "SCPH-55005 GT/N", 0, WHITE},          // 50: 27205025 */
+    {0xd417, "SCPH-55005 GT/N", 0, WHITE},          // 50: 27205025
     {0xd418, "SCPH-55006 GT", 0, WHITE},            // 47: 27204718
     {0xd419, "SCPH-55007 GT", 0, WHITE},            // 47: 27204716
     {0xd41a, "SCPH-50008 SS", 0, SATIN_SILVER},     // 40: 27204081
