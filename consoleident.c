@@ -87,8 +87,8 @@ static const console_record_t DB[] = {
     {0xd403, "SCPH-50000", 0, BLACK},               // 35: 27203500, 27203502
     {0xd404, "SCPH-50000 MB/NH", 0, MIDNIGHT_BLUE}, // 39, 43, 60: 27203900, 27203902, 27204302, 27206002
     {0xd405, "SCPH-50002", 0, BLACK},               // 35: 27203591
-    {0xd406, "SCPH-50003", 0, BLACK},               // 35: 227203561
-    {0xd407, "SCPH-50004", 0, BLACK},               // 35: 227203551, 27203552
+    {0xd406, "SCPH-50003", 0, BLACK},               // 35: 27203561
+    {0xd407, "SCPH-50004", 0, BLACK},               // 35: 27203551, 27203552
     {0xd408, "SCPH-50002 SS", 0, SATIN_SILVER},     // 40: 27204091, Silver Prestige Line
     {0xd409, "SCPH-50003 SS", 0, SATIN_SILVER},     // 40: 27204061, Silver Prestige Line
     {0xd40a, "SCPH-50004 SS", 0, SATIN_SILVER},     // 40: 27204051, 27204052, Silver Prestige Line
@@ -191,9 +191,9 @@ static const console_record_t DB[] = {
     {0xd467, "SCPH-79000 CW", 0, WHITE},            // 242: 27224201
     {0xd468, "SCPH-79002", 0, BLACK},               // 240: 27224091
     {0xd469, "SCPH-79001 SS", 0, SATIN_SILVER},     // 241: 27224131
-//  {0xd46a, "??? SCPH-79005", 0, UNKNOWN},          // 240: 27224025
+//  {0xd46a, "??? SCPH-79005", 0, UNKNOWN},         // 240: 27224025
     {0xd46b, "SCPH-79006", 0, BLACK},               // 240: 27224018
-//  {0xd46c, "??? SCPH-79007", 0, UNKNOWN},          // 240: 27224016
+//  {0xd46c, "??? SCPH-79007", 0, UNKNOWN},         // 240: 27224016
     {0xd46d, "SCPH-79000 SS", 0, SATIN_SILVER},     // 241: 27224101
     {0xd46e, "SCPH-79003", 0, BLACK},               // 240: 27224061
     {0xd46f, "SCPH-79004", 0, BLACK},               // 240: 27224051, 27224052
@@ -208,18 +208,18 @@ static const console_record_t DB[] = {
     {0xd477, "SCPH-90000 SS", 0, SATIN_SILVER},     // 246: 27224601        // 4990: 27499001
     {0xd478, "SCPH-90006", 0, BLACK},               // 244: 27224418
     {0xd479, "SCPH-90006 CW", 0, WHITE},            // 245: 27224518
-//  {0xd47a, "SCPH-90006 SS", 0, SATIN_SILVER},     // 246: 27224618 // needs sticker confirmation
+    {0xd47a, "SCPH-90006 SS", 0, SATIN_SILVER},     // 246: 27224618 // needs sticker confirmation
     {0xd47b, "SCPH-90005", 0, BLACK},               // 244: 27224425        // 4994: 27499475
 //  {0xd47c, "SCPH-90005 CW", 0, WHITE},            // 245: 27224525
-//  {0xd47d, "SCPH-90005 SS", 0, SATIN_SILVER},      // 246: 27224625
+//  {0xd47d, "SCPH-90005 SS", 0, SATIN_SILVER},     // 246: 27224625
     {0xd47e, "SCPH-90007", 0, BLACK},               // 244: 27224416        // 4245: 27424581
     {0xd47f, "SCPH-90007 CW", 0, WHITE},            // 245: 27224516        // 4246: 27424681
-//  {0xd480, "SCPH-90007 SS", 0, SATIN_SILVER},      // 246: 27224616        // 4247: 27424731
+//  {0xd480, "SCPH-90007 SS", 0, SATIN_SILVER},     // 246: 27224616        // 4247: 27424731
     {0xd481, "SCPH-90001", 0, BLACK},               // 4090: PA2, 27409054
     {0xd482, "SCPH-90001 SS", 0, SATIN_SILVER},     // 246: PA7, 27224631   // 4090, 4991: PA7, 27499104, PA8, 27409054
     {0xd483, "SCPH-90004", 0, BLACK},               // 244: 27224451        // 4993: 27499372
     {0xd484, "SCPH-90004 SS", 0, SATIN_SILVER},     // 246: 27224651
-    {0xd485, "SCPH-90002", 0, BLACK},               // 244: 27224491       // 4091: 27409166
+    {0xd485, "SCPH-90002", 0, BLACK},               // 244: 27224491        // 4091: 27409166
     {0xd486, "SCPH-90003", 0, BLACK},               // 244: 27224461
 //  {0xd487, "SCPH-90005 CR", 0, CINNABAR_RED},     // 247: 27224725        // 4242: 27424225
     {0xd488, "SCPH-90006 CR", 0, CINNABAR_RED},     // 4244: 27424428
