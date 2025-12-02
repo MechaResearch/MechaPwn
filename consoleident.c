@@ -41,8 +41,8 @@ static const console_record_t DB[] = {
     {0xd220, "SCPH-39000 TB", 0, BLUE},
     {0xd221, "SCPH-39000 RC", 0, BLACK},
     {0xd222, "SCPH-39006", 0, BLACK},
-//  {0xd223, "SCPH-39005", 0, BLACK},
-//  {0xd224, "SCPH-39007", 0, BLACK},
+//  {0xd223, "SCPH-39007", 0, BLACK},
+//  {0xd224, "??? DTL-H30005", DEX, BLACK},
     {0xd225, "DTL-H10100", DEX | PROTOKERNEL, BLACK},
     {0xd226, "DTL-H30100", DEX, BLACK},
     {0xd227, "DTL-H30101", DEX, BLACK},
@@ -52,6 +52,7 @@ static const console_record_t DB[] = {
     {0xd22b, "SCPH-39000 AQ", 0, AQUA_BLUE},
     {0xd22c, "SCPH-39000 SA", 0, PINK},
     {0xd22d, "SCPH-39010/N", 0, BLACK},
+    {0xd22e, "SCPH-39005", 0, BLACK},
     // Deckard
     // d300 = SCPH-50000, whats that?
     {0xd301, "DTL-H50000", DEX, BLACK},
@@ -83,7 +84,7 @@ static const console_record_t DB[] = {
     // H, I, J -chassis
 //  {0xd400, "SCPH-50000", 0, BLACK},               // 35: PX1, PX2, 27203531, 27203532
     {0xd401, "SCPH-50001/N", 0, BLACK},             // 37: PX7, PX8, 27203731, 27203732
-    {0xd402, "SCPH-50010/N", 0, BLACK},             // ??: PU6
+    {0xd402, "SCPH-50010/N", 0, BLACK},             // 37: PU6: 27203741
     {0xd403, "SCPH-50000", 0, BLACK},               // 35: 27203500, 27203502
     {0xd404, "SCPH-50000 MB/NH", 0, MIDNIGHT_BLUE}, // 39, 43, 60: 27203900, 27203902, 27204302, 27206002
     {0xd405, "SCPH-50002", 0, BLACK},               // 35: 27203591
@@ -124,7 +125,7 @@ static const console_record_t DB[] = {
     {0xd427, "SCPH-70003", 0, BLACK},               // 63, 70: 27207061, 27207062, ????????, 27206362
     {0xd428, "SCPH-70002", 0, BLACK},               // 63, 70: 27207091, 27206392
     {0xd429, "SCPH-70011", 0, BLACK},               // 63: PK1, 27206331
-    {0xd42a, "SCPH-70012", 0, BLACK},               // 63: PK2, 27206341
+    {0xd42a, "SCPH-70012", 0, BLACK},               // 63: PK2, 27206341, 27207141
     {0xd42b, "SCPH-70000", 0, BLACK},               // 63, 78: 27206301, 27206302, 27207802
     {0xd42c, "SCPH-70005", 0, BLACK},               // 63: 27206325
     {0xd42d, "SCPH-70006", 0, BLACK},               // 63: 27206318
@@ -155,14 +156,14 @@ static const console_record_t DB[] = {
     {0xd445, "SCPH-75006", 0, BLACK},               // 82: 27208218
     {0xd446, "SCPH-75007", 0, BLACK},               // 82: 27208216
     {0xd447, "SCPH-75005", 0, BLACK},               // 82: 27208225
-    {0xd448, "SCPH-75010", 0, BLACK},               // PK6
+    {0xd448, "SCPH-75010", 0, BLACK},               // ??: PK6
     {0xd449, "SCPH-75000 FF", 0, BLACK},            // 89: 27208901
 //  {0xd44a, "???", 0, UNKNOWN},
 //  {0xd44b, "???", 0, UNKNOWN},
     {0xd44c, "SCPH-75008", 0, BLACK},               // 82: 27208281
     {0xd44d, "SCPH-75008 SS", 0, SATIN_SILVER},     // 88: 27208881
                                                     // M-chassis
-    {0xd44e, "SCPH-77001", 0, BLACK},               // 91: PK7, PK8: 27209131
+    {0xd44e, "SCPH-77001", 0, BLACK},               // 91: PK7, PK8: 27209131, 27209132
     {0xd44f, "SCPH-77002", 0, BLACK},               // 91: 27209191
     {0xd450, "SCPH-77003", 0, BLACK},               // 91: 27209161
     {0xd451, "SCPH-77004", 0, BLACK},               // 91: 27209151, 27209152
@@ -176,11 +177,11 @@ static const console_record_t DB[] = {
     {0xd459, "SCPH-77007", 0, BLACK},               // 91: 27209116
     {0xd45a, "SCPH-77008", 0, BLACK},               // 91: 27209181
     {0xd45b, "SCPH-77008 SS", 0, SATIN_SILVER},     // 95: 27209581
-//  {0xd45c, "??? SCPH-77010", 0, UNKNOWN},         // ??? PK9 not confirmed
-    {0xd45d, "SCPH-77001 SS", 0, SATIN_SILVER},     // PL1
+//  {0xd45c, "??? SCPH-77010", 0, UNKNOWN},         // ??: PK9
+    {0xd45d, "SCPH-77001 SS", 0, SATIN_SILVER},     // 95: PL1: 27209531
     {0xd45e, "SCPH-77003 PK", 0, PINK},             // 97: 27209761
     {0xd45f, "SCPH-77004 PK", 0, PINK},             // 97: 27209751
-//  {0xd460, "SCPH-77010 SS", 0, SATIN_SILVER},     // PL2
+//  {0xd460, "SCPH-77010 SS", 0, SATIN_SILVER},     // ??: PL2
     {0xd461, "SCPH-77000 SS", 0, SATIN_SILVER},     // 96: 27209601
     {0xd462, "SCPH-77000 PK", 0, PINK},             // 97: 27209701
     {0xd463, "SCPH-77008 PK", 0, PINK},             // 97: 27209781
@@ -201,14 +202,14 @@ static const console_record_t DB[] = {
     {0xd471, "SCPH-79003 SS", 0, SATIN_SILVER},     // 241: 27224161
 //  {0xd472, "SCPH-79004 SS", 0, SATIN_SILVER},     // 241: 27224151
     {0xd473, "SCPH-79008", 0, BLACK},               // 240: 27224081
-    {0xd474, "SCPH-79001 CW", 0, WHITE},            // PW0
+    {0xd474, "SCPH-79001 CW", 0, WHITE},            // ???: PW0
                                                     // P/R-chassis
     {0xd475, "SCPH-90000", 0, BLACK},               // 244, 248: 27224401, 27224801
     {0xd476, "SCPH-90000 CW", 0, WHITE},            // 245, 249: 27224501, 27224901
     {0xd477, "SCPH-90000 SS", 0, SATIN_SILVER},     // 246: 27224601        // 4990: 27499001
     {0xd478, "SCPH-90006", 0, BLACK},               // 244: 27224418
     {0xd479, "SCPH-90006 CW", 0, WHITE},            // 245: 27224518
-    {0xd47a, "SCPH-90006 SS", 0, SATIN_SILVER},     // 246: 27224618 // needs sticker confirmation
+    {0xd47a, "SCPH-90006 SS", 0, SATIN_SILVER},     // 246: 27224618
     {0xd47b, "SCPH-90005", 0, BLACK},               // 244: 27224425        // 4994: 27499475
 //  {0xd47c, "SCPH-90005 CW", 0, WHITE},            // 245: 27224525
 //  {0xd47d, "SCPH-90005 SS", 0, SATIN_SILVER},     // 246: 27224625
