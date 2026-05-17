@@ -47,13 +47,16 @@ void MechaDeinit()
     memset(&SifRpcClientMechaScmd, 0, sizeof(SifRpcClientData_t));
 }
 
-int MechaScmd(u8 cmd, void *input, u8 inputlength, void *output)
+int MechaScmd(u8 cmd, void *input, u8 inputlength, void *output, u8 outputlength)
 {
     struct MechaScmdParams *params = (struct MechaScmdParams *)RpcBuffer;
+    if (inputlength > sizeof(params->input) || outputlength > sizeof(params->output) || (inputlength > 0 && input == NULL))
+        return 0;
 
     params->cmd                    = cmd;
     params->inputlength            = inputlength;
-    memcpy(params->input, input, inputlength);
+    if (inputlength > 0)
+        memcpy(params->input, input, inputlength);
 
     if (SifCallRpc(&SifRpcClientMechaScmd, 1, 0, RpcBuffer, sizeof(RpcBuffer), RpcBuffer, sizeof(RpcBuffer), NULL, NULL) < 0)
     {
@@ -61,7 +64,8 @@ int MechaScmd(u8 cmd, void *input, u8 inputlength, void *output)
         return 0;
     }
 
-    memcpy(output, params->output, 16);
+    if (output && outputlength > 0)
+        memcpy(output, params->output, outputlength);
 
     return params->result;
 }
@@ -72,7 +76,7 @@ char getMechaVersion(uint8_t *data)
     u8 output[16];
     input[0] = 0x00;
 
-    if (MechaScmd(0x03, input, sizeof(input), output) != 1)
+    if (MechaScmd(0x03, input, sizeof(input), output, sizeof(output)) != 1)
     {
         return 0;
     }
@@ -87,7 +91,7 @@ char getMechaBuildDate(uint8_t *data)
     u8 input[1];
     u8 output[16];
     input[0] = 0xfd;
-    if (MechaScmd(0x03, input, sizeof(input), output) != 1 || output[0] != 0)
+    if (MechaScmd(0x03, input, sizeof(input), output, sizeof(output)) != 1 || output[0] != 0)
     {
         _printf("Failed to read the build date!\n");
         return 0;
@@ -107,13 +111,13 @@ char OpenConfig(uint8_t id, char write, uint8_t blocks)
     input[1] = id;     // id
     input[2] = blocks; // blocks
 
-    if (MechaScmd(0x40, input, sizeof(input), output) != 1)
+    if (MechaScmd(0x40, input, sizeof(input), output, sizeof(output)) != 1)
     {
         if (output[0] != 0)
         {
             CloseConfig();
 
-            if (MechaScmd(0x40, input, sizeof(input), output) != 1 || output[0] != 0)
+            if (MechaScmd(0x40, input, sizeof(input), output, sizeof(output)) != 1 || output[0] != 0)
             {
                 _printf("Failed to cmd OpenConfig!\n");
                 return 0;
@@ -129,7 +133,7 @@ char ReadConfig(uint8_t *data)
     u8 input[0];
     u8 output[16];
 
-    if (MechaScmd(0x41, input, sizeof(input), output) != 1)
+    if (MechaScmd(0x41, input, sizeof(input), output, sizeof(output)) != 1)
     {
         _printf("Failed to cmd ReadConfig!\n");
         return 0;
@@ -147,7 +151,7 @@ char WriteConfig(const uint8_t *data)
 
     memcpy(input, data, 16);
 
-    if (MechaScmd(0x42, input, sizeof(input), output) != 1 || output[0] != 0)
+    if (MechaScmd(0x42, input, sizeof(input), output, sizeof(output)) != 1 || output[0] != 0)
     {
         _printf("Failed to cmd WriteConfig!\n");
         return 0;
@@ -164,7 +168,7 @@ char CloseConfig()
 
     while (output[0])
     {
-        if (MechaScmd(0x43, input, sizeof(input), output) != 1 || (output[0] != 0 && output[0] != 1))
+        if (MechaScmd(0x43, input, sizeof(input), output, sizeof(output)) != 1 || (output[0] != 0 && output[0] != 1))
         {
             _printf("Failed to cmd CloseConfig!\n");
             return 0;
@@ -180,7 +184,7 @@ char ReadNVM(uint16_t offset, uint16_t *data)
     u8 output[16];
     input[0] = offset >> 8;
     input[1] = offset;
-    if (MechaScmd(0x0A, input, sizeof(input), output) != 1 || output[0] != 0)
+    if (MechaScmd(0x0A, input, sizeof(input), output, sizeof(output)) != 1 || output[0] != 0)
     {
         _printf("Failed to cmd 0x0A!\n");
         return 0;
@@ -205,7 +209,7 @@ char WriteNVM(uint16_t offset, uint16_t data)
 
     while (output[0])
     {
-        if (MechaScmd(0x0B, input, sizeof(input), output) != 1 || (output[0] != 0 && output[0] != 1))
+        if (MechaScmd(0x0B, input, sizeof(input), output, sizeof(output)) != 1 || (output[0] != 0 && output[0] != 1))
         {
             _printf("Failed to cmd WriteNVM! (%d)\n", offset);
             return 0;

@@ -16,6 +16,9 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "ui.h"
 #include "binaries.h"
@@ -39,6 +42,8 @@ void draw_bitmap(int x, int y, FT_Bitmap *bitmap, GSTEXTURE *Texture, u32 color)
     Texture->Height   = bitmap->rows;
     u32 TextureSize   = gsKit_texture_size_ee(Texture->Width, Texture->Height, Texture->PSM);
     Texture->Mem      = memalign(128, TextureSize);
+    if (!Texture->Mem)
+        return;
 
     u32 *buff         = (u32 *)Texture->Mem;
 
@@ -66,6 +71,8 @@ void draw_bitmap(int x, int y, FT_Bitmap *bitmap, GSTEXTURE *Texture, u32 color)
 struct GSTEXTURE_holder *drawImage(int x, int y, int width, int height, const u8 *texture)
 {
     struct GSTEXTURE_holder *TextureHolder = malloc(sizeof(struct GSTEXTURE_holder));
+    if (!TextureHolder)
+        return NULL;
     memset(TextureHolder, 0, sizeof(struct GSTEXTURE_holder));
     GSTEXTURE *Texture = &TextureHolder->curr;
 
@@ -81,6 +88,11 @@ struct GSTEXTURE_holder *drawImage(int x, int y, int width, int height, const u8
     Texture->Height   = height;
     u32 TextureSize   = gsKit_texture_size_ee(Texture->Width, Texture->Height, Texture->PSM);
     Texture->Mem      = memalign(128, TextureSize);
+    if (!Texture->Mem)
+    {
+        free(TextureHolder);
+        return NULL;
+    }
 
     uint32_t pos      = 0;
     uint32_t tx       = 0;
@@ -173,6 +185,11 @@ struct GSTEXTURE_holder *draw_text(int x, int y, int size, u32 color, const char
             continue;
 
         struct GSTEXTURE_holder *Texture = malloc(sizeof(struct GSTEXTURE_holder));
+        if (!Texture)
+        {
+            freeGSTEXTURE_holder(Textures);
+            return NULL;
+        }
         memset(Texture, 0, sizeof(struct GSTEXTURE_holder));
         draw_bitmap(x + slot->bitmap_left, y - slot->bitmap_top, &slot->bitmap, &Texture->curr, color);
 
@@ -191,7 +208,7 @@ struct GSTEXTURE_holder *ui_printf(int x, int y, int size, u32 color, const char
     char buffer[256];
     va_list args;
     va_start(args, format);
-    vsprintf(buffer, format, args);
+    vsnprintf(buffer, sizeof(buffer), format, args);
     struct GSTEXTURE_holder *Textures = draw_text(x, y, size, color, buffer);
     va_end(args);
     return Textures;
