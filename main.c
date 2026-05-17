@@ -973,10 +973,8 @@ void checkUnsupportedVersion()
     if ((fd = open("rom0:ROMVER", O_RDONLY)) >= 0)
     {
         char romver[17] = {0};
-        int romver_size = read(fd, romver, 16);
+        read(fd, romver, 16);
         close(fd);
-        if (romver_size > 0)
-            romver[romver_size] = '\0';
 
         romverTextures = ui_printf(8, 8 + big_size + big_size / 2 + 4 * (reg_size + 4), reg_size, 0xFFFFFF, "Romver: %s\n", romver);
     }
@@ -1030,7 +1028,8 @@ void checkUnsupportedVersion()
             if (hasBuildDate)
                 freeGSTEXTURE_holder(buildTextures);
             freeGSTEXTURE_holder(versionTextures);
-            freeGSTEXTURE_holder(errorTextures);
+            if (errorTextures)
+                freeGSTEXTURE_holder(errorTextures);
 
             SleepThread();
             return;
