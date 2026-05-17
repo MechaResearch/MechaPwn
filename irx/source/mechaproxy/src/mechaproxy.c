@@ -30,7 +30,15 @@ static unsigned char SifServerBuffer[0x1000];
 
 static void *MechaScmdHeader(int function, void *buffer, int nbytes)
 {
+    if (buffer == NULL || nbytes < (int)sizeof(struct MechaScmdParams))
+        return buffer;
+
     struct MechaScmdParams *params = (struct MechaScmdParams *)buffer;
+    if (params->inputlength > sizeof(params->input))
+    {
+        params->result = 0;
+        return buffer;
+    }
 
     params->result                 = sceCdApplySCmd(params->cmd, params->input, params->inputlength, params->output);
 

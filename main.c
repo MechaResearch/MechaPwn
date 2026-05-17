@@ -465,32 +465,34 @@ void selectRegion(char isDex, uint8_t **region_params, uint8_t **region_cipherte
             int fd;
             if ((fd = open("rom0:ROMVER", O_RDONLY)) >= 0)
             {
-                char romver[16];
-                read(fd, romver, sizeof(romver));
+                char romver[17] = {0};
+                int romver_size = read(fd, romver, 16);
                 close(fd);
-
-                // ckeck romver 5th letter: JAEHC, compare with version[0] & 7
-                // J - 0
-                // A - 1, 7
-                // E - 2, 3, 5
-                // H - 4
-                // C - 6
-                if (romver[4] == 'J')
-                    *region_ciphertext = isDex ? region_ciphertext_japan_dex : region_ciphertext_japan_cex;
-                else if (romver[4] == 'C')
-                    *region_ciphertext = isDex ? region_ciphertext_china_dex : region_ciphertext_china_cex;
-                else if ((romver[4] == 'E') && ((version[0] & 7) == 3))
-                    *region_ciphertext = isDex ? region_ciphertext_oceania_dex : region_ciphertext_oceania_cex;
-                else if ((romver[4] == 'E') && ((version[0] & 7) == 5))
-                    *region_ciphertext = isDex ? region_ciphertext_russia_dex : region_ciphertext_russia_cex;
-                else if (romver[4] == 'E')
-                    *region_ciphertext = isDex ? region_ciphertext_europe_dex : region_ciphertext_europe_cex;
-                else if ((romver[4] == 'A') && ((version[0] & 7) == 7))
-                    *region_ciphertext = isDex ? region_ciphertext_mexico_dex : region_ciphertext_mexico_cex;
-                else if (romver[4] == 'A')
-                    *region_ciphertext = isDex ? region_ciphertext_usa_dex : region_ciphertext_usa_cex;
-                else if (romver[4] == 'H')
-                    *region_ciphertext = isDex ? region_ciphertext_asia_dex : region_ciphertext_asia_cex;
+                if (romver_size >= 5)
+                {
+                    // ckeck romver 5th letter: JAEHC, compare with version[0] & 7
+                    // J - 0
+                    // A - 1, 7
+                    // E - 2, 3, 5
+                    // H - 4
+                    // C - 6
+                    if (romver[4] == 'J')
+                        *region_ciphertext = isDex ? region_ciphertext_japan_dex : region_ciphertext_japan_cex;
+                    else if (romver[4] == 'C')
+                        *region_ciphertext = isDex ? region_ciphertext_china_dex : region_ciphertext_china_cex;
+                    else if ((romver[4] == 'E') && ((version[0] & 7) == 3))
+                        *region_ciphertext = isDex ? region_ciphertext_oceania_dex : region_ciphertext_oceania_cex;
+                    else if ((romver[4] == 'E') && ((version[0] & 7) == 5))
+                        *region_ciphertext = isDex ? region_ciphertext_russia_dex : region_ciphertext_russia_cex;
+                    else if (romver[4] == 'E')
+                        *region_ciphertext = isDex ? region_ciphertext_europe_dex : region_ciphertext_europe_cex;
+                    else if ((romver[4] == 'A') && ((version[0] & 7) == 7))
+                        *region_ciphertext = isDex ? region_ciphertext_mexico_dex : region_ciphertext_mexico_cex;
+                    else if (romver[4] == 'A')
+                        *region_ciphertext = isDex ? region_ciphertext_usa_dex : region_ciphertext_usa_cex;
+                    else if (romver[4] == 'H')
+                        *region_ciphertext = isDex ? region_ciphertext_asia_dex : region_ciphertext_asia_cex;
+                }
             }
         }
     }
@@ -578,7 +580,7 @@ char backupNVM()
     getMechaVersion(version);
 
     char nvm_path[256];
-    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], (version[2] | 1) - 1, serial[0]);
+    snprintf(nvm_path, sizeof(nvm_path), "mass:/nvm_%d.%02d_%07ld.bin", version[1], (version[2] | 1) - 1, serial[0]);
 
     FILE *f = fopen(nvm_path, "rb");
     if (f)
@@ -722,7 +724,7 @@ char applyPatches(char isDex)
         getMechaVersion(version);
 
         char nvm_path[256];
-        sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], (version[2] | 1) - 1, serial[0]);
+        snprintf(nvm_path, sizeof(nvm_path), "mass:/nvm_%d.%02d_%07ld.bin", version[1], (version[2] | 1) - 1, serial[0]);
         FILE *f = fopen(nvm_path, "rb");
         if (!f)
         {
@@ -943,8 +945,8 @@ void checkUnsupportedVersion()
     char RealModelName[20];
     char color[20];
     struct GSTEXTURE_holder *versionTextures;
-    struct GSTEXTURE_holder *romverTextures;
-    struct GSTEXTURE_holder *buildTextures;
+    struct GSTEXTURE_holder *romverTextures = NULL;
+    struct GSTEXTURE_holder *buildTextures  = NULL;
     struct GSTEXTURE_holder *serialTextures;
     struct GSTEXTURE_holder *ModelIDTextures;
     struct GSTEXTURE_holder *modelnameTextures;
@@ -952,7 +954,8 @@ void checkUnsupportedVersion()
     // struct GSTEXTURE_holder *warnTextures1;
     // struct GSTEXTURE_holder *warnTextures2;
 
-    struct GSTEXTURE_holder *errorTextures;
+    struct GSTEXTURE_holder *errorTextures = NULL;
+    struct GSTEXTURE_holder *modelIdUnknownTextures = NULL;
 
     backupNVM();
     gsKit_clear(gsGlobal, Black);
@@ -969,9 +972,11 @@ void checkUnsupportedVersion()
 
     if ((fd = open("rom0:ROMVER", O_RDONLY)) >= 0)
     {
-        char romver[16];
-        read(fd, romver, sizeof(romver));
+        char romver[17] = {0};
+        int romver_size = read(fd, romver, 16);
         close(fd);
+        if (romver_size > 0)
+            romver[romver_size] = '\0';
 
         romverTextures = ui_printf(8, 8 + big_size + big_size / 2 + 4 * (reg_size + 4), reg_size, 0xFFFFFF, "Romver: %s\n", romver);
     }
@@ -989,22 +994,23 @@ void checkUnsupportedVersion()
 
     // ModelID whitelist
     IsKnownconsole  = 1;
-    sprintf(RealModelName, "???");
+    snprintf(RealModelName, sizeof(RealModelName), "???");
     console_record_t* T = ConsoleModel_GetDataByID(ModelId);
     if (!T)
     {
-        errorTextures  = ui_printf(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unknown, please report!\n");
+        modelIdUnknownTextures  = ui_printf(8, 8 + big_size + big_size / 2 + 5 * (reg_size + 4), reg_size, 0xFFFFFF, "Model ID unknown, please report!\n");
         IsKnownconsole = 0;
     } else {
-        sprintf(RealModelName, T->name);
+        snprintf(RealModelName, sizeof(RealModelName), "%s", T->name);
     }
     modelnameTextures = ui_printf(8, 8 + big_size + big_size / 2 + 2 * (reg_size + 4), reg_size, 0xFFFFFF, "Real Model Name: %s\n", RealModelName);
 
-    sprintf(color, ConsoleModel_GetColorName((T) ? T->color : UNKNOWN));
+    snprintf(color, sizeof(color), "%s", ConsoleModel_GetColorName((T) ? T->color : UNKNOWN));
 
     colorTextures = ui_printf(8, 8 + big_size + big_size / 2 + 3 * (reg_size + 4), reg_size, 0xFFFFFF, "Console color: %s\n", color);
 
-    if (getMechaBuildDate(build_date))
+    char hasBuildDate = getMechaBuildDate(build_date);
+    if (hasBuildDate)
     {
         buildTextures = ui_printf(8, 8 + big_size + big_size / 2 + 1 * (reg_size + 4), reg_size, 0xFFFFFF, "Mecha build date: 20%02x/%02x/%02x %02x:%02x\n", build_date[0], build_date[1], build_date[2], build_date[3], build_date[4]);
 
@@ -1015,13 +1021,13 @@ void checkUnsupportedVersion()
             drawFrame();
 
             if (!(IsKnownconsole))
-                freeGSTEXTURE_holder(errorTextures);
+                freeGSTEXTURE_holder(modelIdUnknownTextures);
             freeGSTEXTURE_holder(romverTextures);
             freeGSTEXTURE_holder(colorTextures);
             freeGSTEXTURE_holder(modelnameTextures);
             freeGSTEXTURE_holder(ModelIDTextures);
             freeGSTEXTURE_holder(serialTextures);
-            if (getMechaBuildDate(build_date))
+            if (hasBuildDate)
                 freeGSTEXTURE_holder(buildTextures);
             freeGSTEXTURE_holder(versionTextures);
             freeGSTEXTURE_holder(errorTextures);
@@ -1061,13 +1067,13 @@ void checkUnsupportedVersion()
     drawFrame();
 
     if (!(IsKnownconsole))
-        freeGSTEXTURE_holder(errorTextures);
+        freeGSTEXTURE_holder(modelIdUnknownTextures);
     freeGSTEXTURE_holder(exitTextures);
     freeGSTEXTURE_holder(colorTextures);
     freeGSTEXTURE_holder(modelnameTextures);
     freeGSTEXTURE_holder(ModelIDTextures);
     freeGSTEXTURE_holder(serialTextures);
-    if (getMechaBuildDate(build_date))
+    if (hasBuildDate)
         freeGSTEXTURE_holder(buildTextures);
     freeGSTEXTURE_holder(versionTextures);
     freeGSTEXTURE_holder(romverTextures);
@@ -1109,7 +1115,7 @@ char restoreBackup()
     getMechaVersion(version);
 
     char nvm_path[256];
-    sprintf(nvm_path, "mass:/nvm_%d.%02d_%07ld.bin", version[1], (version[2] | 1) - 1, serial[0]);
+    snprintf(nvm_path, sizeof(nvm_path), "mass:/nvm_%d.%02d_%07ld.bin", version[1], (version[2] | 1) - 1, serial[0]);
 
     FILE *f = fopen(nvm_path, "rb");
     if (!f)

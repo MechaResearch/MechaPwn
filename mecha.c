@@ -50,10 +50,13 @@ void MechaDeinit()
 int MechaScmd(u8 cmd, void *input, u8 inputlength, void *output)
 {
     struct MechaScmdParams *params = (struct MechaScmdParams *)RpcBuffer;
+    if (inputlength > sizeof(params->input) || (inputlength > 0 && input == NULL))
+        return 0;
 
     params->cmd                    = cmd;
     params->inputlength            = inputlength;
-    memcpy(params->input, input, inputlength);
+    if (inputlength > 0)
+        memcpy(params->input, input, inputlength);
 
     if (SifCallRpc(&SifRpcClientMechaScmd, 1, 0, RpcBuffer, sizeof(RpcBuffer), RpcBuffer, sizeof(RpcBuffer), NULL, NULL) < 0)
     {
@@ -61,7 +64,8 @@ int MechaScmd(u8 cmd, void *input, u8 inputlength, void *output)
         return 0;
     }
 
-    memcpy(output, params->output, 16);
+    if (output)
+        memcpy(output, params->output, sizeof(params->output));
 
     return params->result;
 }
