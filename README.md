@@ -89,6 +89,15 @@ On all-region Deckard[^3] units, FAT[^5]/70k[^7] units from regions North Americ
 
 - Boot burned PS1 backups, original PS1 and PS2 disks from all-region directly from OSD
 
+| Console | PS2<br>OEM CDVD<br>domestic | PS2<br>OEM CDVD<br>import | PS2 CD burned<br>no master-patch<br>domestic | PS2 CD burned<br>no master patch<br>import | PS2 CDVD burned<br>master-patched | PS1 OEM<br>domestic | PS1 burned<br>domestic | PS1 OEM and burned<br>import |
+| ------------------------------------------------ | :----------------------: | :--------------------------: | :------------------------------------------: | :----------------------------------------: | :-------------------------------------: | :----------------------: | :--------------------------: | :---------------------------------: |
+| **SCPH-10000–390xx** *(Not MechaPwn compatible)* | ✅ | ❌<br>*Possible with Modchip* | ❌<br>*Possible with Modchip* | ❌<br>*Possible with Modchip* | ❌<br>*Possible with Modchip* | ✅ | ❌<br>*Possible with Modchip* | ❌<br>*Possible with Modchip* |
+| **SCPH-500xx / SCPH-700xx**<br>**NTSC-U & Asia** | ✅ | ✅ | ✅<br>*Direct from OSDSYS* | ❌<br>*Use master patch or Modchip* | ✅¹ | ✅ | ✅ | ✅ |
+| **SCPH-500xx / SCPH-700xx**<br>**PAL & NTSC-J** | ✅ | ✅¹ | ✅<br>*Direct from OSDSYS* | ❌<br>*Use master patch or Modchip* | ✅¹ | ✅ | ✅ | ❌<br>*Possible with Modchip* |
+| **SCPH-750xx–900xx**<br>*Deckard* | ✅ | ✅ | ✅<br>*Direct from OSDSYS* | ❌<br>*Use master patch or Modchip* | ✅¹ | ✅ | ✅ | ✅ |
+
+**¹ Patched-launcher route:** OSDMenu / PS2BBLE can launch master-patched discs with or without the PS2 logo. Otherwise use wLaunchELF / FMCB FASTBOOT to skip the normal logo-check path.
+
 ### FAQ
 
 #### How to update from MechaPwn 2.0 to MechaPwn 3.0?
